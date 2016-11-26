@@ -100,15 +100,13 @@ When the value of `technique` is `BLINN`, this defines a material shaded accordi
 This equation is complex and detailed via the ACM, so it is not detailed here. Refer to “Models of Light
 Reflection for Computer Synthesized Pictures,” SIGGRAPH 77, pp 192-198 [http://portal.acm.org/citation.cfm?id=563893](http://portal.acm.org/citation.cfm?id=563893).
 
-To maximize application compatibility, it is suggested that developers use the Blinn-Torrance-Sparrow model for
-`shininess` values in the range of 0 to 1. For `shininess` values greater than 1.0, it is recommended to instead use the Blinn-Phong approximation:
+The following code illustrates the basic computation:
 
 ```
 color = <emission> + <ambient> * al + <diffuse> * max(N * L, 0) + <specular> * max(H * N, 0)^<shininess>
 ```
 
-
-where:
+where
 
 * `al` – A constant amount of ambient light contribution coming from the scene, i.e. the sum of all ambient light values.
 * `N` – Normal vector
@@ -117,6 +115,7 @@ where:
 * `H` – Half-angle vector,calculated as halfway between the unit Eye and Light vectors, using the
 equation H= normalize(I+L)
 
+> **Implementation Note**: Writers should be aware about the range of the specular exponent (`shininess`), which is _not_ a normalized range. Concretely speaking, given the above equation, a `shininess` value of 1 corresponds to a very low shininess. For orientation: using the traditional OpenGL fixed function pipeline, the specular exponent was expected to be within [0, 128]. However, using glTF, larger `shininess` values are clearly possible.
 
 Blinn shading uses all of the common material properties defined in Table 1. The following example defines a Blinn shaded material with a diffuse texture, moderate shininess and red specular highlights. 
 
@@ -157,6 +156,8 @@ where:
 * `L` – Light vector
 * `I` – Eye vector
 * `R` – Perfect reflection vector (reflect (L around N))
+
+> **Implementation Note**: For the interpretation of the specular exponent parameter (`shininess`), see the section about the [Blinn](#blinn) lighting model.
 
 Phong lighting uses all of the common material properties defined in Table 1. The following example defines a Phong lit material with a yellow diffuse color.
 
@@ -258,6 +259,26 @@ The following example defines a Constant lit material with an emissive texture a
 ### Interaction Between Attribute Semantics and Common Materials
 
 The base specification defines attribute semantics for mesh primitives. The common materials in this extension shall support the semantics `POSITION`, `NORMAL`, `TEXCOORD`, `COLOR`, `JOINT`, `JOINTMATRIX`, and `WEIGHT`. For array semantics such as texture coordinates, the implemention is only required to support the 0th set of coordinates i.e. `TEXCOORD_0`.
+Since semantics are usually defined via technique parameters, they are not present in the glTF scene description when `KHR_materials_common` is used.
+Therefore, writers using this extension must ensure that the attributes of the mesh are named exactly like the semantics:
+
+```javascript
+"meshes": {
+    "mesh0":{         
+        "primitives" : [
+        {
+           "attributes":{
+              "NORMAL"  :"accessor23",
+              "POSITION":"accessor42"
+           },
+           "indices" : "accessor13",
+           "material": "material7",
+           "mode":4
+        }
+     ]
+    }
+}
+```
 
 If a conforming implementation of this extension supports skinned animations, then the common materials described in this extension must also support hardware skinning in its vertex and fragment shader programs.
 
