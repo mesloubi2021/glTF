@@ -30,48 +30,41 @@ var BABYLON;
             };
         }
 
-        PbrUtilities.ConvertStandardToSpecularGlossiness = function(standard) {
+        PbrUtilities.ConvertStandardToSpecularGlossiness = function(standard, maxSpecPower, p) {
             var opacity = standard.opacity;
             var specular = standard.specular;
-            var glossiness = standard.specularPower / 256;
+            var glossiness = 1 - Math.pow(1 - standard.specularPower / maxSpecPower, 4);
             var diffuse = standard.diffuse;
 
+            // Calculate a initial
             var specularStrength = specular.getMaxComponent();
+            var oneMinusDiffuse = 1 - diffuse.getMaxComponent();
 
-            var oneMinusDiffuse = BABYLON.Color3.White - diffuse;
-
-            var a = new BABYLON.Color3();
+            var a = 1;
             if (specularStrength < epsilon) {
-                a = BABYLON.Color3.Black;
+                a = 0;
             }
             else {
-                a.r = oneMinusDiffuse.r/specular.r;
-                a.g = oneMinusDiffuse.g/specular.g;
-                a.b = oneMinusDiffuse.b/specular.b;
+                a = BABYLON.Scalar.Clamp(oneMinusDiffuse/specularStrength);
             }
-            if (a > epsilon) {
-                var oneMinusDiffuseR = 1 - diffuse.r/a.r;
-                var oneMinusDiffuseG = 1 - diffuse.g/a.g;
-                var oneMinusDiffuseB = 1 - diffuse.b/a.b;
-            }
-            var specR = (1 - diffuse.r)/a.r;
-            var specG = (1 - diffuse.g)/a.g;
-            var specB = (1 - diffuse.b)/a.b;
-            
 
-            //diffuse.r = 1 - a.r * (specularStrength);
-            //diffuse.g = 1 - a.g * (specularStrength);
-            //diffuse.b = 1 - a.b * (specularStrength);
+            // Calculate a final
+            a = 1 - (1 - a)/Math.pow((specularStrength + 1), p);
+
+
+            specularStrength = specularStrength * a;
+
+            // clamp glossiness based on specular strength
+            specular.clampToRef(0, specularStrength, specular);
 
             return {
-                specular: new BABYLON.Color3(specR, specG, specB),
-                diffuse: diffuse,
+                specular: specular,
                 opacity: opacity,
+                diffuse: diffuse,
                 glossiness: glossiness
-            };
-
-
+            }
         }
+
 
         PbrUtilities.ConvertToMetallicRoughness = function (specularGlossiness) {
             function solveMetallic(diffuse, specular, oneMinusSpecularStrength) {

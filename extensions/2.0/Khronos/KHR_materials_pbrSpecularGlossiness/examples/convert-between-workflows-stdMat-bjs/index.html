@@ -1,10 +1,12 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <title>glTF Standard to PBR Conversion (BabylonJS)</title>
 
     <style>
-        html, body {
+        html,
+        body {
             overflow: hidden;
             width: 100%;
             height: 100%;
@@ -24,6 +26,7 @@
     <script src="js/babylon.colorExtensions.js"></script>
     <script src="js/babylon.pbrUtilities.js"></script>
 </head>
+
 <body>
     <canvas id="renderCanvas"></canvas>
 
@@ -50,10 +53,16 @@
                 this.specularPower = 125;
             }
 
+            var Factors = function () {
+                this.p = 1;
+                this.maxspecpower = 1024;
+            }
+
             this.autoUpdate = true;
             this.metallicRoughness = new MetallicRoughness();
             this.specularGlossiness = new SpecularGlossiness();
             this.standard = new Standard();
+            this.factors = new Factors();
         }
 
         var options = new Options();
@@ -75,14 +84,18 @@
         gui.add(options.specularGlossiness, 'glossiness', 0, 1, 0.001).onChange(onSpecularGlossinessChange);
         specularGlossinessFolder.open();
 
-        
+
         var standardMaterialFolder = gui.addFolder("Standard-Material");
         gui.addColor(options.standard, 'diffuse').onChange(onStandardChange);
         gui.add(options.standard, 'opacity', 0, 1, 0.001).onChange(onStandardChange);
         gui.addColor(options.standard, 'specular', 0, 1, 0.001).onChange(onStandardChange);
-        gui.add(options.standard, 'specularPower', 0, 256, 0.001).onChange(onStandardChange);
+        gui.add(options.standard, 'specularPower', 0, 1024, 0.001).onChange(onStandardChange);
         standardMaterialFolder.open();
-        
+
+        var factorsFolder = gui.addFolder("Factors");
+        gui.add(options.factors, 'p', 0.1, 1, 0.001).onChange(onStandardChange);
+        gui.add(options.factors, 'maxspecpower', 0.0, 1024, 0.001).onChange(onStandardChange);
+        factorsFolder.open();
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true);
@@ -104,7 +117,7 @@
         const sphereDiameter = 4;
         const sphereSegments = 64;
 
-        
+
         var standardMaterial = new BABYLON.StandardMaterial("Standard-Material", scene);
         standardMaterial.useScalarInLinearSpace = true;
         var standardMaterialSphere = BABYLON.Mesh.CreateSphere(standardMaterial.name, sphereSegments, sphereDiameter, scene);
@@ -113,9 +126,10 @@
         var standardMaterialLabel = createLabel(standardMaterial.name);
         standardMaterialLabel.parent = standardMaterialSphere;
         standardMaterialLabel.position.y = -3;
-        
-        
+
+
         var metallicRoughnessMaterial = new BABYLON.PBRMaterial("Metallic-Roughness", scene);
+        metallicRoughnessMaterial.usePhysicalLightFalloff = false;
         metallicRoughnessMaterial.useScalarInLinearSpace = true;
         var metallicRoughnessSphere = BABYLON.Mesh.CreateSphere(metallicRoughnessMaterial.name, sphereSegments, sphereDiameter, scene);
         metallicRoughnessSphere.position.x = sphereDiameter;
@@ -123,8 +137,9 @@
         var metallicRoughnessLabel = createLabel(metallicRoughnessMaterial.name);
         metallicRoughnessLabel.parent = metallicRoughnessSphere;
         metallicRoughnessLabel.position.y = -3;
-        
+
         var specularGlossinessMaterial = new BABYLON.PBRMaterial("Specular-Glossiness", scene);
+        specularGlossinessMaterial.usePhysicalLightFalloff = false;
         specularGlossinessMaterial.useScalarInLinearSpace = true;
         var specularGlossinessSphere = BABYLON.Mesh.CreateSphere(specularGlossinessMaterial.name, sphereSegments, sphereDiameter, scene);
         specularGlossinessSphere.position.x = -sphereDiameter;
@@ -171,7 +186,8 @@
             }
         }
 
-        function onStandardChange() {   
+        function onStandardChange() {
+            console.log("onStandardChange");
             updateStandardMaterial();
 
             if (options.autoUpdate) {
@@ -183,7 +199,7 @@
 
                 updateGUI();
             }
-            
+
         }
 
         function updateGUI() {
@@ -200,15 +216,12 @@
                 specularPower: options.standard.specularPower
             }
 
-            //var specularGlossiness = BABYLON.PbrUtilities.ConvertStandardToSpecularGlossiness(standardMaterial);
+            var specularGlossiness = BABYLON.PbrUtilities.ConvertStandardToSpecularGlossiness(standardMaterial, options.factors.maxspecpower, options.factors.p);
 
-        
-
-
-            options.specularGlossiness.diffuse = standardMaterial.diffuse.toHexString();
-            options.specularGlossiness.opacity = standardMaterial.opacity;
-            options.specularGlossiness.specular = standardMaterial.specular.toHexString();
-            options.specularGlossiness.glossiness = standardMaterial.specularPower / 256;
+            options.specularGlossiness.diffuse = specularGlossiness.diffuse.toHexString(); //standardMaterial.diffuse.toHexString();
+            options.specularGlossiness.opacity = specularGlossiness.opacity; //standardMaterial.opacity;
+            options.specularGlossiness.specular = specularGlossiness.specular.toHexString(); // standardMaterial.specular.toHexString();
+            options.specularGlossiness.glossiness = specularGlossiness.glossiness; // standardMaterial.specularPower / 256;
 
         }
 
@@ -256,8 +269,8 @@
             options.standard.diffuse = options.specularGlossiness.diffuse;
             options.standard.opacity = options.specularGlossiness.opacity;
             options.standard.specular = options.specularGlossiness.specular;
-            options.standard.specularPower = options.specularGlossiness.glossiness * 256;
-               
+            options.standard.specularPower = options.specularGlossiness.glossiness * 1024;
+
         }
 
         function updateMetallicRoughnessFromSpecularGlossines() {
@@ -279,12 +292,14 @@
         }
 
         function updateMetallicRoughnessFromStandard() {
-            var specGloss = {
+            var standard = {
                 diffuse: BABYLON.Color3.FromHexString(options.standard.diffuse),
                 opacity: options.standard.opacity,
                 specular: BABYLON.Color3.FromHexString(options.standard.specular),
-                glossiness: options.standard.specularPower / 256
+                specularPower: options.standard.specularPower
             };
+
+            var specGloss = BABYLON.PbrUtilities.ConvertStandardToSpecularGlossiness(standard, options.factors.maxspecpower, options.factors.p);
 
             var metallicRoughness = BABYLON.PbrUtilities.ConvertToMetallicRoughness(specGloss);
 
@@ -312,7 +327,7 @@
             standardMaterial.diffuseColor = BABYLON.Color3.FromHexString(options.standard.diffuse);
             standardMaterial.alpha = options.standard.opacity;
             standardMaterial.specularColor = BABYLON.Color3.FromHexString(options.standard.specular);
-            standardMaterial.specularPower = options.standard.specularPower;          
+            standardMaterial.specularPower = options.standard.specularPower;
         }
 
         function createLabel(text) {
@@ -329,4 +344,5 @@
         }
     </script>
 </body>
+
 </html>
