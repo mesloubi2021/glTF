@@ -49,10 +49,10 @@ var BABYLON;
             }
 
             // Calculate a final
-            a = 1 - (1 - a)/Math.pow((specularStrength + 1), p);
+            a = 1 - (1 - a)/Math.pow((standard.specularPower / maxSpecPower + 1), p);
 
 
-            specularStrength = specularStrength * a;
+            specularStrength = specularStrength * a * 0.5;
 
             // clamp glossiness based on specular strength
             specular.clampToRef(0, specularStrength, specular);

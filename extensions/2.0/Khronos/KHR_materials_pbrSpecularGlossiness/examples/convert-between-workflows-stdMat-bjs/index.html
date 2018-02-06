@@ -93,7 +93,7 @@
         standardMaterialFolder.open();
 
         var factorsFolder = gui.addFolder("Factors");
-        gui.add(options.factors, 'p', 0.1, 1, 0.001).onChange(onStandardChange);
+        gui.add(options.factors, 'p', 0.1, 4, 0.001).onChange(onStandardChange);
         gui.add(options.factors, 'maxspecpower', 0.0, 1024, 0.001).onChange(onStandardChange);
         factorsFolder.open();
 
@@ -111,8 +111,8 @@
         // Default intensity is 1. Let's dim the light a small amount
         //light.intensity = 0.7;
 
-        scene.environmentTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("images/countrySpecularHDR.dds", scene);
-        scene.createDefaultSkybox(null, true);
+       // scene.environmentTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("images/countrySpecularHDR.dds", scene);
+       // scene.createDefaultSkybox(null, true);
 
         const sphereDiameter = 4;
         const sphereSegments = 64;
