@@ -23,11 +23,11 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
-This extension defines the metalness-roughness material model from Physically-Based Rendering (PBR) adding additional material parameters, which reference per vertex attributes. These additional material parameters, complete a full PBR workflow representation per vertex.
+This extension defines the metalness-roughness material model from Physically-Based Rendering (PBR), adding additional material parameters, which reference per vertex attributes. These additional material parameters, complete a full PBR workflow representation per vertex.
 
-This extension allows meshes to have attributes of any name, and allows materials to select those attributes together with a swizzle (ie. rgba, r, a), so that attributes can be packed into a compact form (for example: METALLIC_ROUGHNESS_AMBIENTOCCLUSION as a single 3-component vector attribute).
+This extension allows meshes to have attributes of any name, and allows materials to select channels from those attributes using a swizzle parameter (ie. "rgba", "r", "a"), so attributes can be packed into a compact form (for example, artist can pack METALLIC_ROUGHNESS_AMBIENTOCCLUSION as a single 3-component vector attribute).
 
-This material <-> attribute indirection allows DCC applications to save multiple materials for a single mesh into glTF, and allows real-time engines to switch / blend between them at run-time. It also allows DCC applications to use glTF as a storage format, used for saving and loading artist defined shading configurations, minimizing data loss and/or shading configuration change / conversion over the save and load cycle(s).
+Such material <-> attribute indirection allows DCC applications to save multiple materials for a single mesh into a glTF file, and allows real-time engines to switch / blend between them at run-time. It also allows DCC applications to use glTF as a storage format, used for saving and loading artist defined shading configurations, while minimizing data loss and/or shading configuration change / conversion over the save and load cycle(s).
 
 ### Example
 ![\[Comparison\]](Figures/vertex_metal_rough_comparison.png)
@@ -59,14 +59,14 @@ Left: per-vertex albedo only. Right: per-vertex albedo attributes extended with 
             "extensions" : {
                 "EXT_pbr_attributes" : {
                     "baseColorAttribSpace" : "sRGB",
-					"baseColorAttrib" : "COLOR_0",
-					"baseColorSwizzle" : "rgb",
-					"roughnessAttribSpace" : "linear",
-					"roughnessAttrib" : "ROUGHNESS_METALLIC",
-					"roughnessSwizzle" : "r",
-					"metallicAttribSpace" : "linear",
-					"metallicAttrib" : "ROUGHNESS_METALLIC",
-					"metallicSwizzle" : "b",
+                    "baseColorAttrib" : "COLOR_0",
+                    "baseColorSwizzle" : "rgb",
+                    "roughnessAttribSpace" : "linear",
+                    "roughnessAttrib" : "ROUGHNESS_METALLIC",
+                    "roughnessSwizzle" : "r",
+                    "metallicAttribSpace" : "linear",
+                    "metallicAttrib" : "ROUGHNESS_METALLIC",
+                    "metallicSwizzle" : "b",
                 }
             }
         }
@@ -99,13 +99,13 @@ This extension adds on additional `enum` to the `materials` section.
 
 [Schema for color space selection](Schema/glTF.EXT_pbr_attributes.schema.json)
 
-This enum provides information about the color space interpretation of the  vertex attributes used. If not present, `"linear"` is assumed. If color space is sRGB, the implementation is required to convert the color to linear space in order to correctly interpolate via the fixed function pipeline.
+This enum provides information about the color space interpretation of the  vertex attributes used. If not present, `"linear"` is assumed. If color space is "sRGB", the implementation is required to convert the color to linear space in order to correctly interpolate via the fixed function pipeline.
 
 If one or more of the attributes are referenced by the material, they must be multiplied with the respective factor, for example, "roughnessAttrib" float value has to be multiplied with "roughnessFactor" of the pbrMetallicRoughness material.
 
 If a relevant texture (for example, metallicRoughnessTexture) is defined in the material, an implementation must multiply the texture values with both attribute value and constant factor.
 
-Swizzle is defined as one or more of letters in the standard 4 component vector "rgba". To simplify the implementations, each letter can appear only once in the swizzle string, so for example, "rrgg" swizzle is not allowed.
+Swizzle is defined as one or more of letters in the standard 4 component vector "rgba". To simplify extension implementations, each letter can appear only once in the swizzle string, so for example, "rrgg" swizzle is not allowed.
 
 ### Attributes
 
@@ -114,7 +114,7 @@ This extension also allows any accessor type and component type for each attribu
 
 ## Best Practices
 
-The primary motivation of this extension is to allow PBR materials to be represented primarily by vertex attributes.
+The primary motivation of this extension is to allow PBR materials to be represented by additional material parameters.
 For this use case, it is recommended to set both "metallicFactor" and "roughnessFactor" to 1.0. Both factors can be then interpreted and used as a global "knob" for artistic control.
 Loaders should pay attention to floating point precision such that 1.0 is exactly represented.
 
