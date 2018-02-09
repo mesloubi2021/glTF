@@ -11,6 +11,7 @@
 * Don McCurdy, Google, [@donrmccurdy](https://twitter.com/donrmccurdy)
 * Ocean Quigley, Facebook, [@oceanquigley](https://twitter.com/oceanquigley)
 * Scott Nagy, Microsoft, [@visageofscott](https://twitter.com/visageofscott)
+* Milan Bulat, Foundry, [@speedy_milan](https://twitter.com/speedy_milan)
 
 ## Status
 
@@ -22,7 +23,11 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
-This extension defines the metalness-roughness material model from Physically-Based Rendering (PBR) as a per vertex attribute. These additional attributes, together with the already existing albedo (COLOR_0), complete a full PBR workflow representation per vertex.
+This extension defines the metalness-roughness material model from Physically-Based Rendering (PBR) adding additional material parameters, which reference per vertex attributes. These additional material parameters, complete a full PBR workflow representation per vertex.
+
+This extension allows meshes to have attributes of any name, and allows materials to select those attributes together with a swizzle (ie. rgba, r, a), so that attributes can be packed into a compact form (for example: METALLIC_ROUGHNESS_AMBIENTOCCLUSION as a single 3-component vector attribute).
+
+This material <-> attribute indirection allows DCC applications to save multiple materials for a single mesh into glTF, and allows real-time engines to switch / blend between them at run-time. It also allows DCC applications to use glTF as a storage format, used for saving and loading artist defined shading configurations, minimizing data loss and/or shading configuration change / conversion over the save and load cycle(s).
 
 ### Example
 ![\[Comparison\]](Figures/vertex_metal_rough_comparison.png)
@@ -53,7 +58,15 @@ Left: per-vertex albedo only. Right: per-vertex albedo attributes extended with 
             },
             "extensions" : {
                 "EXT_pbr_attributes" : {
-                    "baseColorAttribSpace" : "sRGB"
+                    "baseColorAttribSpace" : "sRGB",
+					"baseColorAttrib" : "COLOR_0",
+					"baseColorSwizzle" : "rgb",
+					"roughnessAttribSpace" : "linear",
+					"roughnessAttrib" : "ROUGHNESS_METALLIC",
+					"roughnessSwizzle" : "r",
+					"metallicAttribSpace" : "linear",
+					"metallicAttrib" : "ROUGHNESS_METALLIC",
+					"metallicSwizzle" : "b",
                 }
             }
         }
@@ -66,24 +79,7 @@ Left: per-vertex albedo only. Right: per-vertex albedo attributes extended with 
                     "material": 0,
                     "mode": 4,
                     "attributes": {
-                        "ROUGHNESS": 4,
-                        "METALLIC": 5,
-                        "COLOR_0": 3,
-                        "NORMAL": 2,
-                        "POSITION": 1
-                    },
-                    "indices": 0
-                }
-            ]
-        },
-        {
-            "name": "myMesh_roughness_only",
-            "primitives": [
-                {
-                    "material": 0,
-                    "mode": 4,
-                    "attributes": {
-                        "ROUGHNESS": 4,
+                        "ROUGHNESS_METALLIC": 4,
                         "COLOR_0": 3,
                         "NORMAL": 2,
                         "POSITION": 1
@@ -103,20 +99,18 @@ This extension adds on additional `enum` to the `materials` section.
 
 [Schema for color space selection](Schema/glTF.EXT_pbr_attributes.schema.json)
 
-This enum provides information about the color space interpretation of the baseColor (COLOR_0) vertex attribute. If not present, `"linear"` is assumed. If color space is sRGB, the implementation is required to convert the color to linear space in order to correctly interpolate via the fixed function pipeline.
+This enum provides information about the color space interpretation of the  vertex attributes used. If not present, `"linear"` is assumed. If color space is sRGB, the implementation is required to convert the color to linear space in order to correctly interpolate via the fixed function pipeline.
+
+If one or more of the attributes are referenced by the material, they must be multiplied with the respective factor, for example, "roughnessAttrib" float value has to be multiplied with "roughnessFactor" of the pbrMetallicRoughness material.
+
+If a relevant texture (for example, metallicRoughnessTexture) is defined in the material, an implementation must multiply the texture values with both attribute value and constant factor.
+
+Swizzle is defined as one or more of letters in the standard 4 component vector "rgba". To simplify the implementations, each letter can appear only once in the swizzle string, so for example, "rrgg" swizzle is not allowed.
 
 ### Attributes
 
-Valid attribute semantic property names include `METALLIC`, `ROUGHNESS`.
-Valid accessor type and component type for each attribute semantic property are defined below:
-
-|Name|Accessor Type(s)|Component Type(s)|Description|
-|----|----------------|-----------------|-----------|
-|`METALLIC`|`"SCALAR"`|`5126`&nbsp;(FLOAT)<br>`5121`&nbsp;(UNSIGNED_BYTE)&nbsp;normalized<br>`5123`&nbsp;(UNSIGNED_SHORT)&nbsp;normalized|PBR Metallic Material Parameter|
-|`ROUGHNESS`|`"SCALAR"`|`5126`&nbsp;(FLOAT)<br>`5121`&nbsp;(UNSIGNED_BYTE)&nbsp;normalized<br>`5123`&nbsp;(UNSIGNED_SHORT)&nbsp;normalized|PBR Roughness Material Parameter|
-
-If one or more of the attributes are present they must be multiplied with the respective "metallicFactor" and "roughnessFactor" of the pbrMetallicRoughness material.
-If a metallicRoughnessTexture texture is defined in the referenced material, an implementation must multiply the texture values with both attribute value and constant factor.
+This extension allows any name to be used as a valid attribute semantic property name.
+This extension also allows any accessor type and component type for each attribute. Implementations are encouraged to support at least FLOAT, UNSIGNED_BYTE and UNSIGNED_SHORT component types, in 1 to 4 component vector formats.
 
 ## Best Practices
 
@@ -133,6 +127,8 @@ In case of an implementation not supporting this extension, the resulting fallba
 If sRGB was used for COLOR_0, the resulting color space and interpolation will be off.
 
 Implementations concerned with these potentially undesirable results, maybe choose to add the extension to `"extensionsRequired"`.
+
+When COLOR_0 attribute exists in the mesh, and baseColorAttrib is defined, baseColorAttrib has the priority, and COLOR_0 attribute (as per Core specification) is ignored. 
 
 ## Known Implementations
 
