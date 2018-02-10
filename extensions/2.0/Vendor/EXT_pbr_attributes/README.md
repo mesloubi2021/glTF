@@ -23,9 +23,9 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
-This extension defines the metalness-roughness material model from Physically-Based Rendering (PBR), adding additional material parameters, which reference per vertex attributes. These additional material parameters, allow for a full PBR workflow representation, per vertex.
+This extension improves the definition of metalness-roughness material model from Physically-Based Rendering (PBR), by adding additional PBR material parameters, which reference per vertex attributes. These additional material parameters, allow for a full per vertex PBR workflow representation.
 
-Such material <-> mesh attribute referencing allows DCC applications to save multiple materials for a single mesh into a glTF file, which allows real-time engines to switch / blend between them at run-time. It also allows DCC applications to use glTF as a storage format, used for saving and loading artist defined shading configurations, while minimizing data loss and/or shading configuration change / conversion over the save and load cycle(s).
+Propsed material property to mesh attribute referencing allows DCC applications to save multiple materials for a single mesh into a glTF file, which then allows real-time engines to switch / blend between them at run-time. It also allows DCC applications to use glTF as a storage format, used for saving and loading artist defined shading configurations, while minimizing data loss and/or shading configuration change / conversion over multiple save and load cycle(s).
 
 ### Example
 ![\[Comparison\]](Figures/vertex_metal_rough_comparison.png)
@@ -66,7 +66,7 @@ Left: per-vertex albedo only. Right: per-vertex albedo attributes extended with 
         {
             "name": "game_asset_worn_out",
             "pbrMetallicRoughness": {
-                "baseColorFactor": [1, 1, 1, 1],
+                "baseColorFactor": [0.8, 0.8, 0.8, 1],
                 "metallicFactor" : 1,
                 "roughnessFactor": 0.8
             },
@@ -78,7 +78,7 @@ Left: per-vertex albedo only. Right: per-vertex albedo attributes extended with 
                     "metallicAttrib" : "METALLIC",
                 }
             }
-        }		
+        }       
     ],
     "meshes": [
         {
@@ -88,9 +88,9 @@ Left: per-vertex albedo only. Right: per-vertex albedo attributes extended with 
                     "material": 0,
                     "mode": 4,
                     "attributes": {
-						"_BASECOLOR_WORN_OUT": 7,
-					    "_ROUGHNESS_WORN_OUT": 6,
-						"METALLIC": 5,
+                        "_BASECOLOR_WORN_OUT": 7,
+                        "_ROUGHNESS_WORN_OUT": 6,
+                        "METALLIC": 5,
                         "_ROUGHNESS_BRAND_NEW": 4,
                         "_BASECOLOR_BRAND_NEW": 3,
                         "NORMAL": 2,
@@ -127,7 +127,7 @@ Valid accessor type and component type for each attribute semantic property are 
 |`METALLIC`|`"SCALAR"`|`5126`&nbsp;(FLOAT)<br>`5121`&nbsp;(UNSIGNED_BYTE)&nbsp;normalized<br>`5123`&nbsp;(UNSIGNED_SHORT)&nbsp;normalized|PBR Metallic Material Parameter|
 |`ROUGHNESS`|`"SCALAR"`|`5126`&nbsp;(FLOAT)<br>`5121`&nbsp;(UNSIGNED_BYTE)&nbsp;normalized<br>`5123`&nbsp;(UNSIGNED_SHORT)&nbsp;normalized|PBR Roughness Material Parameter|
  
-This extension allows user defined attributes (prefixed with "_") to be used instead of the default ones, with the same type limitations as specified in the above table.
+This extension allows user defined attributes (prefixed with "_") to be used instead of the default ones. User defined attributes need to adhere to the  same type limitations as specified in the above table.
 
 ## Best Practices
 
@@ -144,12 +144,12 @@ If sRGB was used for COLOR_0, the resulting color space and interpolation will b
 
 Implementations concerned with these potentially undesirable results, maybe choose to add the extension to `"extensionsRequired"`.
 
-To provide for a clean separation between meshes and materials, the following two considerations apply:
+For materials which have this extension, to be able to provide for clean separation between meshes and materials, the following two considerations apply:
 
 When COLOR_0 attribute exists in the mesh, and baseColorAttrib is defined, baseColorAttrib has the priority, and automatic usage of COLOR_0 attribute (as per Core specification) is ignored. 
 
 When COLOR_0 attribute exists in the mesh, and baseColorAttrib is not defined, 
-COLOR_0 is again ignored (not automatically applied).
+COLOR_0 is again ignored (not automatically applied as per Core specification).
 
 ## Known Implementations
 
