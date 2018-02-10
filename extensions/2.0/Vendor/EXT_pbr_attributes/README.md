@@ -23,11 +23,9 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
-This extension defines the metalness-roughness material model from Physically-Based Rendering (PBR), adding additional material parameters, which reference per vertex attributes. These additional material parameters, complete a full PBR workflow representation per vertex.
+This extension defines the metalness-roughness material model from Physically-Based Rendering (PBR), adding additional material parameters, which reference per vertex attributes. These additional material parameters, allow for a full PBR workflow representation, per vertex.
 
-This extension allows meshes to have attributes of any name, and allows materials to select channels from those attributes using a swizzle parameter (ie. "rgba", "r", "a"), so attributes can be packed into a compact form (for example, artist can pack METALLIC_ROUGHNESS_AMBIENTOCCLUSION as a single 3-component vector attribute).
-
-Such material <-> attribute indirection allows DCC applications to save multiple materials for a single mesh into a glTF file, and allows real-time engines to switch / blend between them at run-time. It also allows DCC applications to use glTF as a storage format, used for saving and loading artist defined shading configurations, while minimizing data loss and/or shading configuration change / conversion over the save and load cycle(s).
+Such material <-> mesh attribute referencing allows DCC applications to save multiple materials for a single mesh into a glTF file, which allows real-time engines to switch / blend between them at run-time. It also allows DCC applications to use glTF as a storage format, used for saving and loading artist defined shading configurations, while minimizing data loss and/or shading configuration change / conversion over the save and load cycle(s).
 
 ### Example
 ![\[Comparison\]](Figures/vertex_metal_rough_comparison.png)
@@ -50,37 +48,51 @@ Left: per-vertex albedo only. Right: per-vertex albedo attributes extended with 
     ],
     "materials": [
         {
-            "name": "vertexPBRMat",
+            "name": "game_asset_brand_new",
             "pbrMetallicRoughness": {
                 "baseColorFactor": [1, 1, 1, 1],
                 "metallicFactor" : 1,
-                "roughnessFactor": 1
+                "roughnessFactor": 0
             },
             "extensions" : {
                 "EXT_pbr_attributes" : {
-                    "baseColorAttribSpace" : "sRGB",
-                    "baseColorAttrib" : "COLOR_0",
-                    "baseColorSwizzle" : "rgb",
-                    "roughnessAttribSpace" : "linear",
-                    "roughnessAttrib" : "ROUGHNESS_METALLIC",
-                    "roughnessSwizzle" : "r",
-                    "metallicAttribSpace" : "linear",
-                    "metallicAttrib" : "ROUGHNESS_METALLIC",
-                    "metallicSwizzle" : "b",
+                    "attribSpace" : "sRGB",
+                    "baseColorAttrib" : "_BASECOLOR_BRAND_NEW",
+                    "roughnessAttrib" : "_ROUGHNESS_BRAND_NEW",
+                    "metallicAttrib" : "METALLIC",
                 }
             }
-        }
+        },
+        {
+            "name": "game_asset_worn_out",
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [1, 1, 1, 1],
+                "metallicFactor" : 1,
+                "roughnessFactor": 0.8
+            },
+            "extensions" : {
+                "EXT_pbr_attributes" : {
+                    "attribSpace" : "sRGB",
+                    "baseColorAttrib" : "_BASECOLOR_WORN_OUT",
+                    "roughnessAttrib" : "_ROUGHNESS_WORN_OUT",
+                    "metallicAttrib" : "METALLIC",
+                }
+            }
+        }		
     ],
     "meshes": [
         {
-            "name": "myMesh_metallic_roughness",
+            "name": "game_asset_1",
             "primitives": [
                 {
                     "material": 0,
                     "mode": 4,
                     "attributes": {
-                        "ROUGHNESS_METALLIC": 4,
-                        "COLOR_0": 3,
+						"_BASECOLOR_WORN_OUT": 7,
+					    "_ROUGHNESS_WORN_OUT": 6,
+						"METALLIC": 5,
+                        "_ROUGHNESS_BRAND_NEW": 4,
+                        "_BASECOLOR_BRAND_NEW": 3,
                         "NORMAL": 2,
                         "POSITION": 1
                     },
@@ -101,23 +113,26 @@ This extension adds on additional `enum` to the `materials` section.
 
 This enum provides information about the color space interpretation of the  vertex attributes used. If not present, `"linear"` is assumed. If color space is "sRGB", the implementation is required to convert the color to linear space in order to correctly interpolate via the fixed function pipeline.
 
-If one or more of the attributes are referenced by the material, they must be multiplied with the respective factor, for example, "roughnessAttrib" float value has to be multiplied with "roughnessFactor" of the pbrMetallicRoughness material.
+If one or more of the attributes are referenced by the material, they must override the respective factor, for example, "roughnessAttrib" overrides "roughnessFactor" of the pbrMetallicRoughness material.
 
 If a relevant texture (for example, metallicRoughnessTexture) is defined in the material, an implementation must multiply the texture values with both attribute value and constant factor.
 
-Swizzle is defined as one or more of letters in the standard 4 component vector "rgba". To simplify extension implementations, each letter can appear only once in the swizzle string, so for example, "rrgg" swizzle is not allowed.
-
 ### Attributes
 
-This extension allows any name to be used as a valid attribute semantic property name.
-This extension also allows any accessor type and component type for each attribute. Implementations are encouraged to support at least FLOAT, UNSIGNED_BYTE and UNSIGNED_SHORT component types, in 1 to 4 component vector formats.
+Valid attribute semantic property names include `METALLIC`, `ROUGHNESS`.
+Valid accessor type and component type for each attribute semantic property are defined below:
+
+|Name|Accessor Type(s)|Component Type(s)|Description|
+|----|----------------|-----------------|-----------|
+|`METALLIC`|`"SCALAR"`|`5126`&nbsp;(FLOAT)<br>`5121`&nbsp;(UNSIGNED_BYTE)&nbsp;normalized<br>`5123`&nbsp;(UNSIGNED_SHORT)&nbsp;normalized|PBR Metallic Material Parameter|
+|`ROUGHNESS`|`"SCALAR"`|`5126`&nbsp;(FLOAT)<br>`5121`&nbsp;(UNSIGNED_BYTE)&nbsp;normalized<br>`5123`&nbsp;(UNSIGNED_SHORT)&nbsp;normalized|PBR Roughness Material Parameter|
+ 
+This extension allows user defined attributes (prefixed with "_") to be used instead of the default ones, with the same type limitations as specified in the above table.
 
 ## Best Practices
 
-The primary motivation of this extension is to allow PBR materials to be represented by additional material parameters.
+The primary motivation of this extension is to allow PBR materials to be represented by additional vertex based material parameters.
 For this use case, it is recommended to set both "metallicFactor" and "roughnessFactor" to fallback values.
-Loaders should pay attention to floating point precision such that 1.0 is exactly represented.
-
 
 If an exporter implementation chooses to add a metallicRoughnessTexture, the texture values take semantic precedence with regards to being linear shading parameters and the attribute values are interpreted as a factor.
 Such configurations are defined for consistency and flexibility, but are not recommended.
@@ -129,7 +144,12 @@ If sRGB was used for COLOR_0, the resulting color space and interpolation will b
 
 Implementations concerned with these potentially undesirable results, maybe choose to add the extension to `"extensionsRequired"`.
 
-When COLOR_0 attribute exists in the mesh, and baseColorAttrib is defined, baseColorAttrib has the priority, and COLOR_0 attribute (as per Core specification) is ignored. 
+To provide for a clean separation between meshes and materials, the following two considerations apply:
+
+When COLOR_0 attribute exists in the mesh, and baseColorAttrib is defined, baseColorAttrib has the priority, and automatic usage of COLOR_0 attribute (as per Core specification) is ignored. 
+
+When COLOR_0 attribute exists in the mesh, and baseColorAttrib is not defined, 
+COLOR_0 is again ignored (not automatically applied).
 
 ## Known Implementations
 
