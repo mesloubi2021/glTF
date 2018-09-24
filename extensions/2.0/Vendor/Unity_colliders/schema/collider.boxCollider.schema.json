@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "Unity_colliders Box Collider",
+    "type": "object",
+    "description": "A set of parameter values that are used to define a box collider.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "center": {
+            "type": "array",
+            "description": "The center of the collider.",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "default": [ 0.0, 0.0, 0.0 ]
+        },
+        "size": {
+            "type": "array",
+            "description": "The size of the collider.",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "default": [ 1.0, 1.0, 1.0 ]
+        },
+        "extensions": { },
+        "extras": { }
+    }
+}

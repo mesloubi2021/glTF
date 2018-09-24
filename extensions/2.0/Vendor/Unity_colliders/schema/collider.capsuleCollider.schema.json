@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "Unity_colliders Capsule Collider",
+    "type": "object",
+    "description": "A set of parameter values that are used to define a capsule collider.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "center": {
+            "type": "array",
+            "description": "The center of the collider.",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "default": [ 0.0, 0.0, 0.0 ]
+        },
+        "radius": {
+            "type": "number",
+            "default": 0.5,
+            "description": "The radius of the collider."
+        },
+        "height": {
+            "type": "number",
+            "default": 1.0,
+            "description": "The height of the capsule collider."
+        },
+        "direction": {
+            "description": "The direction of the capsule collider.",
+            "anyOf": [
+                {
+                    "enum": [ "x" ],
+                    "description": "Orient the collider in the direction of the x-axis."
+                },
+                {
+                    "enum": [ "y" ],
+                    "description": "Orient the collider in the direction of the y-axis."
+                },
+                {
+                    "enum": [ "z" ],
+                    "description": "Orient the collider in the direction of the z-axis."
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "extensions": { },
+        "extras": { }
+    }
+}

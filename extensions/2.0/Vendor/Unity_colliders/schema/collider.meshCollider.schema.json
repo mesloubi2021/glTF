@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "Unity_colliders Mesh Collider",
+    "type": "object",
+    "description": "A set of parameter values that are used to define a mesh collider.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "convex": {
+            "type": "boolean",
+            "default": false,
+            "description": "Specifies whether the collider is convex."
+        },
+        "mesh": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The index of the mesh in this node."
+        },
+        "extensions": { },
+        "extras": { }
+    }
+}

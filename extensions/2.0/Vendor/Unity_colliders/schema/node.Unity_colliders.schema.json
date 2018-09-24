@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "Unity_colliders Node extension",
+    "type": "object",
+    "description": "glTF Extension for an individual node in a glTF model, to associate it with the model's root Unity_colliders object.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "collider": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The index of the collider in this node."
+        },
+        "extensions": { },
+        "extras": { }
+    }
+}
