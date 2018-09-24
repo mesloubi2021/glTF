@@ -14,6 +14,7 @@ This extensions allows glTF to support Unity colliders.
 
 ## Unity Colliders
 
+Node Extension:
 ```json
 "nodes": [
     {
@@ -27,6 +28,7 @@ This extensions allows glTF to support Unity colliders.
 ]
 ```
 
+glTF Extension:
 ```json
 "extensions": {
     "Unity_colliders": {
