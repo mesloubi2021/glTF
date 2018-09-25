@@ -10,7 +10,7 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
-This extensions allows glTF to support Unity colliders.
+This extension allows glTF to support Unity colliders.
 
 ## Unity Colliders
 
