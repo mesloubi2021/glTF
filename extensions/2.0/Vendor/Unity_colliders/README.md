@@ -14,6 +14,16 @@ This extension allows glTF to support Unity colliders.
 
 ## Unity Colliders
 
+Setup:
+```json
+"extensionsUsed": [
+    "Unity_colliders"
+],
+"extensionsRequired": [
+    "Unity_colliders"
+],
+```
+
 Node Extension:
 ```json
 "nodes": [
