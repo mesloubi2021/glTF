@@ -21,7 +21,7 @@ Setup:
 ],
 "extensionsRequired": [
     "Unity_colliders"
-],
+]
 ```
 
 Node Extension:
