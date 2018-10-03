@@ -9,13 +9,13 @@
             "allOf": [ { "$ref": "collider.boxCollider.schema.json" } ],
             "description": "A set of parameter values that are used to define a box collider."
         },
-        "capsuleCollider": {
-            "allOf": [ { "$ref": "collider.capsuleCollider.schema.json" } ],
-            "description": "A set of parameter values that are used to define a capsule collider."
-        },
         "sphereCollider": {
             "allOf": [ { "$ref": "collider.sphereCollider.schema.json" } ],
             "description": "A set of parameter values that are used to define a sphere collider."
+        },
+        "capsuleCollider": {
+            "allOf": [ { "$ref": "collider.capsuleCollider.schema.json" } ],
+            "description": "A set of parameter values that are used to define a capsule collider."
         },
         "meshCollider": {
             "allOf": [ { "$ref": "collider.meshCollider.schema.json" } ],
