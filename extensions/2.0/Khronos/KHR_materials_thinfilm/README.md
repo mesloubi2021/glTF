@@ -3,6 +3,7 @@
 ## Khronos 3D Formats Working Group
 
 * Norbert Nopper, UX3D [@UX3DGpuSoftware](https://twitter.com/UX3DGpuSoftware)
+* Ben Houston, [Threekit](https://threekit.com)  [@BenHouston3D](https://twitter.com/BenHouston3D)
 
 ## Acknowledgments
 
@@ -44,20 +45,25 @@ All implementations should use the same calculations for the BRDF inputs. Implem
 
 |                             | Type                                                                | Description                      | Required              |
 |-----------------------------|---------------------------------------------------------------------|----------------------------------|-----------------------|
-|**thinfilmFactor**           | `number`                                                            | The thin film intensity.         | No, default: `0.0`    |
-|**thinfilmTexture**          | [`textureInfo`](/specification/2.0/README.md#reference-textureInfo) | The thin film intensity texture. | No                    |
-|**thinfilmThicknessMinimum** | `number`                                                            | The thin film minimum thickness. | No, default: `400.0`  |
-|**thinfilmThicknessMaximum** | `number`                                                            | The thin film maximum thickness. | No, default: `1200.0` |
-|**thinfilmThicknessTexture** | [`textureInfo`](/specification/2.0/README.md#reference-textureInfo) | The thin film thickness texture. | No                    |
+|**thinfilmIOR**           | `number`                                                            | The thin film index of refraction.         | No, default: `1.5`    |
+|**thinfilmIORTexture**          | [`textureInfo`](/specification/2.0/README.md#reference-textureInfo) | The thin film index of refraction modulation texture. | No                    |
+|**thinfilmThickness** | `number`                                                            | The thin film maximum thickness in nanometers. | No, default: `400.0`  |
+|**thinfilmThicknessTexture** | [`textureInfo`](/specification/2.0/README.md#reference-textureInfo) | The thin film thickness modulation texture. | No                    |
 
 ```
-float thinfilmThicknessNormalized = (thinfilmTexture.g * (thinfilmThicknessMaximum - thinfilmThicknessMinimum) + thinfilmThicknessMinimum) / 1200.0;  
-float thinfilmIntensity = thinfilmTexture.r * thinfilmFactor;
+// implementation specific min, max for the precalculated iridescence lookup table per 
+// https://hal.archives-ouvertes.fr/hal-01518344/document
+#define THINFILM_MIN_THICKNESS 400
+#define THINFILM_MAX_THICKNESS 1200
+
+float thinfilmThicknessNormalized = clamp( ( thinfilmTexture.g * thinfilmThickness ) - THINFILM_MIN_THICKNESS ) /
+  ( THINFILM_MAX_THICKNESS - THINFILM_MIN_THICKNESS ), 0, 1.0 );
+float thinfilmIntensity = thinfilmTexture.r * iorToF0( thinfilmIOR );
 ```
 
 The thin film effect is overwriting the F (Surface Reflection Ratio) from the specular glossiness effect.
 ```
-vec3 thinfilmSpecularReflection(vec3 F0, float VdotH, float thinfilmIntensity, float thinfilmThicknessNormalized)
+vec3 thinfilmSpecularReflection(vec3 F0, float VdotH, float thinfilmIntensity, float thinfilmThicknessNormalized )
 {
     vec3 F = fresnelReflection(F0, VdotH);
 
