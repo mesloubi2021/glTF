@@ -33,11 +33,11 @@ Per-feature IDs enable individual features to be identified and updated at runti
 
 A _Batch Table_ contains per-feature application-specific properties. Some example batch table properties are building heights, geographic coordinates, and database primary keys. A _batch id_ vertex attribute is used to identify the vertices belonging to a feature, and that feature's properties may be retrieved from the batch table.
 
-![Batch Table Diagram](./batch-table-buildings.png)
+![Batch Table Diagram](./figures/batch-table-buildings.png)
 
 Multiple batch ids and batch tables are allowed to support feature layers. For example, in point cloud models it may be useful to store both per-point properties and per-group properties - in the first layer each point is considered a feature; in the second layer each group of points is considered a feature.
 
-![Batched Points](./batched-points.png)
+![Batched Points](./figures/batched-points.png)
 
 ### Batch Id
 
