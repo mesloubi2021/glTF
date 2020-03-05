@@ -81,42 +81,41 @@ It is more efficient to store long numeric arrays in the binary body.
 Batch table containing a mix of JSON and binary properties for two buildings (features)
 
 ```json
-  {
-    "batchLength": 2,
-    "properties": {
-      "name": {
-        "values": [
-          "Building name",
-          "Another building name"
-        ]
-      },
-      "yearBuilt": {
-        "values": [
-          1999,
-          2015
-        ]
-      },
-      "address": {
-        "values": [
-          {
-            "street": "Main Street",
-            "houseNumber": "1"
-          },
-          {
-            "street": "Main Street",
-            "houseNumber": "2"
-          }
-        ]
-      },
-      "geographicCoordinates": {
-        "accessor": 0
-      },
-      "zone": {
-        "accessor": 1
-      }
+{
+  "batchLength": 2,
+  "properties": {
+    "name": {
+      "values": [
+        "Building name",
+        "Another building name"
+      ]
+    },
+    "yearBuilt": {
+      "values": [
+        1999,
+        2015
+      ]
+    },
+    "address": {
+      "values": [
+        {
+          "street": "Main Street",
+          "houseNumber": "1"
+        },
+        {
+          "street": "Main Street",
+          "houseNumber": "2"
+        }
+      ]
+    },
+    "geographicCoordinates": {
+      "accessor": 0
+    },
+    "zone": {
+      "accessor": 1
     }
   }
-]
+}
 ```
 
 #### Batch Table Accessors Requirements
