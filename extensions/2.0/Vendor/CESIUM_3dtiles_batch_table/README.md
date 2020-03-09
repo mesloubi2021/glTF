@@ -43,6 +43,31 @@ Multiple batch ids and batch tables are allowed to support feature layers. For e
 
 This extensions adds a new indexed attribute semantic `_BATCHID_0`. All indices must start with 0 and be continuous positive integers: `_BATCHID_0`, `_BATCHID_1`, `_BATCHID_2`, etc. Each attribute represents a different feature layer and its corresponding batch table.
 
+The mapping between batch id attributes and their batch tables is defined in the primitive's `CESIUM_3dtiles_batch_table` extension object where the key is the attribute name and the value is the index into the `batchTables` array in the top-level `CESIUM_3dtiles_batch_table` extension. In the example below `_BATCHID_0` corresponds to the first batch table and `_BATCHID_1` corresponds the third batch table.
+
+```json
+"primitives": [
+  {
+    "attributes": {
+      "POSITION": 0,
+      "_BATCHID_0": 1,
+      "_BATCHID_1": 2
+    },
+    "indices": 3,
+    "material": 0,
+    "mode": 4,
+    "extensions": {
+      "CESIUM_3dtiles_batch_table": {
+        "attributes": {
+          "_BATCHID_0": 0,
+          "_BATCHID_1": 2
+        }
+      }
+    }
+  }
+]
+```
+
 `_BATCHID_0` is a required attribute for all primitives in the glTF; additional batch id attributes are optional. Clients are required to support at least `_BATCHID_0`.
 
 Valid accessor type and component type for the `_BATCHID_0` attribute semantic property are defined below.
@@ -181,7 +206,14 @@ TODO
           },
           "indices": 2,
           "material": 0,
-          "mode": 4
+          "mode": 4,
+          "extensions": {
+            "CESIUM_3dtiles_batch_table": {
+              "attributes": {
+                "_BATCHID_0": 0
+              }
+            }
+          }
         }
       ]
     }
@@ -284,7 +316,14 @@ TODO
           },
           "indices": 2,
           "material": 0,
-          "mode": 4
+          "mode": 4,
+          "extensions": {
+            "CESIUM_3dtiles_batch_table": {
+              "attributes": {
+                "_BATCHID_0": 0
+              }
+            }
+          }
         }
       ]
     }
@@ -391,7 +430,15 @@ TODO
             "_BATCHID_0": 2,
             "_BATCHID_1": 3
           },
-          "mode": 0
+          "mode": 0,
+          "extensions": {
+            "CESIUM_3dtiles_batch_table": {
+              "attributes": {
+                "_BATCHID_0": 0,
+                "_BATCHID_1": 1
+              }
+            }
+          }
         }
       ]
     }
@@ -469,7 +516,14 @@ TODO
           },
           "indices": 2,
           "material": 0,
-          "mode": 4
+          "mode": 4,
+          "extensions": {
+            "CESIUM_3dtiles_batch_table": {
+              "attributes": {
+                "_BATCHID_0": 0
+              }
+            }
+          }
         }
       ]
     }
@@ -486,6 +540,184 @@ TODO
             "name": {
               "values": [
                 "Building name"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+### Composite example
+
+```json
+{
+  "accessors": [
+    {
+      "name": "point positions (float)",
+      "bufferView": 0,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 8,
+      "type": "VEC3"
+    },
+    {
+      "name": "point colors (unsigned byte)",
+      "bufferView": 1,
+      "byteOffset": 0,
+      "componentType": 5121,
+      "count": 8,
+      "type": "VEC3"
+    },
+    {
+      "name": "per-point batch ids (implicitly 0 to batchLength-1) (batch table 0) (unsigned byte)",
+      "componentType": 5121,
+      "count": 8,
+      "type": "SCALAR"
+    },
+    {
+      "name": "per-group batch ids (batch table 1) (unsigned byte)",
+      "bufferView": 2,
+      "byteOffset": 0,
+      "componentType": 5121,
+      "count": 8,
+      "type": "SCALAR"
+    },
+    {
+      "name": "intensity property (unsigned short)",
+      "bufferView": 3,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "count": 8,
+      "type": "SCALAR"
+    },
+    {
+      "name": "classification property (unsigned byte)",
+      "bufferView": 4,
+      "byteOffset": 0,
+      "componentType": 5121,
+      "count": 8,
+      "type": "SCALAR"
+    },
+    {
+      "name": "id property (unsigned int)",
+      "bufferView": 5,
+      "byteOffset": 0,
+      "componentType": 5125,
+      "count": 2,
+      "type": "SCALAR"
+    },
+    {
+      "name": "cartographic property (vec3 float)",
+      "bufferView": 6,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 2,
+      "type": "VEC3"
+    },
+    {
+      "name": "positions (float)",
+      "bufferView": 7,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 8,
+      "type": "VEC3"
+    },
+    {
+      "name": "batch ids (unsigned byte)",
+      "bufferView": 8,
+      "byteOffset": 0,
+      "componentType": 5121,
+      "count": 8,
+      "type": "SCALAR"
+    },
+    {
+      "name": "indices (unsigned short)",
+      "bufferView": 9,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "count": 12,
+      "type": "SCALAR"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "name": "two buildings composed of four points each",
+          "attributes": {
+            "POSITION": 0,
+            "COLOR_0": 1,
+            "_BATCHID_0": 2,
+            "_BATCHID_1": 3
+          },
+          "mode": 0,
+          "extensions": {
+            "CESIUM_3dtiles_batch_table": {
+              "attributes": {
+                "_BATCHID_0": 0,
+                "_BATCHID_1": 1
+              }
+            }
+          }
+        },
+        {
+          "name": "two buildings composed of two triangles each",
+          "attributes": {
+            "POSITION": 8,
+            "_BATCHID_0": 9
+          },
+          "indices": 10,
+          "material": 0,
+          "mode": 4,
+          "extensions": {
+            "CESIUM_3dtiles_batch_table": {
+              "attributes": {
+                "_BATCHID_0": 2
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "extensionsUsed": [
+    "CESIUM_3dtiles_batch_table"
+  ],
+  "extensions": {
+    "CESIUM_3dtiles_batch_table": {
+      "batchTables": [
+        {
+          "batchLength": 8,
+          "properties": {
+            "intensity": {
+              "accessor": 4
+            },
+            "classification": {
+              "accessor": 5
+            }
+          }
+        },
+        {
+          "batchLength": 2,
+          "properties": {
+            "id": {
+              "accessor": 6
+            },
+            "cartographic": {
+              "accessor": 7
+            }
+          }
+        },
+        {
+          "batchLength": 2,
+          "properties": {
+            "name": {
+              "values": [
+                "Building name",
+                "Another building name"
               ]
             }
           }
