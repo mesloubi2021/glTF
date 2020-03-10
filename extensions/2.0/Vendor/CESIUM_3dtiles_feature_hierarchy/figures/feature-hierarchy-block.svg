@@ -1,0 +1,849 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="303.64337mm"
+   height="294.9483mm"
+   viewBox="0 0 303.64337 294.9483"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (unknown)"
+   sodipodi:docname="feature-hierarchy-block.svg"
+   inkscape:export-filename="/home/slilley/Code/glTF/extensions/2.0/Vendor/CESIUM_3dtiles_feature_hierarchy/figures/feature-hierarchy-block.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="250.70393"
+     inkscape:cy="662.00971"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1-3"
+     showgrid="false"
+     inkscape:window-width="775"
+     inkscape:window-height="434"
+     inkscape:window-x="1996"
+     inkscape:window-y="713"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(240.88379,31.902733)">
+    <g
+       id="g1122"
+       transform="translate(-240.88379,-31.902733)">
+      <g
+         id="layer2"
+         transform="translate(236.41115,64.031032)" />
+      <g
+         id="layer1-5"
+         transform="translate(236.41115,64.031032)">
+        <g
+           id="g1067"
+           transform="matrix(0.26458333,0,0,0.26458333,-245.49855,56.950244)">
+          <g
+             id="g930">
+            <title
+               id="title927">background</title>
+            <rect
+               x="-1"
+               y="-1"
+               width="582"
+               height="402"
+               id="canvas_background"
+               style="fill:none" />
+          </g>
+          <g
+             id="g994">
+            <title
+               id="title932">Layer 1</title>
+            <g
+               id="layer1-3"><rect
+   y="298.29715"
+   x="689.89832"
+   height="20.499632"
+   width="148.17928"
+   id="rect4277"
+   stroke-miterlimit="4"
+   style="fill:#adf8ae;stroke:#00e01c;stroke-width:1.52462113;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect4605"
+   width="103.04169"
+   height="19.69669"
+   x="697.99133"
+   y="359.63904"
+   stroke-miterlimit="4"
+   style="fill:#adf8ae;stroke:#00e01c;stroke-width:1.24623144;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect4275"
+   width="23.344297"
+   height="25.166922"
+   x="727.91461"
+   y="58.197094"
+   stroke-miterlimit="4"
+   style="fill:#bac9ff;stroke:#483cff;stroke-width:1.35676813;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   y="116.63242"
+   x="838.19336"
+   height="24.422941"
+   width="124.24567"
+   id="rect4273"
+   stroke-miterlimit="4"
+   style="fill:#bac9ff;stroke:#483cff;stroke-width:1.32857728;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect4605-7"
+   width="124.24567"
+   height="24.422941"
+   x="837.43414"
+   y="-2.6742907"
+   stroke-miterlimit="4"
+   style="fill:#bac9ff;stroke:#483cff;stroke-width:1.32857728;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   y="-182.71719"
+   x="785.89514"
+   height="24.60536"
+   width="21.488438"
+   id="rect4271"
+   stroke-miterlimit="4"
+   style="fill:#ffb5b5;stroke:#ff3c3c;stroke-width:1.35676813;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect4605-7-60"
+   width="65.254097"
+   height="24.036335"
+   x="943.06274"
+   y="-242.63892"
+   stroke-miterlimit="4"
+   style="fill:#ffb5b5;stroke:#ff3c3c;stroke-width:1.35676813;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+
+
+{&quot;extensions&quot; : {&quot;3DTILES_batch_table_hierarchy&quot; : {&quot;classes&quot; : [{&quot;name&quot; : &quot;Wall&quot;,&quot;length&quot; : 6,&quot;instances&quot; : {&quot;wall_color&quot; : [&quot;blue&quot;, &quot;pink&quot;, &quot;green&quot;, &quot;lime&quot;, &quot;black&quot;, &quot;brown&quot;],&quot;wall_windows&quot; : [2, 4, 4, 2, 0, 3]}},{&quot;name&quot; : &quot;Building&quot;,&quot;length&quot; : 3,&quot;instances&quot; : {&quot;building_name&quot; : [&quot;building_0&quot;, &quot;building_1&quot;, &quot;building_2&quot;],&quot;building_id&quot; : [0, 1, 2],&quot;building_address&quot; : [&quot;10 Main St&quot;, &quot;12 Main St&quot;, &quot;14 Main St&quot;]}},{&quot;name&quot; : &quot;Block&quot;,&quot;length&quot; : 1,&quot;instances&quot; : {&quot;block_lat_long&quot; : [[0.12, 0.543]],&quot;block_district&quot; : [&quot;central&quot;]}}],&quot;instancesLength&quot; : 10,&quot;classIds&quot; : [0, 0, 0, 0, 0, 0, 1, 1, 1, 2],&quot;parentIds&quot; : [6, 6, 7, 7, 8, 8, 9, 9, 9, 9]}}}
+   <rect
+   id="rect4699"
+   width="362.45697"
+   height="473.96939"
+   x="35.410694"
+   y="-119.28643"
+   stroke-miterlimit="4"
+   style="fill:#f1f1f1;stroke:#000000;stroke-width:2.12919736;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6547"
+   width="72.399788"
+   height="77.177139"
+   x="81.293762"
+   y="140.35098"
+   stroke-miterlimit="4"
+   style="fill:#eba4a4;stroke-width:2.22450781;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6547-0"
+   width="72.399788"
+   height="111.10858"
+   x="186.82007"
+   y="106.77797"
+   stroke-miterlimit="4"
+   style="fill:#9ca732;stroke-width:2.66909242;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6547-0-9"
+   width="72.399788"
+   height="87.168182"
+   x="291.87283"
+   y="130.00145"
+   stroke-miterlimit="4"
+   style="fill:#745a24;stroke-width:2.36411572;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6547-7"
+   width="72.399788"
+   height="77.177139"
+   x="81.293762"
+   y="63.016285"
+   stroke-miterlimit="4"
+   style="fill:#5fb7ea;stroke-width:2.22450781;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6547-0-3"
+   width="72.399788"
+   height="111.10858"
+   x="186.82007"
+   y="-3.1187427"
+   stroke-miterlimit="4"
+   style="fill:#15601c;stroke-width:2.66909242;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6547-0-9-8"
+   width="72.399788"
+   height="87.168182"
+   x="291.87283"
+   y="42.49118"
+   stroke-miterlimit="4"
+   style="fill:#292929;stroke-width:2.36411572;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669"
+   width="17.266247"
+   height="17.004637"
+   x="93.744843"
+   y="81.570999"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.41304399;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-8"
+   width="17.266247"
+   height="17.004637"
+   x="121.18681"
+   y="81.570999"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-1"
+   width="17.266247"
+   height="17.004637"
+   x="93.744888"
+   y="154.24767"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-8-7"
+   width="17.266247"
+   height="17.004637"
+   x="121.18681"
+   y="154.24767"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-87-6"
+   width="17.266247"
+   height="17.004637"
+   x="93.744888"
+   y="181.4279"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-8-2-1"
+   width="17.266247"
+   height="17.004637"
+   x="121.18681"
+   y="181.4279"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-1-2"
+   width="17.266247"
+   height="17.004637"
+   x="197.29572"
+   y="118.82632"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-8-7-9"
+   width="17.266247"
+   height="17.004637"
+   x="197.29572"
+   y="141.93626"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-9"
+   width="17.266247"
+   height="17.004637"
+   x="197.79849"
+   y="9.0303984"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-8-5"
+   width="17.266247"
+   height="17.004637"
+   x="225.24054"
+   y="9.0303984"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-9-3"
+   width="17.266247"
+   height="17.004637"
+   x="197.79849"
+   y="36.21064"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-8-5-4"
+   width="17.266247"
+   height="17.004637"
+   x="225.24054"
+   y="36.21064"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-1-1"
+   width="17.266247"
+   height="17.004637"
+   x="303.28314"
+   y="134.07173"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-8-7-6"
+   width="17.266247"
+   height="17.004637"
+   x="320.54935"
+   y="134.07173"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect6669-8-7-6-2"
+   width="17.266247"
+   height="17.004637"
+   x="337.81561"
+   y="134.07173"
+   stroke-miterlimit="4"
+   style="fill:#e4e4e4;fill-opacity:0.39215698;stroke:#212121;stroke-width:1.37757862;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<rect
+   id="rect5204-60"
+   width="27.239525"
+   height="27.239525"
+   x="64.4702"
+   y="204.53789"
+   stroke-miterlimit="4"
+   style="fill:#ffe680;stroke:#000000;stroke-width:1.39223552;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+
+
+1
+   <rect
+   id="rect5204-60-5"
+   width="27.239525"
+   height="27.239525"
+   x="64.4702"
+   y="101.9988"
+   stroke-miterlimit="4"
+   style="fill:#ffe680;stroke:#000000;stroke-width:1.39223552;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+
+
+0
+   <rect
+   id="rect5204-60-9"
+   width="27.239525"
+   height="27.239525"
+   x="177.18597"
+   y="204.53789"
+   stroke-miterlimit="4"
+   style="fill:#ffe680;stroke:#fd0000;stroke-width:2.54602218;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+
+
+3
+   <rect
+   id="rect5204-60-9-5"
+   width="27.239525"
+   height="27.239525"
+   x="177.18597"
+   y="65.366562"
+   stroke-miterlimit="4"
+   style="fill:#ffe680;stroke:#000000;stroke-width:1.39223552;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+
+
+2
+   <rect
+   id="rect5204-60-9-50"
+   width="27.239525"
+   height="27.239525"
+   x="283.79645"
+   y="204.53789"
+   stroke-miterlimit="4"
+   style="fill:#ffe680;stroke:#000000;stroke-width:1.39223552;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+
+
+5
+   <rect
+   id="rect5204-60-9-50-6"
+   width="27.239525"
+   height="27.239525"
+   x="283.79645"
+   y="77.577293"
+   stroke-miterlimit="4"
+   style="fill:#ffe680;stroke:#000000;stroke-width:1.39223552;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+
+
+4
+   <path
+   d="M 192.36486,242.55543 C 292.52474,334.33717 592.49957,372.34009 707.14335,437.8733"
+   id="path7059"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#ff0707;stroke-width:2.41180968;stroke-miterlimit:4"
+   inkscape:connector-curvature="0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<circle
+   id="path5331"
+   cx="737.77692"
+   cy="508.30957"
+   r="13.426823"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#f60000;stroke-width:2.66834641;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<path
+   d="m 707.17803,426.73167 1.7266,12.55454 -11.95965,0.77438"
+   id="path4702"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#ff0000;stroke-width:2.73062754;stroke-miterlimit:4"
+   inkscape:connector-curvature="0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<circle
+   id="path5331-1"
+   cx="737.96185"
+   cy="567.35321"
+   r="13.426823"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#f60000;stroke-width:2.66909242;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<path
+   d="m 753.678,585.69783 c 46.14142,69.02262 86.76681,19.8786 83.28534,4.79336"
+   id="path7125"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#0035f6;stroke-width:3.17910814;stroke-miterlimit:4"
+   inkscape:connector-curvature="0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<path
+   d="m 830.95109,593.79393 7.23289,-5.62788 5.93893,7.61452"
+   id="path4702-3"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#0035f6;stroke-width:2.73062754;stroke-miterlimit:4"
+   inkscape:connector-curvature="0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<circle
+   id="path5331-1-2"
+   cx="853.47473"
+   cy="568.26593"
+   r="13.426823"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#0035f6;stroke-width:2.66909242;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<circle
+   id="path5331-1-2-5"
+   cx="853.36237"
+   cy="510.78171"
+   r="13.426823"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#0035f6;stroke-width:2.66909242;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<circle
+   id="path5331-1-2-4"
+   cx="910.09375"
+   cy="511.25348"
+   r="13.426823"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#00ca03;stroke-width:2.66909242;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<circle
+   id="path5331-1-2-4-0"
+   cx="911.19788"
+   cy="570.51556"
+   r="13.426823"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#00ca03;stroke-width:2.66909242;stroke-miterlimit:4;stroke-dashoffset:0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<path
+   d="m 861.47384,589.74427 c 9.08485,30.06272 42.82835,28.04293 46.56345,2.39929"
+   id="path7125-3"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#00ca03;stroke-width:2.9380784;stroke-miterlimit:4"
+   inkscape:connector-curvature="0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<path
+   d="m 912.84097,599.60012 -4.80368,-7.45656 -8.0026,5.24177"
+   id="path4702-3-7"
+   stroke-miterlimit="4"
+   style="fill:#00ce00;fill-opacity:0.10196102;stroke:#00ca03;stroke-width:2.98004961;stroke-miterlimit:4"
+   inkscape:connector-curvature="0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+
+
+Labeled bybatchId
+   <path
+   d="m 941.83133,569.25428 c 13.98996,-3.33638 19.76726,-14.00415 20.12316,-24.8667 0.49085,-14.98177 -9.33107,-30.33404 -22.14269,-27.33328"
+   id="path7378"
+   stroke-miterlimit="4"
+   style="fill:none;stroke:#ed9b00;stroke-width:2.69216824;stroke-miterlimit:4"
+   inkscape:connector-curvature="0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+<path
+   d="m 947.75882,525.10266 -7.94702,-8.04836 9.36091,-7.21916"
+   id="path4702-3-7-2"
+   stroke-miterlimit="4"
+   style="fill:#00ce00;fill-opacity:0.10196102;stroke:#ed9b00;stroke-width:2.73062754;stroke-miterlimit:4"
+   inkscape:connector-curvature="0"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96" />
+
+
+Traversal stops<flowRoot
+   transform="matrix(0.44365399,0,0,0.44365399,775.53446,-606.14227)"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.01%;font-family:Consolas;-inkscape-font-specification:'Consolas, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+   id="flowRoot4629"
+   xml:space="preserve"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><flowRegion
+     id="flowRegion4631"><rect
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:36.06414032px;line-height:125%;font-family:Consolas;-inkscape-font-specification:'Consolas, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
+       y="331.09113"
+       x="-702.85712"
+       height="3148.3569"
+       width="1880.0459"
+       id="rect4633" /></flowRegion><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara4446">{</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8216">  &quot;featureCount&quot;: 6,</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8218">  &quot;properties&quot;: {},</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8220">  &quot;extensions&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8222">    &quot;CESIUM_3dtiles_feature_hierarchy&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8224">      &quot;classes&quot;: [</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8226">        {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8228">          &quot;name&quot;: &quot;Wall&quot;,</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8230">          &quot;instanceCount&quot;: 6,</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8232">          &quot;properties&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8234">            &quot;wall_color&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8236">              &quot;values&quot;: [&quot;blue&quot;, &quot;pink&quot;, &quot;green&quot;, &quot;lime&quot;, &quot;black&quot;, &quot;brown&quot;]</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8238">            },</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8240">            &quot;wall_windows&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8242">              &quot;values&quot;: [2, 4, 4, 2, 0, 3]</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8244">            }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8246">          }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8248">        },</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8250">        {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8252">          &quot;name&quot;: &quot;Building&quot;,</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8254">          &quot;instanceCount&quot;: 3,</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8256">          &quot;properties&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8258">            &quot;building_name&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8260">              &quot;values&quot;: [&quot;building_0&quot;, &quot;building_1&quot;, &quot;building_2&quot;]</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8262">            },</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8264">            &quot;building_id&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8266">              &quot;values&quot;: [0, 1, 2]</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8268">            },</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8270">            &quot;building_address&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8272">              &quot;values&quot;: [&quot;10 Main St&quot;, &quot;12 Main St&quot;, &quot;14 Main St&quot;]</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8274">            }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8276">          }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8278">        },</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8280">        {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8282">          &quot;name&quot;: &quot;Block&quot;,</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8284">          &quot;instanceCount&quot;: 1,</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8286">          &quot;properties&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8288">            &quot;block_lat_long&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8290">              &quot;values&quot;: [[0.12, 0.543]]</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8292">            },</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8294">            &quot;block_district&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8296">              &quot;values&quot;: [&quot;central&quot;]</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8298">            }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8300">          }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8302">        }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8304">      ],</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8306">      &quot;instanceCount&quot;: 10,</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8308">      &quot;classIds&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8310">        &quot;values&quot;: [0, 0, 0, 0, 0, 0, 1, 1, 1, 2]</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8312">      },</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8314">      &quot;parentIds&quot;: {</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8316">        &quot;values&quot;: [6, 6, 7, 7, 8, 8, 9, 9, 9, 9]</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8318">      }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8320">    }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8322">  }</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8326">}</flowPara><flowPara
+     style="font-size:36.06414032px;line-height:1.25"
+     id="flowPara8324" /></flowRoot><flowRoot
+   transform="translate(108.69794,-345.90397)"
+   style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+   id="flowRoot4750"
+   xml:space="preserve"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><flowRegion
+     id="flowRegion4752"><rect
+       y="705.8175"
+       x="67.680222"
+       height="63.63961"
+       width="341.43155"
+       id="rect4754" /></flowRegion><flowPara
+     style="font-size:21.33333397px;line-height:1.25"
+     id="flowPara4756">Labeled by <flowSpan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+   id="flowSpan1124">feature</flowSpan><flowSpan
+   id="flowSpan4758"
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.33333397px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Id</flowSpan></flowPara></flowRoot><flowRoot
+   transform="translate(-441.7717,-607.53502)"
+   style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+   id="flowRoot5196-9"
+   xml:space="preserve"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><flowRegion
+     style="font-size:18.66666603px"
+     id="flowRegion5198-6"><rect
+       style="font-size:18.66666603px"
+       y="713.89874"
+       x="513.15747"
+       height="72.225906"
+       width="107.58125"
+       id="rect5200-56" /></flowRegion><flowPara
+     style="font-size:18.66666603px;line-height:1.25"
+     id="flowPara5202-2">0</flowPara></flowRoot><flowRoot
+   transform="translate(-441.26663,-506.78373)"
+   style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+   id="flowRoot5196-9-4"
+   xml:space="preserve"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><flowRegion
+     style="font-size:18.66666603px"
+     id="flowRegion5198-6-7"><rect
+       style="font-size:18.66666603px"
+       y="713.89874"
+       x="513.15747"
+       height="72.225906"
+       width="107.58125"
+       id="rect5200-56-6" /></flowRegion><flowPara
+     style="font-size:18.66666603px;line-height:1.25"
+     id="flowPara8440">1</flowPara></flowRoot><flowRoot
+   transform="translate(-328.29816,-644.66044)"
+   style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+   id="flowRoot5196-9-4-6"
+   xml:space="preserve"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><flowRegion
+     style="font-size:18.66666603px"
+     id="flowRegion5198-6-7-9"><rect
+       style="font-size:18.66666603px"
+       y="713.89874"
+       x="513.15747"
+       height="72.225906"
+       width="107.58125"
+       id="rect5200-56-6-3" /></flowRegion><flowPara
+     style="font-size:18.66666603px;line-height:1.25"
+     id="flowPara8440-7">2</flowPara></flowRoot><flowRoot
+   transform="translate(-328.89359,-505.64142)"
+   style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+   id="flowRoot5196-9-4-6-4"
+   xml:space="preserve"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><flowRegion
+     style="font-size:18.66666603px"
+     id="flowRegion5198-6-7-9-5"><rect
+       style="font-size:18.66666603px"
+       y="713.89874"
+       x="513.15747"
+       height="72.225906"
+       width="107.58125"
+       id="rect5200-56-6-3-2" /></flowRegion><flowPara
+     style="font-size:18.66666603px;line-height:1.25"
+     id="flowPara8440-7-5">3</flowPara></flowRoot><flowRoot
+   transform="translate(-222.82758,-632.92065)"
+   style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+   id="flowRoot5196-9-4-6-47"
+   xml:space="preserve"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><flowRegion
+     style="font-size:18.66666603px"
+     id="flowRegion5198-6-7-9-4"><rect
+       style="font-size:18.66666603px"
+       y="713.89874"
+       x="513.15747"
+       height="72.225906"
+       width="107.58125"
+       id="rect5200-56-6-3-4" /></flowRegion><flowPara
+     style="font-size:18.66666603px;line-height:1.25"
+     id="flowPara8440-7-3">4</flowPara></flowRoot><flowRoot
+   transform="translate(-221.43572,-505.62573)"
+   style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+   id="flowRoot5196-9-4-6-47-0"
+   xml:space="preserve"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><flowRegion
+     style="font-size:18.66666603px"
+     id="flowRegion5198-6-7-9-4-7"><rect
+       style="font-size:18.66666603px"
+       y="713.89874"
+       x="513.15747"
+       height="72.225906"
+       width="107.58125"
+       id="rect5200-56-6-3-4-8" /></flowRegion><flowPara
+     style="font-size:18.66666603px;line-height:1.25"
+     id="flowPara8440-7-3-6">5</flowPara></flowRoot><flowRoot
+   transform="translate(906.5026,-175.74649)"
+   style="font-style:normal;font-weight:normal;line-height:0.01%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ed9b00;fill-opacity:1;stroke:#000000;stroke-width:0.37795275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+   id="flowRoot4750-8"
+   xml:space="preserve"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><flowRegion
+     id="flowRegion4752-8"
+     style="fill:#ed9b00;fill-opacity:1;stroke:#000000;stroke-width:0.37795275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"><rect
+       y="705.8175"
+       x="67.680222"
+       height="63.63961"
+       width="341.43155"
+       id="rect4754-4"
+       style="fill:#ed9b00;fill-opacity:1;stroke:#000000;stroke-width:0.37795275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /></flowRegion><flowPara
+     style="font-size:16px;line-height:1.25;fill:#ed9b00;fill-opacity:1;stroke:#000000;stroke-width:0.37795275;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="flowPara4756-3">Traversal stops</flowPara></flowRoot></g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
