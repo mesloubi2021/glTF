@@ -809,7 +809,9 @@ TODO
           "name": "3 branches in each of the 2 instanced trees",
           "featureCount": 6,
           "properties": {
-            "state": ["normal", "normal", "broken", "nest", "normal", "normal"]
+            "state": {
+              "values": ["normal", "normal", "broken", "nest", "normal", "normal"]
+            }
           }
         }
       ]
