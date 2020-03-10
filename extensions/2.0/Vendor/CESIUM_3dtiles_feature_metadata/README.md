@@ -1,4 +1,4 @@
-# CESIUM\_3dtiles\_batch\_table
+# CESIUM\_3dtiles\_feature\_metadata
 
 ## Contributors
 
@@ -8,18 +8,13 @@ TODO
 
 TODO
 
-* Change name?
-  * CESIUM_3dtiles_batched_features
-  * CESIUM_3dtiles_batched_models
-* Rename batch to feature everywhere?
-* Note the batch table hierarchy extension
-* Update batch points diagram
+* Update diagrams
 * `values` and `accessor` are mutually exclusive
 * Fill in other TODO's
 
 ## Dependencies
 
-Written against the glTF 2.0 spec.
+Written against the glTF 2.0 spec. Depends on KHR_mesh_instancing for instanced features.
 
 ## Overview
 
@@ -31,36 +26,36 @@ This extension allows offline batching of heterogeneous 3D models, such as diffe
 
 Per-feature IDs enable individual features to be identified and updated at runtime, e.g., show/hide, highlight color, etc. IDs may be used to query application-specific properties for styling and any application-specific use cases such as populating a UI or issuing a REST API request.
 
-A _Batch Table_ contains per-feature application-specific properties. Some example batch table properties are building heights, geographic coordinates, and database primary keys. A _batch id_ vertex attribute is used to identify the vertices belonging to a feature, and that feature's properties may be retrieved from the batch table.
+A _Feature Table_ contains per-feature application-specific properties. Some example feature table properties are building heights, geographic coordinates, and database primary keys. A _feature id_ vertex attribute is used to identify the vertices belonging to a feature, and that feature's properties may be retrieved from the feature table.
 
-![Batch Table Diagram](./figures/batch-table-buildings.png)
+![Feature Table Diagram](./figures/feature-table-buildings.png)
 
-Multiple batch ids and batch tables are allowed to support feature layers. For example, in point cloud models it may be useful to store both per-point properties and per-group properties - in the first layer each point is considered a feature; in the second layer each group of points is considered a feature.
+Multiple feature ids and feature tables are allowed to support feature layers. For example, in point cloud models it may be useful to store both per-point properties and per-group properties - in the first layer each point is considered a feature; in the second layer each group of points is considered a feature.
 
 ![Batched Points](./figures/batched-points.png)
 
-### Batch Id
+### Feature Id
 
-This extensions adds a new indexed attribute semantic `_BATCHID_0`. All indices must start with 0 and be continuous positive integers: `_BATCHID_0`, `_BATCHID_1`, `_BATCHID_2`, etc. Each attribute represents a different feature layer and its corresponding batch table.
+This extension adds a new indexed attribute semantic `_FEATURE_ID_0`. All indices must start with 0 and be continuous positive integers: `_FEATURE_ID_0`, `_FEATURE_ID_1`, `_FEATURE_ID_2`, etc. Each attribute represents a different feature layer and its corresponding feature table.
 
-The mapping between batch id attributes and their batch tables is defined in the primitive's `CESIUM_3dtiles_batch_table` extension object where the key is the attribute name and the value is the index into the `batchTables` array in the top-level `CESIUM_3dtiles_batch_table` extension. In the example below `_BATCHID_0` corresponds to the first batch table and `_BATCHID_1` corresponds the third batch table.
+The mapping between feature id attributes and their feature tables is defined in the primitive's `CESIUM_3dtiles_feature_metadata` extension object where the key is the attribute name and the value is the index into the `featureTables` array in the top-level `CESIUM_3dtiles_feature_metadata` extension. In the example below `_FEATURE_ID_0` corresponds to the first feature table and `_FEATURE_ID_1` corresponds the third feature table.
 
 ```json
 "primitives": [
   {
     "attributes": {
       "POSITION": 0,
-      "_BATCHID_0": 1,
-      "_BATCHID_1": 2
+      "_FEATURE_ID_0": 1,
+      "_FEATURE_ID_1": 2
     },
     "indices": 3,
     "material": 0,
     "mode": 4,
     "extensions": {
-      "CESIUM_3dtiles_batch_table": {
+      "CESIUM_3dtiles_feature_metadata": {
         "attributes": {
-          "_BATCHID_0": 0,
-          "_BATCHID_1": 2
+          "_FEATURE_ID_0": 0,
+          "_FEATURE_ID_1": 2
         }
       }
     }
@@ -68,46 +63,46 @@ The mapping between batch id attributes and their batch tables is defined in the
 ]
 ```
 
-`_BATCHID_0` is a required attribute for all primitives in the glTF; additional batch id attributes are optional. Clients are required to support at least `_BATCHID_0`.
+`_FEATURE_ID_0` is a required attribute for all primitives in the glTF; additional feature id attributes are optional. Clients are required to support at least `_FEATURE_ID_0`.
 
-Valid accessor type and component type for the `_BATCHID_0` attribute semantic property are defined below.
+Valid accessor type and component type for the `_FEATURE_ID_0` attribute semantic property are defined below.
 
 |Name|Accessor Type(s)|Component Type(s)|Description|
 |----|----------------|-----------------|-----------|
-|`_BATCHID_0`|`"SCALAR"`|`5121`&nbsp;(UNSIGNED_BYTE)<br>`5123`&nbsp;(UNSIGNED_SHORT)<br>`5125`&nbsp;(UNSIGNED_INT)|Feature id within a feature layer |
+|`_FEATURE_ID_0`|`"SCALAR"`|`5121`&nbsp;(UNSIGNED_BYTE)<br>`5123`&nbsp;(UNSIGNED_SHORT)<br>`5125`&nbsp;(UNSIGNED_INT)|Feature id within a feature layer |
 
-Note that to comply with alignment rules for accessors, accessors need to be aligned to 4-byte boundaries; for example, an `UNSIGNED_BYTE` batch id is expected to have a stride of 4, not 1.
+Note that to comply with alignment rules for accessors, accessors need to be aligned to 4-byte boundaries; for example, an `UNSIGNED_BYTE` feature id is expected to have a stride of 4, not 1.
 
-#### Batch Id Accessor Requirements
+#### Feature Id Accessor Requirements
 
-Each component in the batch id accessor must be in the range `[0, batchLength - 1]` inclusive, where `batchLength` is the number of features in the feature layer.
+Each component in the feature id accessor must be in the range `[0, featureCount - 1]` inclusive, where `featureCount` is the number of features in the feature layer.
 
-In certain cases, batch id components can be implicity defined. When `bufferView` is not defined:
+In certain cases, feature id components can be implicity defined. When `bufferView` is not defined:
 
-* If `accessor.count` equals `batchLength`, the accessor must be initialized with consecutive integers starting at 0 and ending at `batchLength - 1`, e.g. `[0, 1, 2, 3, ..., batchLength - 1]`. This can provide memory savings when each point in a point cloud is its own feature and batch ids do not need to be explicity defined.
-* Otherwise if `accessor.count` does not equal `batchLength` the accessor must be initialized with zeros, in accordance with the glTF accessor schema. This can provide memory savings if the model consists of single feature.
+* If `accessor.count` equals `featureCount`, the accessor must be initialized with consecutive integers starting at 0 and ending at `featureCount - 1`, e.g. `[0, 1, 2, 3, ..., featureCount - 1]`. This can provide memory savings when each point in a point cloud is its own feature and feature ids do not need to be explicity defined.
+* Otherwise if `accessor.count` does not equal `featureCount` the accessor must be initialized with zeros, in accordance with the glTF accessor schema. This can provide memory savings if the model consists of single feature.
 
-### Batch Table
+### Feature Table
 
-A batch table contains per-feature application-specific properties. A batch table may contain any number of properties, or no properties at all. The number of features is specified in the `batchLength` property. `batchLength` must be greater than or equal to 1.
+A feature table contains per-feature application-specific properties. A feature table may contain any number of properties, or no properties at all. The number of features is specified in the `featureCount` property. `featureCount` must be greater than or equal to 1.
 
-Batch Table properties can be represented in two different ways:
+Feature Table properties can be represented in two different ways:
 
 1. An array of values
     * Array elements can be any valid JSON data type, including objects and arrays.  Elements may be `null`.
-    * The length of each array must be equal to `batchLength`.
+    * The length of each array must be equal to `featureCount`.
 2. A reference to binary data via an accessor.
-    * The accessor's count must be equal to `batchLength`.
+    * The accessor's count must be equal to `featureCount`.
     
-It is more efficient to store long numeric arrays in the binary body.
+It is more efficient to store long numeric arrays in accessors.
 
 #### Example
 
-Batch table containing a mix of JSON and binary properties for two buildings (features)
+Feature table containing a mix of JSON and binary properties for two buildings (features)
 
 ```json
 {
-  "batchLength": 2,
+  "featureCount": 2,
   "properties": {
     "name": {
       "values": [
@@ -143,9 +138,9 @@ Batch table containing a mix of JSON and binary properties for two buildings (fe
 }
 ```
 
-#### Batch Table Accessors Requirements
+#### Feature Table Accessors Requirements
 
-For each batch table property's accessor, `accessor.count` must equal `batchLength`.
+For each feature table property's accessor, `accessor.count` must equal `featureCount`.
 
 ## Optional vs. Required
 
@@ -179,7 +174,7 @@ TODO
       "type": "VEC3"
     },
     {
-      "name": "batch ids (unsigned byte)",
+      "name": "feature ids (unsigned byte)",
       "bufferView": 1,
       "byteOffset": 0,
       "componentType": 5121,
@@ -202,15 +197,15 @@ TODO
           "name": "two buildings composed of two triangles each",
           "attributes": {
             "POSITION": 0,
-            "_BATCHID_0": 1
+            "_FEATURE_ID_0": 1
           },
           "indices": 2,
           "material": 0,
           "mode": 4,
           "extensions": {
-            "CESIUM_3dtiles_batch_table": {
+            "CESIUM_3dtiles_feature_metadata": {
               "attributes": {
-                "_BATCHID_0": 0
+                "_FEATURE_ID_0": 0
               }
             }
           }
@@ -219,13 +214,13 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_batch_table"
+    "CESIUM_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_batch_table": {
-      "batchTables": [
+    "CESIUM_3dtiles_feature_metadata": {
+      "featureTables": [
         {
-          "batchLength": 2,
+          "featureCount": 2,
           "properties": {
             "name": {
               "values": [
@@ -273,7 +268,7 @@ TODO
       "type": "VEC3"
     },
     {
-      "name": "batch ids (unsigned byte)",
+      "name": "feature ids (unsigned byte)",
       "bufferView": 1,
       "byteOffset": 0,
       "componentType": 5121,
@@ -312,15 +307,15 @@ TODO
           "name": "two buildings composed of two triangles each",
           "attributes": {
             "POSITION": 0,
-            "_BATCHID_0": 1
+            "_FEATURE_ID_0": 1
           },
           "indices": 2,
           "material": 0,
           "mode": 4,
           "extensions": {
-            "CESIUM_3dtiles_batch_table": {
+            "CESIUM_3dtiles_feature_metadata": {
               "attributes": {
-                "_BATCHID_0": 0
+                "_FEATURE_ID_0": 0
               }
             }
           }
@@ -329,13 +324,13 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_batch_table"
+    "CESIUM_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_batch_table": {
-      "batchTables": [
+    "CESIUM_3dtiles_feature_metadata": {
+      "featureTables": [
         {
-          "batchLength": 2,
+          "featureCount": 2,
           "properties": {
             "id": {
               "accessor": 3
@@ -373,13 +368,13 @@ TODO
       "type": "VEC3"
     },
     {
-      "name": "per-point batch ids (implicitly 0 to batchLength-1) (batch table 0) (unsigned byte)",
+      "name": "per-point feature ids (implicitly 0 to featureCount-1) (feature table 0) (unsigned byte)",
       "componentType": 5121,
       "count": 8,
       "type": "SCALAR"
     },
     {
-      "name": "per-feature batch ids (batch table 1) (unsigned byte)",
+      "name": "per-feature feature ids (feature table 1) (unsigned byte)",
       "bufferView": 2,
       "byteOffset": 0,
       "componentType": 5121,
@@ -427,15 +422,15 @@ TODO
           "attributes": {
             "POSITION": 0,
             "COLOR_0": 1,
-            "_BATCHID_0": 2,
-            "_BATCHID_1": 3
+            "_FEATURE_ID_0": 2,
+            "_FEATURE_ID_1": 3
           },
           "mode": 0,
           "extensions": {
-            "CESIUM_3dtiles_batch_table": {
+            "CESIUM_3dtiles_feature_metadata": {
               "attributes": {
-                "_BATCHID_0": 0,
-                "_BATCHID_1": 1
+                "_FEATURE_ID_0": 0,
+                "_FEATURE_ID_1": 1
               }
             }
           }
@@ -444,13 +439,13 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_batch_table"
+    "CESIUM_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_batch_table": {
-      "batchTables": [
+    "CESIUM_3dtiles_feature_metadata": {
+      "featureTables": [
         {
-          "batchLength": 8,
+          "featureCount": 8,
           "properties": {
             "intensity": {
               "accessor": 4
@@ -461,7 +456,7 @@ TODO
           }
         },
         {
-          "batchLength": 2,
+          "featureCount": 2,
           "properties": {
             "id": {
               "accessor": 6
@@ -491,7 +486,7 @@ TODO
       "type": "VEC3"
     },
     {
-      "name": "batch ids (implicitly zeros) (unsigned byte)",
+      "name": "feature ids (implicitly zeros) (unsigned byte)",
       "componentType": 5121,
       "count": 4,
       "type": "SCALAR"
@@ -512,15 +507,15 @@ TODO
           "name": "one building composed of two triangles",
           "attributes": {
             "POSITION": 0,
-            "_BATCHID_0": 1
+            "_FEATURE_ID_0": 1
           },
           "indices": 2,
           "material": 0,
           "mode": 4,
           "extensions": {
-            "CESIUM_3dtiles_batch_table": {
+            "CESIUM_3dtiles_feature_metadata": {
               "attributes": {
-                "_BATCHID_0": 0
+                "_FEATURE_ID_0": 0
               }
             }
           }
@@ -529,13 +524,13 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_batch_table"
+    "CESIUM_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_batch_table": {
-      "batchTables": [
+    "CESIUM_3dtiles_feature_metadata": {
+      "featureTables": [
         {
-          "batchLength": 1,
+          "featureCount": 1,
           "properties": {
             "name": {
               "values": [
@@ -572,13 +567,13 @@ TODO
       "type": "VEC3"
     },
     {
-      "name": "per-point batch ids (implicitly 0 to batchLength-1) (batch table 0) (unsigned byte)",
+      "name": "per-point feature ids (implicitly 0 to featureCount-1) (feature table 0) (unsigned byte)",
       "componentType": 5121,
       "count": 8,
       "type": "SCALAR"
     },
     {
-      "name": "per-group batch ids (batch table 1) (unsigned byte)",
+      "name": "per-group feature ids (feature table 1) (unsigned byte)",
       "bufferView": 2,
       "byteOffset": 0,
       "componentType": 5121,
@@ -626,7 +621,7 @@ TODO
       "type": "VEC3"
     },
     {
-      "name": "batch ids (unsigned byte)",
+      "name": "feature ids (unsigned byte)",
       "bufferView": 8,
       "byteOffset": 0,
       "componentType": 5121,
@@ -650,15 +645,15 @@ TODO
           "attributes": {
             "POSITION": 0,
             "COLOR_0": 1,
-            "_BATCHID_0": 2,
-            "_BATCHID_1": 3
+            "_FEATURE_ID_0": 2,
+            "_FEATURE_ID_1": 3
           },
           "mode": 0,
           "extensions": {
-            "CESIUM_3dtiles_batch_table": {
+            "CESIUM_3dtiles_feature_metadata": {
               "attributes": {
-                "_BATCHID_0": 0,
-                "_BATCHID_1": 1
+                "_FEATURE_ID_0": 0,
+                "_FEATURE_ID_1": 1
               }
             }
           }
@@ -667,15 +662,15 @@ TODO
           "name": "two buildings composed of two triangles each",
           "attributes": {
             "POSITION": 8,
-            "_BATCHID_0": 9
+            "_FEATURE_ID_0": 9
           },
           "indices": 10,
           "material": 0,
           "mode": 4,
           "extensions": {
-            "CESIUM_3dtiles_batch_table": {
+            "CESIUM_3dtiles_feature_metadata": {
               "attributes": {
-                "_BATCHID_0": 2
+                "_FEATURE_ID_0": 2
               }
             }
           }
@@ -684,13 +679,13 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_batch_table"
+    "CESIUM_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_batch_table": {
-      "batchTables": [
+    "CESIUM_3dtiles_feature_metadata": {
+      "featureTables": [
         {
-          "batchLength": 8,
+          "featureCount": 8,
           "properties": {
             "intensity": {
               "accessor": 4
@@ -701,7 +696,7 @@ TODO
           }
         },
         {
-          "batchLength": 2,
+          "featureCount": 2,
           "properties": {
             "id": {
               "accessor": 6
@@ -712,7 +707,7 @@ TODO
           }
         },
         {
-          "batchLength": 2,
+          "featureCount": 2,
           "properties": {
             "name": {
               "values": [
