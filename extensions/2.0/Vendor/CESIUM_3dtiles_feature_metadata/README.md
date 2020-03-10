@@ -73,6 +73,8 @@ Valid accessor type and component type for the `_FEATURE_ID_0` attribute semanti
 
 Note that to comply with alignment rules for accessors, accessors need to be aligned to 4-byte boundaries; for example, an `UNSIGNED_BYTE` feature id is expected to have a stride of 4, not 1.
 
+If this mesh is instanced by the `KHR_mesh_instancing` extension then feature id values are incremented by the instance index.
+
 #### Feature Id Accessor Requirements
 
 Each component in the feature id accessor must be in the range `[0, featureCount - 1]` inclusive, where `featureCount` is the number of features in the feature layer.
@@ -715,6 +717,99 @@ TODO
                 "Another building name"
               ]
             }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+### Instancing example
+
+```json
+{
+  "nodes": [
+    {
+      "name": "Instanced",
+      "mesh": 0,
+      "extensions": {
+        "KHR_mesh_instancing": {
+          "attributes": {
+            "TRANSLATION": 3
+          }
+        }
+      }
+    }
+  ],
+  "accessors": [
+    {
+      "name": "point positions (float)",
+      "bufferView": 0,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 4,
+      "type": "VEC3"
+    },
+    {
+      "name": "implicit feature ids for per-tree properties (unsigned byte)",
+      "componentType": 5121,
+      "count": 4,
+      "type": "SCALAR"
+    },
+    {
+      "name": "explicit feature ids for per-branch properties (unsigned byte)",
+      "bufferView": 1,
+      "byteOffset": 0,
+      "componentType": 5121,
+      "count": 4,
+      "type": "SCALAR"
+    },
+    {
+      "name": "Per-Instance TRANSLATION",
+      "bufferView": 2,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 2,
+      "type": "VEC3"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "_FEATURE_ID_0": 1,
+            "_FEATURE_ID_1": 2
+          },
+          "extensions": {
+            "CESIUM_3dtiles_feature_metadata": {
+              "attributes": {
+                "_FEATURE_ID_0": 0,
+                "_FEATURE_ID_1": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "extensions": {
+    "CESIUM_3dtiles_feature_metadata": {
+      "featureTables": [
+        {
+          "name": "2 instanced trees",
+          "featureCount": 2,
+          "properties": {
+            "name": ["tree1", "tree2"]
+          }
+        },
+        {
+          "name": "3 branches in each of the 2 instanced trees",
+          "featureCount": 6,
+          "properties": {
+            "state": ["normal", "normal", "broken", "nest", "normal", "normal"]
           }
         }
       ]
