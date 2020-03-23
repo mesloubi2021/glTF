@@ -404,12 +404,12 @@ The `texture` object contains the following properties:
 
 When using `textureAccessor` the `channels` string must be a length of one and `normalized` must be `false`. See [Texture Accessor](#texture-accessor) for more information.
 
-The implicit object contains four properties:
+The implicit object contains two properties:
 
 * `width`: the width of the texture in pixels
 * `height`: the height of the texture in pixels
-* `start`: the value of the top-left texel
-* `increment`: the amount to increment per-texel (row-major top-to-bottom). This may be set to `0` to maintain a constant value for all texels or `1` to produce consecutive values.
+
+Implicit feature IDs start at zero for the top-left pixel and increment for each successive pixel, row-major top-to-bottom.
 
 Example: explicit and implicit texture feature IDs
 <p align="center">
@@ -450,9 +450,7 @@ Example: explicit and implicit texture feature IDs
                     "texCoord": 0,
                     "implicit": {
                       "width": 10,
-                      "height": 10,
-                      "start": 0,
-                      "increment": 1
+                      "height": 10
                     }
                   }
                 }
@@ -1292,9 +1290,7 @@ TODO
                     "texCoord": 0,
                     "implicit": {
                       "width": 10,
-                      "height": 10,
-                      "start": 0,
-                      "increment": 1
+                      "height": 10
                     }
                   }
                 },
@@ -1304,9 +1300,7 @@ TODO
                     "texCoord": 1,
                     "implicit": {
                       "width": 10,
-                      "height": 10,
-                      "start": 0,
-                      "increment": 1
+                      "height": 10
                     }
                   }
                 }
