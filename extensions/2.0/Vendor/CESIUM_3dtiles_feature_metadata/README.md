@@ -148,7 +148,43 @@ Feature Table properties can be represented in three different ways:
 
 `values`, `accessor`, and `textureAccessor` are mutually exclusive
 
-Application-specific metadata about a property may be stored in an `extras` object.
+Properties may also optionally define a `semantic`, an enumerated value describing how the property is to be interpreted. Application-specific semantics must start with an underscore, e.g., `_CLASSIFICATION`. The same semantic cannot be used by multiple properties in a single feature table.
+
+List of built-in semantics:
+
+Semantic | Type | Description
+--|--|--
+`NAME`|`string`| The name of the feature. Names do not have to be unique.
+`ID`|`number` or `string`|A unique identifier for this feature.
+
+Example feature table with built-in and application-specific semantics:
+
+```json
+{
+  "featureCount": 4,
+  "properties": {
+    "bldg_name": {
+      "semantic": "NAME",
+      "values": ["House", "Store", "Bank", "House"]
+    },
+    "bldg_uuid": {
+      "semantic": "ID",
+      "values": [
+        "752ac29d-c262-473b-bd85-aff3c471f3c8",
+        "c3006d52-099a-4c05-95a1-a91a1be71f0e",
+        "9e011aa9-0ed9-497c-923f-0bed8c286134",
+        "cd876cc5-f2d3-400b-ad64-f5dee35f0520"
+      ]
+    },
+    "bldg_classif": {
+      "semantic": "_CLASSIFICATION",
+      "values": [0, 1, 2, 0]
+    }
+  }
+}
+```
+
+Additional application-specific metadata about a property may be stored in the propery's `extras` object:
 
 ```json
 {
@@ -193,7 +229,7 @@ A texture accessor contains a reference to a glTF texture and information for ac
 * `channels` - a string that defines both the type (scalar, vec2, vec3, vec4) and the color channels to read from. Example: "rgb" means this property is a vec3 and its values are obtained from the red, green, and blue channels. This is useful when packing properties into the same texture: one texture accessor might be "r", another might be "gb" and a last might be "a". The string must match the pattern `/^[rgba]{1,4}$/`. If the texture does not contain a particular color channel then the maximum value must be returned (e.g. 255 for 8-bit color depth).
 * `normalized` - whether the texture data should be normalized to the `[0.0, 1.0]` range or not. This property is ignored for KTX2 images since KTX2 has native normalized and unnormalized image formats. Defaults to `false`.
 
-Example: read the first channel of the texture and normalize to the `[0.0, 1.0]` range.
+Example: read data from a grayscale texture and normalize to the `[0.0, 1.0]` range.
 
 ```json
 {
