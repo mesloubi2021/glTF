@@ -144,11 +144,46 @@ Feature Table properties can be represented in three different ways:
 2. `accessor`: a reference to binary data via a glTF accessor
     * The accessor's count must be equal to `featureCount`
 3. `textureAccessor`: a view of a glTF texture
-    * The feature ID is converted to texture coordinates with the following formula: `(featureId % textureWidth, featureId / textureWidth)`
+    * A feature ID is converted to texture coordinates with the following formula: `(featureId % textureWidth, featureId / textureWidth)`
 
 `values`, `accessor`, and `textureAccessor` are mutually exclusive
 
-It is more efficient to store long numeric arrays in accessors.
+Application-specific metadata about a property may be stored in an `extras` object.
+
+```json
+{
+  "featureCount": 10,
+  "properties": {
+    "ClassificationIds": {
+      "accessor": 0,
+      "extras": {
+        "version": "1.4"
+      }
+    }
+  }
+}
+```
+
+```json
+{
+  "featureCount": 100,
+  "properties": {
+    "Accuracy": {
+      "textureAccesor": {
+        "texture": {
+          "index": 0
+        },
+        "channels": "r",
+        "normalized": true
+      },
+      "extras": {
+        "Offset": 0.1,
+        "Gain": 20.0
+      }
+    }
+  }
+}
+```
 
 #### Texture Accessor
 
