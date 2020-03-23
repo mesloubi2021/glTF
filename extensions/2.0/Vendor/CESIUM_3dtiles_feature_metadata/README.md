@@ -59,7 +59,6 @@ The following example contains two features and a feature table with a mix of JS
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 8,
                   "vertexAttribute": {
                     "attributeIndex": 0
                   }
@@ -156,8 +155,8 @@ It is more efficient to store long numeric arrays in accessors.
 A texture accessor contains a reference to a glTF texture and information for accessing its values:
 
 * `texture` - a `textureInfo` object where `texCoord` is ignored.
-* `channels` - a string that defines both the type (scalar, vec2, vec3, vec4) and the color channels to read from. Example: "rgb" means this property is a vec3 and it's values are obtained from the red, green, and blue channels. This is useful when packing properties into the same texture: one texture accessor might be "r", another might be "gb" and a last might be "a". The string must match the pattern `/^[rgba]{1,4}$/`. If the texture does not contain a particular color channel then the maximum value must be returned (e.g. 255 for 8-bit color depth).
-* `normalized` - whether the texture data should be normalized to the `[0.0, 1.0]` range or not. This property is ignored for KTX2 images since KTX2 has native normalized and unnormalized image formats.
+* `channels` - a string that defines both the type (scalar, vec2, vec3, vec4) and the color channels to read from. Example: "rgb" means this property is a vec3 and its values are obtained from the red, green, and blue channels. This is useful when packing properties into the same texture: one texture accessor might be "r", another might be "gb" and a last might be "a". The string must match the pattern `/^[rgba]{1,4}$/`. If the texture does not contain a particular color channel then the maximum value must be returned (e.g. 255 for 8-bit color depth).
+* `normalized` - whether the texture data should be normalized to the `[0.0, 1.0]` range or not. This property is ignored for KTX2 images since KTX2 has native normalized and unnormalized image formats. Defaults to `false`.
 
 Example: read the first channel of the texture and normalize to the `[0.0, 1.0]` range.
 
@@ -178,7 +177,6 @@ Feature IDs are stored inside the glTF primitive as vertex attributes or texture
 An individual feature layer contains the follow properties:
 
 * `featureTable`: the index of the feature table used by this layer
-* `featureIdCount`: the number of feature ids in this layer, not to be confused with a feature's table `featureCount`.
 * `instanceStride`: an optional property that specifies the per-instance stride to apply to feature IDs when the mesh is instanced by the `KHR_mesh_instancing` extension.
 * `vertexAttribute`: the source for per-vertex feature IDs
 * `texture`: the source for per-texel feature IDs
@@ -195,7 +193,7 @@ Vertices with the same feature ID are part of the same feature. Feature IDs can 
 
 This extension adds a new indexed attribute semantic `_FEATURE_ID_0`. All indices must start with 0 and be continuous positive integers: `_FEATURE_ID_0`, `_FEATURE_ID_1`, `_FEATURE_ID_2`, etc.
 
-The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be `false`. There is no restriction on `componentType`, however as described above, all feature IDs must be in the range `[0, featureCount - 1]`. `count` must equal `featureIdCount`.
+The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be `false`. There is no restriction on `componentType`, however as described above, all feature IDs must be in the range `[0, featureCount - 1]`.
 
 A feature layer references a feature id attribute by its set index. For example, `"attributeIndex": 0` corresponds to `_FEATURE_ID_0` and `"attributeIndex": 1` corresponds to `_FEATURE_ID_1`.
 
@@ -216,14 +214,12 @@ An example of two feature layers with explicit feature IDs:
           "featureLayers": [
             {
               "featureTable": 0,
-              "featureIdCount": 8,
               "vertexAttribute": {
                 "attributeIndex": 0
               }
             },
             {
               "featureTable": 1,
-              "featureIdCount": 8,
               "vertexAttribute": {
                 "attributeIndex": 1
               }
@@ -275,7 +271,6 @@ Example: instanced mesh where each instance is assigned consecutive feature IDs
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 4,
                   "instanceStride": 1,
                   "vertexAttribute": {
                     "implicit": {
@@ -309,7 +304,6 @@ Example: point cloud where each point is assigned consecutive feature IDs
           "featureLayers": [
             {
               "featureTable": 0,
-              "featureIdCount": 100,
               "vertexAttribute": {
                 "implicit": {
                   "start": 0,
@@ -327,25 +321,22 @@ Example: point cloud where each point is assigned consecutive feature IDs
 
 #### Per-texel feature IDs
 
-Feature IDs can also be stored in textures. The feature ID is determined by sampling a texture using the interpolated texture coordinate of the given `TEXCOORD` set at a particular point on the surface, like traditional texture mapping for a color texture. Per-texel feature IDs may be set explicitly or implicitly.
+Feature IDs can also be stored in textures. The feature ID is determined by sampling a texture using the interpolated texture coordinates of the given `TEXCOORD` set at a particular point on the surface, like traditional texture mapping for a color texture. Per-texel feature IDs may be set explicitly or implicitly.
 
 The `texture` object contains the following properties:
 
 * `texCoord`: the set index of primitives's `TEXCOORD` attribute used for texture coordinate mapping
-* `width`: the width of the texture in pixels
-* `height`: the height of the texture in pixels. `width * height` must equal `featureIdCount`
 * `textureAccessor`: a view into a glTF texture that contains explicit feature IDs
-* `accessor`: an accessor that contains explicit feature IDs. Values are stored row-major going top to bottom.
 * `implicit`: an object defining how implicit feature IDs are generated
 
-`textureAccessor`, `accessor`, and `implicit` are mutually exclusive.
-
-When using `accessor`, the accessor `type` must be `"SCALAR"` and `normalized` must be `false`. There is no restriction on `componentType`, however as described above, all feature IDs must be in the range `[0, featureCount - 1]`. `count` must equal `featureIdCount`.
+`textureAccessor` and `implicit` are mutually exclusive.
 
 When using `textureAccessor` the `channels` string must be a length of one and `normalized` must be `false`. See [Texture Accessor](#texture-accessor) for more information.
 
-The implicit object contains two properties:
+The implicit object contains four properties:
 
+* `width`: the width of the texture in pixels
+* `height`: the height of the texture in pixels
 * `start`: the value of the top-left texel
 * `increment`: the amount to increment per-texel (row-major top-to-bottom). This may be set to `0` to maintain a constant value for all texels or `1` to produce consecutive values.
 
@@ -372,22 +363,23 @@ Example: explicit and implicit texture feature IDs
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 100,
                   "texture": {
                     "texCoord": 0,
-                    "width": 10,
-                    "height": 10,
-                    "accessor": 3
+                    "textureAccessor": {
+                      "texture": {
+                        "index": 0
+                      },
+                      "channels": "r"
+                    }
                   }
                 },
                 {
                   "featureTable": 1,
-                  "featureIdCount": 100,
                   "texture": {
                     "texCoord": 0,
-                    "width": 10,
-                    "height": 10,
                     "implicit": {
+                      "width": 10,
+                      "height": 10,
                       "start": 0,
                       "increment": 1
                     }
@@ -498,7 +490,6 @@ TODO
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 8,
                   "vertexAttribute": {
                     "attributeIndex": 0
                   }
@@ -607,7 +598,6 @@ TODO
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 8,
                   "vertexAttribute": {
                     "attributeIndex": 0
                   }
@@ -720,7 +710,6 @@ TODO
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 8,
                   "vertexAttribute": {
                     "implicit": {
                       "start": 0,
@@ -730,7 +719,6 @@ TODO
                 },
                  {
                   "featureTable": 1,
-                  "featureIdCount": 8,
                   "vertexAttribute": {
                     "attributeIndex": 0
                   }
@@ -813,7 +801,6 @@ TODO
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 4,
                   "vertexAttribute": {
                     "implicit": {
                       "start": 0,
@@ -951,7 +938,6 @@ TODO
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 8,
                   "vertexAttribute": {
                     "implicit": {
                       "start": 0,
@@ -961,7 +947,6 @@ TODO
                 },
                 {
                   "featureTable": 1,
-                  "featureIdCount": 8,
                   "vertexAttribute": {
                     "attributeIndex": 0
                   }
@@ -984,7 +969,6 @@ TODO
               "featureLayers": [
                 {
                   "featureTable": 2,
-                  "featureIdCount": 8,
                   "vertexAttribute": {
                     "attributeIndex": 0
                   }
@@ -1102,7 +1086,6 @@ TODO
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 12,
                   "instanceStride": 1,
                   "vertexAttribute": {
                     "implicit": {
@@ -1113,7 +1096,6 @@ TODO
                 },
                 {
                   "featureTable": 1,
-                  "featureIdCount": 12,
                   "instanceStride": 1,
                   "vertexAttribute": {
                     "attributeIndex": 0
@@ -1235,12 +1217,11 @@ TODO
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "featureIdCount": 100,
                   "texture": {
                     "texCoord": 0,
-                    "width": 10,
-                    "height": 10,
                     "implicit": {
+                      "width": 10,
+                      "height": 10,
                       "start": 0,
                       "increment": 1
                     }
@@ -1248,12 +1229,11 @@ TODO
                 },
                 {
                   "featureTable": 1,
-                  "featureIdCount": 100,
                   "texture": {
                     "texCoord": 1,
-                    "width": 10,
-                    "height": 10,
                     "implicit": {
+                      "width": 10,
+                      "height": 10,
                       "start": 0,
                       "increment": 1
                     }
