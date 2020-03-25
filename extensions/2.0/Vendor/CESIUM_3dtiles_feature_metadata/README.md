@@ -260,6 +260,12 @@ Feature IDs, whether sourced from a vertex attribute or texture, are integral va
 
 Vertices with the same feature ID are part of the same feature. Feature IDs can be defined explicitly via a `_FEATURE_ID_0` vertex attribute semantic, or implicitly as a constant number or consecutive numbers.
 
+`vertexAttribute` contains two properties:
+* `attributeIndex`: the set index of the feature id vertex attribute containing explicit feature ids
+* `implicit`: an object defining how implicit feature IDs are generated
+
+`attributeIndex` and `implicit` are mutually exclusive.
+
 ##### Explicit feature IDs
 
 This extension adds a new indexed attribute semantic `_FEATURE_ID_0`. All indices must start with 0 and be continuous positive integers: `_FEATURE_ID_0`, `_FEATURE_ID_1`, `_FEATURE_ID_2`, etc.
