@@ -1222,7 +1222,7 @@ TODO
       "type": "VEC3"
     },
     {
-      "name": "Texcoords for color / material_id",
+      "name": "Texcoords for color / material_id / accuracy",
       "bufferView": 1,
       "byteOffset": 0,
       "componentType": 5126,
@@ -1230,7 +1230,7 @@ TODO
       "type": "VEC2"
     },
     {
-      "name": "Texcoords for ortho classification",
+      "name": "Texcoords for ortho classification and vegetation",
       "bufferView": 2,
       "byteOffset": 0,
       "componentType": 5126,
@@ -1254,7 +1254,13 @@ TODO
       "uri": "material_id.png"
     },
     {
-      "uri": "classification.png"
+      "uri": "classification_ortho.png"
+    },
+    {
+      "uri": "accuracy.png"
+    },
+    {
+      "uri": "vegetation_ortho.png"
     }
   ],
   "textures": [
@@ -1267,11 +1273,20 @@ TODO
     {
       "source": 2
     },
+    {
+      "source": 3
+    },
+    {
+      "source": 4
+    },
   ],
   "materials": [
     {
       "pbrMetallicRoughness": {
-        "baseColorTexture": 0
+        "baseColorTexture": {
+          "index": 0,
+          "texCoord": 0
+        }
       }
     }
   ],
@@ -1294,6 +1309,30 @@ TODO
                   "featureTable": 0,
                   "texture": {
                     "texCoord": 0,
+                    "textureAccessor": {
+                      "texture": {
+                        "index": 1
+                      },
+                      "channels": "r"
+                    }
+                  }
+                },
+                {
+                  "featureTable": 1,
+                  "texture": {
+                    "texCoord": 1,
+                    "textureAccessor": {
+                      "texture": {
+                        "index": 2
+                      },
+                      "channels": "r"
+                    }
+                  }
+                },
+                {
+                  "featureTable": 2,
+                  "texture": {
+                    "texCoord": 0,
                     "implicit": {
                       "width": 10,
                       "height": 10
@@ -1301,7 +1340,7 @@ TODO
                   }
                 },
                 {
-                  "featureTable": 1,
+                  "featureTable": 3,
                   "texture": {
                     "texCoord": 1,
                     "implicit": {
@@ -1324,12 +1363,28 @@ TODO
     "CESIUM_3dtiles_feature_metadata": {
       "featureTables": [
         {
-          "featureCount": 100,
+          "featureCount": 5,
           "properties": {
             "MaterialId": {
+              "values": ["dirt", "grass", "wood", "brick", "glass"]
+            }
+          }
+        },
+        {
+          "featureCount": 7,
+          "properties": {
+            "ClassificationId": {
+              "values": [0, 1, 9, 10, 11, 12, 24]
+            }
+          }
+        },
+        {
+          "featureCount": 100,
+          "properties": {
+            "Accuracy": {
               "textureAccesor": {
                 "texture": {
-                  "index": 1
+                  "index": 3
                 },
                 "channels": "r",
                 "normalized": false
@@ -1340,24 +1395,19 @@ TODO
         {
           "featureCount": 100,
           "properties": {
-            "OrthClassification1": {
+            "VegetationDensity": {
               "textureAccesor": {
                 "texture": {
-                  "index": 2
+                  "index": 4
                 },
                 "channels": "r",
                 "normalized": false
               }
-            }
-          }
-        },
-        {
-          "featureCount": 100,
-          "properties": {
-            "OrthoClassification2": {
+            },
+            "VegetationHealth": {
               "textureAccesor": {
                 "texture": {
-                  "index": 2
+                  "index": 4
                 },
                 "channels": "g",
                 "normalized": false
