@@ -1,16 +1,19 @@
-# CESIUM\_3dtiles\_feature\_metadata
+# EXT\_3dtiles\_feature\_metadata
 
 ## Contributors
 
-TODO
+* Sean Lilley, Cesium
+* Samuel Vargas, Cesium
+* Sam Suhag, Cesium
+* Patrick Cozzi, Cesium
 
 ## Status
 
-TODO
+Draft
 
 ## Dependencies
 
-Written against the glTF 2.0 spec. Depends on `KHR_mesh_instancing` for instanced features.
+Written against the glTF 2.0 spec. Depends on [`EXT_mesh_gpu_instancing`](https://github.com/KhronosGroup/glTF/pull/1691) for instanced features.
 
 ## Overview
 
@@ -24,7 +27,7 @@ A feature may be a building in a city, a pipe in a BIM/CAD model, a point in a p
 
 Geometry from different features may be batched into as few glTF primitives as possible to enable efficient rendering and interaction. Feature IDs, stored per-vertex or per-texel, enable individual features to be identified and updated at runtime, e.g., show/hide, highlight color, etc. Feature IDs may also be used to query properties from a feature table for styling and application-specific use cases such as populating a UI or issuing a REST API request. Some example feature table properties are building heights, geographic coordinates, and database primary keys.
 
-A glTF primitive may contain one or more feature layers where each feature layer points to a feature table. Multiple feature layers enable different levels of feature granularity within a single dataset. For example, a point cloud may contain groups of points that represent different architectural components of a building while retaining per-point properties like intensity - in the first layer each group is considered a feature; in the second layer each point is considered a feature. Multiple feature layers also enable heterogeonous datasets to be combined into a single glTF payload.
+A glTF primitive may contain one or more feature layers where each feature layer points to a feature table. Multiple feature layers enable different levels of feature granularity within a single dataset. For example, a point cloud may contain groups of points that represent different architectural components of a building while retaining per-point properties like intensity - in the first layer each group is considered a feature; in the second layer each point is considered a feature. Multiple feature layers also enable heterogenous datasets to be combined into a single glTF payload.
 
 <table style="table-layout: fixed">
   <tr>
@@ -37,11 +40,16 @@ A glTF primitive may contain one or more feature layers where each feature layer
   </tr>
 </table>
 
-A feature table may be extended to include feature classes and hierarchies. See the `CESIUM_3dtiles_feature_hierarchy` extension.
+A feature table may be extended to include feature classes and hierarchies. See the `EXT_3dtiles_feature_hierarchy` extension.
 
-## Basic Example
+## Example
 
 The following example contains two features and a feature table with a mix of JSON and binary properties.
+
+<p>
+<img src="./figures/basic-example.png">
+</p>
+
 
 ```json
 {
@@ -55,12 +63,12 @@ The following example contains two features and a feature table with a mix of JS
           },
           "indices": 2,
           "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
+            "EXT_3dtiles_feature_metadata": {
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "vertexAttribute": {
-                    "attributeIndex": 0
+                  "featureIds": {
+                    "attribute": "_FEATURE_ID_0"
                   }
                 }
               ]
@@ -71,16 +79,22 @@ The following example contains two features and a feature table with a mix of JS
     }
   ],
   "extensions": {
-    "CESIUM_3dtiles_feature_metadata": {
+    "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
           "featureCount": 2,
-          "properties": {
+          "featureProperties": {
             "Name": {
-              "values": ["Building A", "Building B"]
+              "array": {
+                "type": "string",
+                "values": ["Building A", "Building B"]
+              }
             },
             "Year": {
-              "values": [1999, 2015]
+              "array": {
+                "type": "number",
+                "values": [1999, 2015]
+              }
             },
             "Coordinates": {
               "accessor": 3
@@ -126,108 +140,242 @@ The following example contains two features and a feature table with a mix of JS
   ]
 }
 ```
-<p>
-<img src="./figures/basic-example.png">
-</p>
 
 ## Concepts
 
-### Feature Table
+### Feature layers
 
-A feature table contains per-feature application-specific properties, indexable by a feature ID. A feature table may contain any number of properties, or no properties at all. The number of features is specified in the `featureCount` property. `featureCount` must be greater than or equal to 1.
+A feature layer defines the mapping between geometry and features. There are two types of feature layers - ones that contain feature IDs, used to query properties from a feature table, and ones that contain feature properties directly.
 
-Feature Table properties can be represented in three different ways:
+A feature layer object contains the following properties:
 
-1. `values`: an array of values
-    * Array elements can be any valid JSON data type, including objects and arrays.  Elements may be `null`.
-    * The length of each array must be equal to `featureCount`
-2. `accessor`: a reference to binary data via a glTF accessor
-    * The accessor's count must be equal to `featureCount`
-3. `textureAccessor`: a view of a glTF texture
-    * A feature ID is converted to texture coordinates with the following formula: `(featureId % textureWidth, featureId / textureWidth)`
+* `featureTable`: the index of the feature table used by this layer
+* `featureIds`: an object describing how to access feature IDs
+* `featureProperties`: an object describing how to access feature properties
 
-`values`, `accessor`, and `textureAccessor` are mutually exclusive
+`featureIds` and `featureProperties` are mutually exclusive and have different characteristics when interfacing with a feature table.
 
-Properties may also optionally define a `semantic`, an enumerated value describing how the property is to be interpreted. Application-specific semantics must start with an underscore, e.g., `_CLASSIFICATION`. The same semantic cannot be used by multiple properties in a single feature table.
+Multiple feature layers within a single primitive cannot use the same feature table.
 
-List of built-in semantics:
+#### Feature IDs
 
-Semantic | Type | Description
---|--|--
-`NAME`|`string`| The name of the feature. Names do not have to be unique.
-`ID`|`number` or `string`|A unique identifier for this feature.
+Feature IDs are stored in vertex attributes or textures and are used to identify the features in a primitive. Feature IDs, whether sourced from a vertex attribute or texture, are integral values in the range `[0, featureCount - 1]`, where `featureCount` is the number of features in the layer's feature table. Feature properties are stored in the feature table, where feature ID is an index into each property array.
 
-Example feature table with built-in and application-specific semantics:
+The `featureIds` object has the following properties:
 
-```json
-{
-  "featureCount": 4,
-  "properties": {
-    "bldg_name": {
-      "semantic": "NAME",
-      "values": ["House", "Store", "Bank", "House"]
-    },
-    "bldg_uuid": {
-      "semantic": "ID",
-      "values": [
-        "752ac29d-c262-473b-bd85-aff3c471f3c8",
-        "c3006d52-099a-4c05-95a1-a91a1be71f0e",
-        "9e011aa9-0ed9-497c-923f-0bed8c286134",
-        "cd876cc5-f2d3-400b-ad64-f5dee35f0520"
-      ]
-    },
-    "bldg_classif": {
-      "semantic": "_CLASSIFICATION",
-      "values": [0, 1, 2, 0]
-    }
-  }
-}
+* `attribute`: the name of a vertex attribute containing feature IDs
+* `textureAccessor`: a view into a texture containing feature IDs
+* `instanceStride`: an optional property that specifies the per-instance stride to apply to feature IDs when the mesh is instanced by the `EXT_mesh_gpu_instancing` extension. Set `instanceStride` to 1 and initialize `attribute`'s accessor with zeros (e.g. by not defining `bufferView`) to treat each instance as a separate feature. Explicit feature ids and custom strides may provide a lower level of feature granularity if desired.
+
+`attribute` and `textureAccessor` are mutually exclusive. Per-vertex and per-texel feature IDs cannot be used in the same feature layer.
+
+##### Per-vertex feature IDs
+
+A feature is often represented geometrically as a group of vertices, like the vertices of a building in the [example](#example) above. Each vertex has a feature ID attribute indicating the feature to which it belongs.
+
+For example, vertices for a primitive with three features may look like this:
+
+```
+feature id:  [0,   0,   0,   ..., 1,   1,   1,   ..., 2,   2,   2,   ...]
+position:    [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
+normal:      [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
 ```
 
-Additional application-specific metadata about a property may be stored in the propery's `extras` object:
+Vertices do not need to be ordered by feature ID so the following is also OK:
 
-```json
-{
-  "featureCount": 10,
-  "properties": {
-    "ClassificationIds": {
-      "accessor": 0,
-      "extras": {
-        "version": "1.4"
-      }
-    }
-  }
-}
+```
+feature id:  [0,   1,   2,   ..., 2,   1,   0,   ..., 1,   2,   0,   ...]
+position:    [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
+normal:      [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
 ```
 
+Note that a vertex can't belong to more than one feature; in that case, the vertex needs to be duplicated so the feature IDs can be assigned.
+
+The feature ID attribute is specified in a glTF mesh primitive by providing the `_FEATURE_ID_0` indexed attribute semantic.
+
+###### Feature ID semantic
+
+This extension adds a new indexed attribute semantic `_FEATURE_ID_0`. All indices must start with 0 and be continuous positive integers: `_FEATURE_ID_0`, `_FEATURE_ID_1`, `_FEATURE_ID_2`, etc.
+
+The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be `false`. There is no restriction on `componentType`. Accessor values must be integral values in the range `[0, featureCount - 1]`.
+
+###### Example
+
+An example of two feature layers with per-vertex feature IDs:
+
 ```json
 {
-  "featureCount": 100,
-  "properties": {
-    "Accuracy": {
-      "textureAccesor": {
-        "texture": {
-          "index": 0
-        },
-        "channels": "r",
-        "normalized": true
+  "primitives": [
+    {
+      "attributes": {
+        "POSITION": 0,
+        "_FEATURE_ID_0": 1,
+        "_FEATURE_ID_1": 2
       },
-      "extras": {
-        "Offset": 0.1,
-        "Gain": 20.0
+      "indices": 3,
+      "extensions": {
+        "EXT_3dtiles_feature_metadata": {
+          "featureLayers": [
+            {
+              "featureTable": 0,
+              "featureIds": {
+                "attribute": "_FEATURE_ID_0"
+              }
+            },
+            {
+              "featureTable": 1,
+              "featureIds": {
+                "attribute": "_FEATURE_ID_1"
+              }
+            }
+          ]
+        }
       }
     }
-  }
+  ]
 }
 ```
 
-#### Texture Accessor
+##### Per-texel feature IDs
+
+Alternatively feature IDs can be stored in a texture and accessed with a [`textureAccessor`](#texture-accessor).
+
+For a given point on the mesh's surface, the feature ID is sampled from the feature ID texture using the interpolated texture coordinates of the given TEXCOORD set, just like in traditional texture mapping.
+
+The `textureAccessor`'s `channels` string must be of length one and `normalized` must be false (default). The texture's sampler must use nearest neighbor filtering - i.e. `minFilter` and `magFilter` must be `9728` (`NEAREST`).
+
+###### Example
+
+```json
+{
+  "primitives": [
+    {
+      "attributes": {
+        "POSITION": 0,
+        "TEXCOORD_0": 1,
+      },
+      "indices": 2,
+      "extensions": {
+        "EXT_3dtiles_feature_metadata": {
+          "featureLayers": [
+            {
+              "featureTable": 0,
+              "featureIds": {
+                "textureAccessor": {
+                  "texture": {
+                    "texCoord": 0,
+                    "index": 0
+                  },
+                  "channels": "r"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
+#### Feature properties
+
+In some cases it is wasteful to use feature IDs, like when properties vary vertex-by-vertex or texel-by-texel. Instead properties may be stored directly in the primitive rather than in the feature table.
+
+`featureProperties` is an object describing how to access properties stored directly in the primitive. `featureProperties` must contain an entry for each property in the layer's feature table.
+
+Each entry is an object containing either an `attribute`, the name of a vertex attribute containing property values, or a `textureAccessor`, a view into a texture containing property values. `featureProperties` cannot have a mix of per-vertex and per-texel properties. When `featureProperties` contains per-texel properties, all `texCoord` values must be the same.
+
+##### Examples
+
+Per-vertex properties:
+
+```json
+{
+  "primitives": [
+    {
+      "attributes": {
+        "POSITION": 0,
+        "_TEMPERATURE": 1,
+        "_INTENSITY:": 2
+      },
+      "indices": 3,
+      "extensions": {
+        "EXT_3dtiles_feature_metadata": {
+          "featureLayers": [
+            {
+              "featureTable": 0,
+              "featureProperties": {
+                "Temperature": {
+                  "attribute": "_TEMPERATURE"
+                },
+                "Intensity": {
+                  "attribute": "_INTENSITY"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
+Per-texel properties:
+
+```json
+{
+  "primitives": [
+    {
+      "attributes": {
+        "POSITION": 0,
+        "TEXCOORD_0": 1,
+      },
+      "indices": 2,
+      "extensions": {
+        "EXT_3dtiles_feature_metadata": {
+          "featureLayers": [
+            {
+              "featureTable": 0,
+              "featureProperties": {
+                "Temperature": {
+                  "textureAccessor": {
+                    "texture": {
+                      "texCoord": 0,
+                      "index": 0
+                    },
+                    "channels": "r",
+                    "normalized": false
+                  }
+                },
+                "Intensity": {
+                  "textureAccessor": {
+                    "texture": {
+                      "texCoord": 0,
+                      "index": 1
+                    },
+                    "channels": "r",
+                    "normalized": true
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
+### Texture Accessor
 
 A texture accessor contains a reference to a glTF texture and information for accessing its values:
 
-* `texture` - a `textureInfo` object where `texCoord` is ignored.
-* `channels` - a string that defines both the type (scalar, vec2, vec3, vec4) and the color channels to read from. Example: "rgb" means this property is a vec3 and its values are obtained from the red, green, and blue channels. This is useful when packing properties into the same texture: one texture accessor might be "r", another might be "gb" and a last might be "a". The string must match the pattern `/^[rgba]{1,4}$/`. If the texture does not contain a particular color channel then the maximum value must be returned (e.g. 255 for 8-bit color depth).
-* `normalized` - whether the texture data should be normalized to the `[0.0, 1.0]` range or not. This property is ignored for KTX2 images since KTX2 has native normalized and unnormalized image formats. Defaults to `false`.
+* `texture` - a `textureInfo` object
+* `channels` - a string that implicitly defines both the type (`"SCALAR"`, `"VEC2"`, `"VEC3"`, `"VEC4"`) and the color channels to read from. Example: `"rgb"` signifies that this property's `type` is `"VEC3"` its values are obtained from the red, green, and blue channels. This is useful when packing properties into the same texture: one texture accessor might be `"r"`, another might be `"gb"` and a last might be `"a"`. The string must match the pattern `/^[rgba]{1,4}$/`. If the texture does not contain a particular color channel then the maximum value must be returned (e.g. 255 for 8-bit color depth).
+* `normalized` - whether the texture data should be normalized to the `[0.0, 1.0]` range or not. This property overrides the normalization specified in the native image format (e.g. if `normalized` is true and the KTX2 image format is `VK_FORMAT_R8_UNORM` the values will still be normalized). Defaults to `false`.
 
 Example: read data from a grayscale texture and normalize to the `[0.0, 1.0]` range.
 
@@ -241,261 +389,105 @@ Example: read data from a grayscale texture and normalize to the `[0.0, 1.0]` ra
 }
 ```
 
-### Feature ID
 
-Feature IDs are stored inside the glTF primitive as vertex attributes or textures and are used to identify the features in a primitives and index into a feature table. A primitive may have multiple sets of feature IDs, or feature layers, from any combination of per-vertex and per-texel sources.
+### Feature Table
 
-An individual feature layer contains the follow properties:
+A feature table stores information about per-feature application-specific properties. There are two types of feature tables - ones containing property arrays that can be indexed by a feature ID, and ones that simply store metadata about properties that are stored externally in primitives.
 
-* `featureTable`: the index of the feature table used by this layer
-* `instanceStride`: an optional property that specifies the per-instance stride to apply to feature IDs when the mesh is instanced by the `KHR_mesh_instancing` extension.
-* `vertexAttribute`: the source for per-vertex feature IDs
-* `texture`: the source for per-texel feature IDs
+A feature layer with `featureIds` can only use a feature table of the first type. In this case `featureCount` will be defined, a value indicating the number of features in the feature table, and equivalently, the range of valid feature IDs that can index into the feature table. Property values may be stored in JSON arrays or glTF accessors.
 
-`vertexAttribute` and `texture` are mutually exclusive. Per-vertex and per-texel feature IDs cannot be used in the same feature layer.
+A feature layer with `featureProperties` can only use a feature table of the second type. `featureCount` will not be defined and the feature table will just store metadata rather than actual property values.
 
-Feature IDs, whether sourced from a vertex attribute or texture, are integral values in the range `[0, featureCount - 1]`, where `featureCount` is the number of features contained in the layer's feature table.
+Properties are stored by name in the `featureProperties` object. A feature table may contain any number of properties, or no properties at all. Property names must be unique across all feature tables.
 
-#### Per-vertex feature IDs
+As stated above, feature table properties can be represented in three different ways:
 
-Vertices with the same feature ID are part of the same feature. Feature IDs can be defined explicitly via a `_FEATURE_ID_0` vertex attribute semantic, or implicitly as a constant number or consecutive numbers.
+1. `array`: an array of values
+    * Array elements can be any valid JSON data type, including objects and arrays.  Elements may be `null`.
+    * The length of each array must be equal to `featureCount`
+    * Elements in the array must conform to the `type` property. Valid `type` values are `"string"`, `"number"`, `"boolean"`, and `"any"` (default), where `"any"` must be used if the array contains arrays, objects, `null`, or mixed types.
+2. `accessor`: a reference to binary data stored in a glTF accessor
+    * The accessor's `count` must be equal to `featureCount`
+3. `descriptor`: describes the format of external properties
+    * Properties stored in vertex attribute accessors must have the same `type`, `componentType`, and `normalized` values. `normalized` is false by default.
+    * Properties stored in textures must have the same `type` (implicitly defined by `channels`), `componentType` (implicitly defined by the texture's bit depth and signedness), and `normalized`
 
-`vertexAttribute` contains two properties:
-* `attributeIndex`: the set index of the feature id vertex attribute containing explicit feature ids
-* `implicit`: an object defining how implicit feature IDs are generated
+`array`, `accessor`, and `descriptor` are mutually exclusive.
 
-`attributeIndex` and `implicit` are mutually exclusive.
+Properties may also optionally define a `semantic`, an enumerated value describing how the property is to be interpreted. Application-specific semantics must start with an underscore, e.g., `_CLASSIFICATION`. Semantics must be unique within an individual feature table.
 
-##### Explicit feature IDs
+List of built-in semantics:
 
-This extension adds a new indexed attribute semantic `_FEATURE_ID_0`. All indices must start with 0 and be continuous positive integers: `_FEATURE_ID_0`, `_FEATURE_ID_1`, `_FEATURE_ID_2`, etc.
+Semantic | Type | Description
+--|--|--
+`NAME`|`string`| The name of the feature. Names do not have to be unique.
+`ID`|`number` or `string`|A unique identifier for this feature.
 
-The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be `false`. There is no restriction on `componentType`, however as described above, all feature IDs must be in the range `[0, featureCount - 1]`.
-
-A feature layer references a feature id attribute by its set index. For example, `"attributeIndex": 0` corresponds to `_FEATURE_ID_0` and `"attributeIndex": 1` corresponds to `_FEATURE_ID_1`.
-
-An example of two feature layers with explicit feature IDs:
+Example feature table with built-in and application-specific semantics:
 
 ```json
 {
-  "primitives": [
-    {
-      "attributes": {
-        "POSITION": 0,
-        "_FEATURE_ID_0": 1,
-        "_FEATURE_ID_1": 0
+  "featureCount": 4,
+  "featureProperties": {
+    "bldg_name": {
+      "semantic": "NAME",
+      "array": {
+        "type": "string",
+        "values": ["House", "Store", "Bank", "House"]
+      }
+    },
+    "bldg_uuid": {
+      "semantic": "ID",
+      "array": {
+        "type": "string",
+        "values": [
+          "752ac29d-c262-473b-bd85-aff3c471f3c8",
+          "c3006d52-099a-4c05-95a1-a91a1be71f0e",
+          "9e011aa9-0ed9-497c-923f-0bed8c286134",
+          "cd876cc5-f2d3-400b-ad64-f5dee35f0520"
+        ]
+      }
+    },
+    "bldg_classif": {
+      "semantic": "_CLASSIFICATION",
+      "array": {
+        "type": "number",
+        "values": [0, 1, 2, 0]
+      }
+    }
+  }
+}
+```
+
+Additional application-specific metadata about a property may be stored in the property's `extras` object:
+
+```json
+{
+  "featureCount": 10,
+  "featureProperties": {
+    "ClassificationIds": {
+      "accessor": 0,
+      "extras": {
+        "version": "1.4"
+      }
+    }
+  }
+}
+```
+
+```json
+{
+  "featureProperties": {
+    "Accuracy": {
+      "descriptor": {
+        "type": "SCALAR",
+        "componentType": 5121,
+        "normalized": false
       },
-      "indices": 2,
-      "extensions": {
-        "CESIUM_3dtiles_feature_metadata": {
-          "featureLayers": [
-            {
-              "featureTable": 0,
-              "vertexAttribute": {
-                "attributeIndex": 0
-              }
-            },
-            {
-              "featureTable": 1,
-              "vertexAttribute": {
-                "attributeIndex": 1
-              }
-            }
-          ]
-        }
+      "extras": {
+        "Offset": 0.1,
+        "Gain": 20.0
       }
-    }
-  ]
-}
-```
-
-##### Implicit feature IDs
-
-In some cases it's not necessary to define explicit feature IDs, like when all feature IDs are the same number or are consecutive numbers.
-
-Instead feature IDs can be defined implicitly with two properties:
-
-* `start`: the value of the first vertex
-* `increment`: the amount to increment per-vertex. This may be set to `0` to maintain a constant value for all vertices or `1` to produce consecutive values.
-
-Example: instanced mesh where each instance is assigned consecutive feature IDs
-
-```json
-{
-  "nodes": [
-    {
-      "mesh": 0,
-      "extensions": {
-        "KHR_mesh_instancing": {
-          "attributes": {
-            "TRANSLATION": 2
-          }
-        }
-      }
-    }
-  ],
-  "meshes": [
-    {
-      "primitives": [
-        {
-          "attributes": {
-            "POSITION": 0
-          },
-          "indices": 1,
-          "mode": 4,
-          "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
-              "featureLayers": [
-                {
-                  "featureTable": 0,
-                  "instanceStride": 1,
-                  "vertexAttribute": {
-                    "implicit": {
-                      "start": 0,
-                      "increment": 0
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      ]
-    }
-  ]
-}
-```
-
-Example: point cloud where each point is assigned consecutive feature IDs
-
-```json
-{
-  "primitives": [
-    {
-      "attributes": {
-        "POSITION": 0
-      },
-      "mode": 0,
-      "extensions": {
-        "CESIUM_3dtiles_feature_metadata": {
-          "featureLayers": [
-            {
-              "featureTable": 0,
-              "vertexAttribute": {
-                "implicit": {
-                  "start": 0,
-                  "increment": 1
-                }
-              }
-            }
-          ]
-        }
-      }
-    }
-  ]
-}
-```
-
-#### Per-texel feature IDs
-
-Feature IDs can also be stored in textures. The feature ID is determined by sampling a texture using the interpolated texture coordinates of the given `TEXCOORD` set at a particular point on the surface, like traditional texture mapping for a color texture. Per-texel feature IDs may be set explicitly or implicitly.
-
-The `texture` object contains the following properties:
-
-* `texCoord`: the set index of primitives's `TEXCOORD` attribute used for texture coordinate mapping
-* `textureAccessor`: a view into a glTF texture that contains explicit feature IDs
-* `implicit`: an object defining how implicit feature IDs are generated
-
-`textureAccessor` and `implicit` are mutually exclusive.
-
-When using `textureAccessor` the `channels` string must be a length of one and `normalized` must be `false`. See [Texture Accessor](#texture-accessor) for more information.
-
-The implicit object contains two properties:
-
-* `width`: the width of the texture in pixels
-* `height`: the height of the texture in pixels
-
-Implicit feature IDs start at zero for the top-left pixel and increment for each successive pixel, row-major top-to-bottom.
-
-Example: explicit and implicit texture feature IDs
-<p align="center">
-<img src="./figures/per-texel-metadata.png" >
-</p>
-
-
-```json
-{
-  "meshes": [
-    {
-      "primitives": [
-        {
-          "attributes": {
-            "POSITION": 0,
-            "TEXCOORD_0": 1,
-          },
-          "indices": 2,
-          "mode": 4,
-          "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
-              "featureLayers": [
-                {
-                  "featureTable": 0,
-                  "texture": {
-                    "texCoord": 0,
-                    "textureAccessor": {
-                      "texture": {
-                        "index": 0
-                      },
-                      "channels": "r"
-                    }
-                  }
-                },
-                {
-                  "featureTable": 1,
-                  "texture": {
-                    "texCoord": 0,
-                    "implicit": {
-                      "width": 10,
-                      "height": 10
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      ]
-    }
-  ],
-  "extensions": {
-    "CESIUM_3dtiles_feature_metadata": {
-      "featureTables": [
-        {
-          "featureCount": 4,
-          "properties": {
-            "Component": {
-              "values": ["Wall", "Door", "Roof", "Window"]
-            }
-          }
-        },
-        {
-          "featureCount": 100,
-          "properties": {
-            "Intensity": {
-              "textureAccesor": {
-                "texture": {
-                  "index": 0
-                },
-                "channels": "r",
-                "normalized": true
-              }
-            },
-            "Temperature": {
-              "accessor": 4
-            }
-          }
-        }
-      ]
     }
   }
 }
@@ -561,12 +553,12 @@ TODO
           "material": 0,
           "mode": 4,
           "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
+            "EXT_3dtiles_feature_metadata": {
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "vertexAttribute": {
-                    "attributeIndex": 0
+                  "featureIds": {
+                    "attribute": "_FEATURE_ID_0"
                   }
                 }
               ]
@@ -577,31 +569,40 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_feature_metadata"
+    "EXT_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_feature_metadata": {
+    "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
           "featureCount": 2,
-          "properties": {
+          "featureProperties": {
             "Name": {
-              "values": ["Building A", "Building B"]
+              "array": {
+                "type": "string",
+                "values": ["Building A", "Building B"]
+              }
             },
             "Year": {
-              "values": [1999, 2015]
+              "array": {
+                "type": "number",
+                "values": [1999, 2015]
+              }
             },
             "Address": {
-              "values": [
-                {
-                  "Street": "Main Street",
-                  "HouseNumber": "1"
-                },
-                {
-                  "Street": "Main Street",
-                  "HouseNumber": "2"
-                }
-              ]
+              "array": {
+                "type": "any",
+                "values": [
+                  {
+                    "Street": "Main Street",
+                    "HouseNumber": "1"
+                  },
+                  {
+                    "Street": "Main Street",
+                    "HouseNumber": "2"
+                  }
+                ]
+              }
             }
           }
         }
@@ -669,12 +670,12 @@ TODO
           "material": 0,
           "mode": 4,
           "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
+            "EXT_3dtiles_feature_metadata": {
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "vertexAttribute": {
-                    "attributeIndex": 0
+                  "featureIds": {
+                    "attribute": "_FEATURE_ID_0"
                   }
                 }
               ]
@@ -685,14 +686,14 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_feature_metadata"
+    "EXT_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_feature_metadata": {
+    "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
           "featureCount": 2,
-          "properties": {
+          "featureProperties": {
             "Id": {
               "accessor": 3
             },
@@ -743,7 +744,8 @@ TODO
       "byteOffset": 0,
       "componentType": 5123,
       "count": 8,
-      "type": "SCALAR"
+      "type": "SCALAR",
+      "normalized": true
     },
     {
       "name": "Classification",
@@ -778,24 +780,28 @@ TODO
             "POSITION": 0,
             "COLOR_0": 1,
             "_FEATURE_ID_0": 2,
+            "_INTENSITY": 3,
+            "_CLASSIFICATION": 4
           },
           "mode": 0,
           "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
+            "EXT_3dtiles_feature_metadata": {
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "vertexAttribute": {
-                    "implicit": {
-                      "start": 0,
-                      "increment": 1
+                  "featureProperties": {
+                    "Intensity": {
+                      "attribute": "_INTENSITY"
+                    },
+                    "Classification": {
+                      "attribute": "_CLASSIFICATION"
                     }
                   }
                 },
-                 {
+                {
                   "featureTable": 1,
-                  "vertexAttribute": {
-                    "attributeIndex": 0
+                  "featureIds": {
+                    "attribute": "_FEATURE_ID_0"
                   }
                 }
               ]
@@ -806,25 +812,31 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_feature_metadata"
+    "EXT_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_feature_metadata": {
+    "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
-          "featureCount": 8,
-          "properties": {
+          "featureProperties": {
             "Intensity": {
-              "accessor": 3
+              "descriptor": {
+                "componentType": 5123,
+                "type": "SCALAR",
+                "normalized": true
+              }
             },
             "Classification": {
-              "accessor": 4
+              "descriptor": {
+                "componentType": 5121,
+                "type": "SCALAR"
+              }
             }
           }
         },
         {
           "featureCount": 2,
-          "properties": {
+          "featureProperties": {
             "Id": {
               "accessor": 5
             },
@@ -853,34 +865,39 @@ TODO
       "type": "VEC3"
     },
     {
+      "name": "Feature Ids",
+      "componentType": 5126,
+      "count": 4,
+      "type": "SCALAR"
+    },
+    {
       "name": "Indices",
       "bufferView": 1,
       "byteOffset": 0,
       "componentType": 5123,
       "count": 6,
       "type": "SCALAR"
-    }
+    },
+    
   ],
   "meshes": [
     {
       "primitives": [
         {
           "attributes": {
-            "POSITION": 0
+            "POSITION": 0,
+            "_FEATURE_ID_0": 1
           },
-          "indices": 1,
+          "indices": 2,
           "material": 0,
           "mode": 4,
           "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
+            "EXT_3dtiles_feature_metadata": {
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "vertexAttribute": {
-                    "implicit": {
-                      "start": 0,
-                      "increment": 0
-                    }
+                  "featureIds": {
+                    "attribute": "_FEATURE_ID_0"
                   }
                 }
               ]
@@ -891,16 +908,19 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_feature_metadata"
+    "EXT_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_feature_metadata": {
+    "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
           "featureCount": 1,
-          "properties": {
+          "featureProperties": {
             "Name": {
-              "values": ["Building name"]
+              "array": {
+                "type": "string",
+                "values": ["Building name"]
+              }
             }
           }
         }
@@ -946,7 +966,8 @@ TODO
       "byteOffset": 0,
       "componentType": 5123,
       "count": 8,
-      "type": "SCALAR"
+      "type": "SCALAR",
+      "normalized": true
     },
     {
       "name": "Classification",
@@ -1005,25 +1026,29 @@ TODO
           "attributes": {
             "POSITION": 0,
             "COLOR_0": 1,
-            "_FEATURE_ID_0": 2
+            "_FEATURE_ID_0": 2,
+            "_INTENSITY": 3,
+            "_CLASSIFICATION": 4
           },
           "mode": 0,
           "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
+            "EXT_3dtiles_feature_metadata": {
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "vertexAttribute": {
-                    "implicit": {
-                      "start": 0,
-                      "increment": 1
+                  "featureProperties": {
+                    "Intensity": {
+                      "attribute": "_INTENSITY"
+                    },
+                    "Classification": {
+                      "attribute": "_CLASSIFICATION"
                     }
                   }
                 },
                 {
                   "featureTable": 1,
-                  "vertexAttribute": {
-                    "attributeIndex": 0
+                  "featureIds": {
+                    "attribute": "_FEATURE_ID_0"
                   }
                 }
               ]
@@ -1040,12 +1065,12 @@ TODO
           "material": 0,
           "mode": 4,
           "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
+            "EXT_3dtiles_feature_metadata": {
               "featureLayers": [
                 {
                   "featureTable": 2,
-                  "vertexAttribute": {
-                    "attributeIndex": 0
+                  "featureIds": {
+                    "attribute": "_FEATURE_ID_0"
                   }
                 }
               ]
@@ -1056,25 +1081,31 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_feature_metadata"
+    "EXT_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_feature_metadata": {
+    "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
-          "featureCount": 8,
-          "properties": {
+          "featureProperties": {
             "Intensity": {
-              "accessor": 3
+              "descriptor": {
+                "componentType": 5123,
+                "type": "SCALAR",
+                "normalized": true
+              }
             },
-            "classification": {
-              "accessor": 4
+            "Classification": {
+              "descriptor": {
+                "componentType": 5121,
+                "type": "SCALAR"
+              }
             }
           }
         },
         {
           "featureCount": 2,
-          "properties": {
+          "featureProperties": {
             "Id": {
               "accessor": 5
             },
@@ -1085,9 +1116,12 @@ TODO
         },
         {
           "featureCount": 2,
-          "properties": {
+          "featureProperties": {
             "Name": {
-              "values": ["Building A", "Building B"]
+              "array": {
+                "type": "string",
+                "values": ["Building A", "Building B"]
+              }
             }
           }
         }
@@ -1105,9 +1139,9 @@ TODO
     {
       "mesh": 0,
       "extensions": {
-        "KHR_mesh_instancing": {
+        "EXT_mesh_gpu_instancing": {
           "attributes": {
-            "TRANSLATION": 3
+            "TRANSLATION": 4
           }
         }
       }
@@ -1123,7 +1157,13 @@ TODO
       "type": "VEC3"
     },
     {
-      "name": "Feature IDs",
+      "name": "Implicit Feature IDs",
+      "componentType": 5126,
+      "count": 12,
+      "type": "SCALAR"
+    },
+    {
+      "name": "Explicit Feature IDs",
       "bufferView": 1,
       "byteOffset": 0,
       "componentType": 5126,
@@ -1153,27 +1193,25 @@ TODO
         {
           "attributes": {
             "POSITION": 0,
-            "_FEATURE_ID_0": 1
+            "_FEATURE_ID_0": 1,
+            "_FEATURE_ID_1": 2
           },
-          "indices": 2,
+          "indices": 3,
           "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
+            "EXT_3dtiles_feature_metadata": {
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "instanceStride": 1,
-                  "vertexAttribute": {
-                    "implicit": {
-                      "start": 0,
-                      "increment": 0
-                    }
+                  "featureIds": {
+                    "instanceStride": 1,
+                    "attribute": "_FEATURE_ID_0"
                   }
                 },
                 {
                   "featureTable": 1,
-                  "instanceStride": 1,
-                  "vertexAttribute": {
-                    "attributeIndex": 0
+                  "featureIds": {
+                    "instanceStride": 6,
+                    "attribute": "_FEATURE_ID_1"
                   }
                 }
               ]
@@ -1184,21 +1222,27 @@ TODO
     }
   ],
   "extensions": {
-    "CESIUM_3dtiles_feature_metadata": {
+    "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
           "featureCount": 2,
-          "properties": {
+          "featureProperties": {
             "Name": {
-              "values": ["tree1", "tree2"]
+              "array": {
+                "type": "string",
+                "values": ["tree1", "tree2"]
+              }
             }
           }
         },
         {
           "featureCount": 6,
-          "properties": {
+          "featureProperties": {
             "State": {
-              "values": ["normal", "normal", "broken", "nest", "normal", "normal"]
+              "array": {
+                "type": "string",
+                "values": ["normal", "normal", "broken", "nest", "normal", "normal"]
+              }
             }
           }
         }
@@ -1303,14 +1347,14 @@ TODO
           "material": 0,
           "mode": 4,
           "extensions": {
-            "CESIUM_3dtiles_feature_metadata": {
+            "EXT_3dtiles_feature_metadata": {
               "featureLayers": [
                 {
                   "featureTable": 0,
-                  "texture": {
-                    "texCoord": 0,
+                  "featureIds": {
                     "textureAccessor": {
                       "texture": {
+                        "texCoord": 0,
                         "index": 1
                       },
                       "channels": "r"
@@ -1319,10 +1363,10 @@ TODO
                 },
                 {
                   "featureTable": 1,
-                  "texture": {
-                    "texCoord": 1,
+                  "featureIds": {
                     "textureAccessor": {
                       "texture": {
+                        "texCoord": 1,
                         "index": 2
                       },
                       "channels": "r"
@@ -1331,21 +1375,41 @@ TODO
                 },
                 {
                   "featureTable": 2,
-                  "texture": {
-                    "texCoord": 0,
-                    "implicit": {
-                      "width": 10,
-                      "height": 10
+                  "featureProperties": {
+                    "Accuracy": {
+                      "textureAccessor": {
+                        "texture": {
+                          "texCoord": 0,
+                          "index": 3
+                        },
+                        "channels": "r",
+                        "normalized": false
+                      }
                     }
                   }
                 },
                 {
                   "featureTable": 3,
-                  "texture": {
-                    "texCoord": 1,
-                    "implicit": {
-                      "width": 10,
-                      "height": 10
+                  "featureProperties": {
+                    "VegetationDensity": {
+                      "textureAccessor": {
+                        "texture": {
+                          "texCoord": 1,
+                          "index": 4
+                        },
+                        "channels": "r",
+                        "normalized": false
+                      }
+                    },
+                    "VegetationHealth": {
+                      "textureAccessor": {
+                        "texture": {
+                          "texCoord": 1,
+                          "index": 4
+                        },
+                        "channels": "g",
+                        "normalized": false
+                      }
                     }
                   }
                 }
@@ -1357,59 +1421,60 @@ TODO
     }
   ],
   "extensionsUsed": [
-    "CESIUM_3dtiles_feature_metadata"
+    "EXT_3dtiles_feature_metadata"
   ],
   "extensions": {
-    "CESIUM_3dtiles_feature_metadata": {
+    "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
           "featureCount": 5,
-          "properties": {
+          "featureProperties": {
             "MaterialId": {
-              "values": ["dirt", "grass", "wood", "brick", "glass"]
+              "array": {
+                "type": "string",
+                "values": ["dirt", "grass", "wood", "brick", "glass"]
+              }
             }
           }
         },
         {
           "featureCount": 7,
-          "properties": {
+          "featureProperties": {
             "ClassificationId": {
-              "values": [0, 1, 9, 10, 11, 12, 24]
-            }
-          }
-        },
-        {
-          "featureCount": 100,
-          "properties": {
-            "Accuracy": {
-              "textureAccesor": {
-                "texture": {
-                  "index": 3
-                },
-                "channels": "r",
-                "normalized": false
+              "array": {
+                "type": "number",
+                "values": [0, 1, 9, 10, 11, 12, 24]
               }
             }
           }
         },
         {
-          "featureCount": 100,
-          "properties": {
+          "featureProperties": {
+            "Accuracy": {
+              "descriptor": {
+                "type": "SCALAR",
+                "componentType": 5121,
+                "normalized": false
+              },
+              "extras": {
+                "transform": [-128.0, 0.001]
+              }
+            }
+          }
+        },
+        {
+          "featureProperties": {
             "VegetationDensity": {
-              "textureAccesor": {
-                "texture": {
-                  "index": 4
-                },
-                "channels": "r",
+              "descriptor": {
+                "type": "SCALAR",
+                "componentType": 5121,
                 "normalized": false
               }
             },
             "VegetationHealth": {
-              "textureAccesor": {
-                "texture": {
-                  "index": 4
-                },
-                "channels": "g",
+              "descriptor": {
+                "type": "SCALAR",
+                "componentType": 5121,
                 "normalized": false
               }
             }
