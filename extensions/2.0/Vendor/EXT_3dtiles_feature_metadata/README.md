@@ -1290,6 +1290,12 @@ TODO
       "type": "SCALAR"
     }
   ],
+  "samplers": [
+    {
+      "magFilter": 9728,
+      "minFilter": 9728
+    }
+  ],
   "images": [
     {
       "uri": "color.jpg"
@@ -1309,13 +1315,15 @@ TODO
   ],
   "textures": [
     {
-      "source": 0
+      "source": 0,
     },
     {
-      "source": 1
+      "source": 1,
+      "sampler": 0
     },
     {
-      "source": 2
+      "source": 2,
+      "sampler": 0
     },
     {
       "source": 3
