@@ -1,19 +1,17 @@
-# CESIUM\_3dtiles\_feature\_hierarchy
+# EXT\_3dtiles\_feature\_hierarchy
 
 ## Contributors
-
-TODO
 
 * Sean Lilley, [@lilleyse](https://github.com/lilleyse)
 * Patrick Cozzi, [@pjcozzi](https://twitter.com/pjcozzi)
 
 ## Status
 
-TODO
+Draft
 
 ## Dependencies
 
-Written against the glTF 2.0 spec. Depends on `CESIUM_3dtiles_feature_metadata`.
+Written against the glTF 2.0 spec. Depends on `EXT_3dtiles_feature_metadata`.
 
 ## Overview
 
@@ -28,22 +26,40 @@ Consider a tile whose features fit into multiple categories that do not share th
   "featureCount": 8,
   "properties": {
     "lampStrength": {
-      "values": [10, 5, 7, 0, 0, 0, 0, 0]
+      "array": {
+        "type": "number",
+        "values": [10, 5, 7, 0, 0, 0, 0, 0]
+      }
     },
     "lampColor": {
-      "values": ["yellow", "white", "white", "", "", "", "", ""]
+      "array": {
+        "type": "string",
+        "values": ["yellow", "white", "white", "", "", "", "", ""]
+      }
     },
     "carType": {
-      "values": ["", "", "", "truck", "bus", "sedan", "", ""],
+      "array": {
+        "type": "string",
+        "values": ["", "", "", "truck", "bus", "sedan", "", ""]
+      }
     },
     "carColor": {
-      "values": ["", "", "", "green", "blue", "red", "", ""],
+      "array": {
+        "type": "string",
+        "values": ["", "", "", "green", "blue", "red", "", ""]
+      }
     },
     "treeHeight": {
-      "values": [0, 0, 0, 0, 0, 0, 10, 15],
+      "array": {
+        "type": "number",
+        "values": [0, 0, 0, 0, 0, 0, 10, 15]
+      }
     },
     "treeAge": {
-      "values": [0, 0, 0, 0, 0, 0, 5, 8],
+      "array": {
+        "type": "number",
+        "values": [0, 0, 0, 0, 0, 0, 5, 8]
+      }
     }
   }
 }
@@ -56,40 +72,43 @@ In this example, several `""` and `0` array values are stored so each array has 
   "featureCount": 8,
   "properties": {
     "info": {
-      "values": [
-        {
-          "lampStrength": 10,
-          "lampColor": "yellow"
-        },
-        {
-          "lampStrength": 5,
-          "lampColor": "white"
-        },
-        {
-          "lampStrength": 7,
-          "lampColor": "white"
-        },
-        {
-          "carType": "truck",
-          "carColor": "green"
-        },
-        {
-          "carType": "bus",
-          "carColor": "blue"
-        },
-        {
-          "carType": "sedan",
-          "carColor": "red"
-        },
-        {
-          "treeHeight": 10,
-          "treeAge": 5
-        },
-        {
-          "treeHeight": 15,
-          "treeAge": 8
-        }
-      ]
+      "array": {
+        "type": "any",
+        "values": [
+          {
+            "lampStrength": 10,
+            "lampColor": "yellow"
+          },
+          {
+            "lampStrength": 5,
+            "lampColor": "white"
+          },
+          {
+            "lampStrength": 7,
+            "lampColor": "white"
+          },
+          {
+            "carType": "truck",
+            "carColor": "green"
+          },
+          {
+            "carType": "bus",
+            "carColor": "blue"
+          },
+          {
+            "carType": "sedan",
+            "carColor": "red"
+          },
+          {
+            "treeHeight": 10,
+            "treeAge": 5
+          },
+          {
+            "treeHeight": 15,
+            "treeAge": 8
+          }
+        ]
+      }
     }
   }
 }
@@ -119,25 +138,46 @@ A standard feature table with two walls per building and three buildings per blo
   "featureCount": 6,
   "properties": {
     "wall_color": {
-      "values": ["blue", "pink", "green", "lime", "black", "brown"]
+      "array": {
+        "type": "string",
+        "values": ["blue", "pink", "green", "lime", "black", "brown"]
+      }
     },
     "wall_windows": {
-      "values": [2, 4, 4, 2, 0, 3]
+      "array": {
+        "type": "number",
+        "values": [2, 4, 4, 2, 0, 3]
+      }
     },
     "building_name": {
-      "values": ["building_0", "building_0", "building_1", "building_1", "building_2", "building_2"],
+      "array": {
+        "type": "string",
+        "values": ["building_0", "building_0", "building_1", "building_1", "building_2", "building_2"]
+      }
     },
     "building_id": {
-      "values": [0, 0, 1, 1, 2, 2],
+      "array": {
+        "type": "number",
+        "values": [0, 0, 1, 1, 2, 2]
+      }
     },
     "building_address": {
-      "values": ["10 Main St", "10 Main St", "12 Main St", "12 Main St", "14 Main St", "14 Main St"],
+      "array": {
+        "type": "string",
+        "values": ["10 Main St", "10 Main St", "12 Main St", "12 Main St", "14 Main St", "14 Main St"]
+      }
     },
     "block_lat_long": {
-      "values": [[0.12, 0.543], [0.12, 0.543], [0.12, 0.543], [0.12, 0.543], [0.12, 0.543], [0.12, 0.543]],
+      "array": {
+        "type": "any",
+        "values": [[0.12, 0.543], [0.12, 0.543], [0.12, 0.543], [0.12, 0.543], [0.12, 0.543], [0.12, 0.543]]
+      }
     },
     "block_district": {
-      "values": ["central", "central", "central", "central", "central", "central"],
+      "array": {
+        "type": "string",
+        "values": ["central", "central", "central", "central", "central", "central"]
+      }
     }
   }
 }
@@ -147,7 +187,7 @@ Both these cases illustrate the benefit of supporting feature classes and a feat
 
 ## Feature Table updates
 
-The standard feature table may be extended to include a `CESIUM_3dtiles_feature_hierarchy` object that defines a set of classes and a tree structure for class instances.
+The standard feature table may be extended to include a `EXT_3dtiles_feature_hierarchy` object that defines a set of classes and a tree structure for class instances. This extension can only be added to feature tables where `featureCount` is defined since feature ids are required to index into the hierarchy.
 
 Sample Feature Table:
 
@@ -156,14 +196,17 @@ Sample Feature Table:
   "featureCount": 6,
   "properties": {},
   "extensions": {
-    "CESIUM_3dtiles_feature_hierarchy": {
+    "EXT_3dtiles_feature_hierarchy": {
       "classes": [
         {
           "name": "Wall",
           "instanceCount": 6,
           "properties": {
             "color": {
-              "values": ["white", "red", "yellow", "gray", "brown", "black"]
+              "array": {
+                "type": "string",
+                "values": ["white", "red", "yellow", "gray", "brown", "black"]
+              }
             }
           }
         },
@@ -172,10 +215,16 @@ Sample Feature Table:
           "instanceCount": 3,
           "properties": {
             "name": {
-              "values": ["unit29", "unit20", "unit93"]
+              "array": {
+                "type": "string",
+                "values": ["unit29", "unit20", "unit93"]
+              }
             },
             "address": {
-              "values": ["100 Main St", "102 Main St", "104 Main St"]
+              "array": {
+                "type": "string",
+                "values": ["100 Main St", "102 Main St", "104 Main St"]
+              }
             }
           }
         },
@@ -184,30 +233,45 @@ Sample Feature Table:
           "instanceCount": 3,
           "properties": {
             "type": {
-              "values": ["city", "resident", "commercial"]
+              "array": {
+                "type": "string",
+                "values": ["city", "resident", "commercial"]
+              }
             },
             "id": {
-              "values": [1120, 1250, 6445]
+              "array": {
+                "type": "number",
+                "values": [1120, 1250, 6445]
+              }
             }
           }
         }
       ],
       "instanceCount": 12,
       "classIds": {
-        "values": [0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2]
+        "array": {
+          "type": "number",
+          "values": [0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2]
+        }
       },
       "parentCounts": {
-        "values": [1, 3, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0]
+        "array": {
+          "type": "number",
+          "values": [1, 3, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0]
+        }
       },
       "parentIds": {
-        "values": [6, 6, 10, 11, 7, 11, 7, 8, 8, 10, 10, 9]
+        "array": {
+          "type": "number",
+          "values": [6, 6, 10, 11, 7, 11, 7, 8, 8, 10, 10, 9]
+        }
       }
     }
   }
 }
 ```
 
-### CESIUM_3dtiles_feature_hierarchy
+### EXT_3dtiles_feature_hierarchy
 
 `classes` is an array of objects, where each object contains the following properties:
 * `name` - A string representing the name of the class
@@ -218,9 +282,9 @@ The top-level `instanceCount` is the total number of instances. It is equal to t
 
 Note that this is different than `featureCount`, which is the total number of features. While all features are instances, not all instances are features; the hierarchy may contain instances that don't have a physical basis in the tile's geometry but still contribute to the hierarchy.
 
-`classIds` is an array of integers of length `instanceCount`. Each value specifies the instances's class as an index in the `classes` array.
+`classIds` is an array of integers of length `instanceCount`. Each value specifies the instance's class as an index in the `classes` array.
 
-> **Implementation Note:** The feature hierarchy does not directly provide an instances's index into its class's `properties` array. Instead the index can be inferred by the number of instances with the same `classId` that have appeared before it. An implementation may want to compute these indices at load time so that property access is as fast as possible.
+> **Implementation Note:** The feature hierarchy does not directly provide an instance's index into its class's `properties` array. Instead the index can be inferred by the number of instances with the same `classId` that have appeared before it. An implementation may want to compute these indices at load time so that property access is as fast as possible.
 
 `parentCounts` is an array of integers of length `instanceCount`. Each value specifies the number of parents that instance has. If omitted, `parentCounts` is implicitly an array of length `instanceCount`, where all values are 1.
 
@@ -265,17 +329,23 @@ Going back to the example of a parking lot with car, lamp post, and tree feature
   "featureCount": 8,
   "properties": {},
   "extensions": {
-    "CESIUM_3dtiles_feature_hierarchy": {
+    "EXT_3dtiles_feature_hierarchy": {
       "classes": [
         {
           "name": "Lamp",
           "instanceCount": 3,
           "properties": {
             "lampStrength": {
-              "values": [10, 5, 7]
+              "array": {
+                "type": "number",
+                "values": [10, 5, 7]
+              }
             },
             "lampColor": {
-              "values": ["yellow", "white", "white"]
+              "array": {
+                "type": "string",
+                "values": ["yellow", "white", "white"]
+              }
             }
           }
         },
@@ -284,10 +354,16 @@ Going back to the example of a parking lot with car, lamp post, and tree feature
           "instanceCount": 3,
           "properties": {
             "carType": {
-              "values": ["truck", "bus", "sedan"]
+              "array": {
+                "type": "string",
+                "values": ["truck", "bus", "sedan"]
+              }
             },
             "carColor": {
-              "values": ["green", "blue", "red"]
+              "array": {
+                "type": "string",
+                "values": ["green", "blue", "red"]
+              }
             }
           }
         },
@@ -296,17 +372,26 @@ Going back to the example of a parking lot with car, lamp post, and tree feature
           "instanceCount": 2,
           "properties": {
             "treeHeight": {
-              "values": [10, 15]
+              "array": {
+                "type": "number",
+                "values": [10, 15]
+              }
             },
             "treeAge": {
-              "values": [5, 8]
+              "array": {
+                "type": "number",
+                "values": [5, 8]
+              }
             }
           }
         }
       ],
       "instanceCount": 8,
       "classIds": {
-        "values": [0, 0, 0, 1, 1, 1, 2, 2]
+        "array": {
+          "type": "number",
+          "values": [0, 0, 0, 1, 1, 1, 2, 2]
+        }
       }
     }
   }
@@ -339,17 +424,23 @@ The city block example would now look like this:
   "featureCount": 6,
   "properties": {},
   "extensions": {
-    "CESIUM_3dtiles_feature_hierarchy": {
+    "EXT_3dtiles_feature_hierarchy": {
       "classes": [
         {
           "name": "Wall",
           "instanceCount": 6,
           "properties": {
             "wall_color": {
-              "values": ["blue", "pink", "green", "lime", "black", "brown"]
+              "array": {
+                "type": "string",
+                "values": ["blue", "pink", "green", "lime", "black", "brown"]
+              }
             },
             "wall_windows": {
-              "values": [2, 4, 4, 2, 0, 3]
+              "array": {
+                "type": "number",
+                "values": [2, 4, 4, 2, 0, 3]
+              }
             }
           }
         },
@@ -358,13 +449,22 @@ The city block example would now look like this:
           "instanceCount": 3,
           "properties": {
             "building_name": {
-              "values": ["building_0", "building_1", "building_2"]
+              "array": {
+                "type": "string",
+                "values": ["building_0", "building_1", "building_2"]
+              }
             },
             "building_id": {
-              "values": [0, 1, 2]
+              "array": {
+                "type": "number",
+                "values": [0, 1, 2]
+              }
             },
             "building_address": {
-              "values": ["10 Main St", "12 Main St", "14 Main St"]
+              "array": {
+                "type": "string",
+                "values": ["10 Main St", "12 Main St", "14 Main St"]
+              }
             }
           }
         },
@@ -373,22 +473,34 @@ The city block example would now look like this:
           "instanceCount": 1,
           "properties": {
             "block_lat_long": {
-              "values": [[0.12, 0.543]]
+              "array": {
+                "type": "any",
+                "values": [[0.12, 0.543]]
+              }
             },
             "block_district": {
-              "values": ["central"]
+              "array": {
+                "type": "string",
+                "values": ["central"]
+              }
             }
           }
         }
       ],
       "instanceCount": 10,
       "classIds": {
-        "values": [0, 0, 0, 0, 0, 0, 1, 1, 1, 2]
+        "array": {
+          "type": "number",
+          "values": [0, 0, 0, 0, 0, 0, 1, 1, 1, 2]
+        }
       },
       "parentIds": {
-        "values": [6, 6, 7, 7, 8, 8, 9, 9, 9, 9]
+        "array": {
+          "type": "number",
+          "values": [6, 6, 7, 7, 8, 8, 9, 9, 9, 9]
+        }
       }
-     }
+    }
   }
 }
 ```
@@ -438,24 +550,33 @@ Feature hierarchy, block:
 
 ## Notes
 
-* Since the feature hierarchy is an extension to the standard feature table, it is still possible to store per-feature properties alongside the `CESIUM_3dtiles_feature_hierarchy` extension object:
+* Since the feature hierarchy is an extension to the standard feature table, it is still possible to store per-feature properties alongside the `EXT_3dtiles_feature_hierarchy` extension object:
 
 ```
 {
   "featureCount": 10,
   "properties": {
     "Height": {
-      "values": [...]
+      "array": {
+        "type": "number",
+        "values": [...]
+      }
     },
     "Longitude": {
-      "values":  [...]
+      "array": {
+        "type": "number",
+        "values": [...]
+      }
     },
     "Latitude": {
-      "values": [...]
-    },
+      "array": {
+        "type": "number",
+        "values": [...]
+      }
+    }
   },
   "extensions": {
-    "CESIUM_3dtiles_feature_hierarchy": {...}
+    "EXT_3dtiles_feature_hierarchy": {...}
   }
 }
 ```
