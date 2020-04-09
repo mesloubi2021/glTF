@@ -24,7 +24,7 @@ Consider a tile whose features fit into multiple categories that do not share th
 ```json
 {
   "featureCount": 8,
-  "properties": {
+  "featureProperties": {
     "lampStrength": {
       "array": {
         "type": "number",
@@ -70,7 +70,7 @@ In this example, several `""` and `0` array values are stored so each array has 
 ```json
 {
   "featureCount": 8,
-  "properties": {
+  "featureProperties": {
     "info": {
       "array": {
         "type": "any",
@@ -136,7 +136,7 @@ A standard feature table with two walls per building and three buildings per blo
 ```json
 {
   "featureCount": 6,
-  "properties": {
+  "featureProperties": {
     "wall_color": {
       "array": {
         "type": "string",
@@ -194,7 +194,7 @@ Sample Feature Table:
 ```json
 {
   "featureCount": 6,
-  "properties": {},
+  "featureProperties": {},
   "extensions": {
     "EXT_3dtiles_feature_hierarchy": {
       "classes": [
@@ -327,7 +327,7 @@ Going back to the example of a parking lot with car, lamp post, and tree feature
 ```json
 {
   "featureCount": 8,
-  "properties": {},
+  "featureProperties": {},
   "extensions": {
     "EXT_3dtiles_feature_hierarchy": {
       "classes": [
@@ -422,7 +422,7 @@ The city block example would now look like this:
 ```json
 {
   "featureCount": 6,
-  "properties": {},
+  "featureProperties": {},
   "extensions": {
     "EXT_3dtiles_feature_hierarchy": {
       "classes": [
@@ -555,7 +555,7 @@ Feature hierarchy, block:
 ```
 {
   "featureCount": 10,
-  "properties": {
+  "featureProperties": {
     "Height": {
       "array": {
         "type": "number",
