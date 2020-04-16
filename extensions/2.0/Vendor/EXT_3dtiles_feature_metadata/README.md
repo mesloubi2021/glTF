@@ -17,22 +17,16 @@ Written against the glTF 2.0 spec. Depends on [`EXT_mesh_gpu_instancing`](https:
 
 ## Overview
 
-In Geographic Information Systems (GIS) a feature is an entity that has both geometry and application-specific properties. This extension adds a mechanism for identifying features within the glTF's vertex and texture data, as well as a database for storing per-feature properties.
+**Features** are geometric entities in 3D space and may have application specific properties associated with them. These properties may span a myriad of domains, such as the names of different pipes in a CAD model, the temperatures of different points in a point cloud, or the age of different trees in a forrest of instanced tree models. This extension adds a mechanism for storing an unlimited amount of feature metadata in an glTF asset and identifying features in the asset on a per-vertex or per-texel basis.
 
-A feature may be a building in a city, a pipe in a BIM/CAD model, a point in a point cloud, and an instanced tree in a forest. A glTF may contain any number of features and any number of per-feature properties.
-
-<p align="center">
-<img src="./figures/feature-table-buildings.png" >
+<p style="text-align: center">
+<img src="./figures/feature-table-buildings.png" alt="Feature Table Buildings Example">
 </p>
-
-Geometry from different features may be batched into as few glTF primitives as possible to enable efficient rendering and interaction. Feature IDs, stored per-vertex or per-texel, enable individual features to be identified and updated at runtime, e.g., show/hide, highlight color, etc. Feature IDs may also be used to query properties from a feature table for styling and application-specific use cases such as populating a UI or issuing a REST API request. Some example feature table properties are building heights, geographic coordinates, and database primary keys.
-
-A glTF primitive may contain one or more feature layers where each feature layer points to a feature table. Multiple feature layers enable different levels of feature granularity within a single dataset. For example, a point cloud may contain groups of points that represent different architectural components of a building while retaining per-point properties like intensity - in the first layer each group is considered a feature; in the second layer each point is considered a feature. Multiple feature layers also enable heterogenous datasets to be combined into a single glTF payload.
 
 <table style="table-layout: fixed">
   <tr>
-    <td style="width: 50%;"><img src="./figures/point-cloud-layers.png" ></td>
-    <td><img src="./figures/composite-example.png" ></td>
+    <td style="width: 50%;"><img src="./figures/point-cloud-layers.png"  alt="Point Cloud Layers Example"></td>
+    <td><img src="./figures/composite-example.png" alt="Composite Example"></td>
   </tr>
   <tr>
     <td>Left: A point cloud with two feature tables, one storing per-group properties and the other storing per-point properties.</td>
@@ -40,16 +34,19 @@ A glTF primitive may contain one or more feature layers where each feature layer
   </tr>
 </table>
 
-A feature table may be extended to include feature classes and hierarchies. See the `EXT_3dtiles_feature_hierarchy` extension.
+The `EXT_3dtiles_feature_metadata` extension consists of **feature layers** and **feature tables**. Feature layers are per-primitive and are used to lookup feature tables. The root-level `EXT_3dtiles_feature_metadata` extension object contains zero or more feature tables: Feature tables are where the feature property data is encoded directly, or a reference to a glTF accessor is located for indirect data retrieval.
+
+Splitting feature layers and feature tables into distinct categories makes this extension flexible and space-efficient. A vertex / texel in a mesh can be simultaneously associated with multiple different properties, without redundant repetition of the same vertex / texel for each desired vertex / texel to property association. For example, a group of points in a point cloud could simultaneously represent specific areas of a building by name **and** also have per-vertex intensity data associated with them. Multiple feature layers and tables also facilitate heterogeneous mesh data to be combined into a single glTF asset.
+
+The `EXT_3dtiles_feature_hierarchy` extension can be used to extend feature tables to support feature classes and hierarchies as well.
 
 ## Example
 
-The following example contains two features and a feature table with a mix of JSON and binary properties.
+The following example is a feature table with a mix of JSON and binary property accessors.
 
 <p>
-<img src="./figures/basic-example.png">
+<img src="./figures/basic-example.png" alt="Basic Example">
 </p>
-
 
 ```json
 {
@@ -135,7 +132,9 @@ The following example contains two features and a feature table with a mix of JS
       "byteOffset": 0,
       "componentType": 5126,
       "count": 2,
-      "type": "VEC2"
+      "type": "VEC2",
+      "max": [180, 90],
+      "min": [-180, -90]
     }
   ]
 }
@@ -143,61 +142,65 @@ The following example contains two features and a feature table with a mix of JS
 
 ## Concepts
 
-### Feature layers
+### Feature Layers
 
-A feature layer defines the mapping between geometry and features. There are two types of feature layers - ones that contain feature IDs, used to query properties from a feature table, and ones that contain feature properties directly.
+Feature layers are per-primitive and define the mapping between vertices / texels and feature property data. They must always reference a feature table and may also encode feature property data directly. They contain the following properties:
 
-A feature layer object contains the following properties:
+| Property            | Description                                                       | Caveats                                                                          |
+|---------------------|-------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| `featureTable`      | Index of the feature table that this feature layer is using.      | Multiple feature layers in a single primitive cannot use the same feature table. |
+| `featureIds`        | Indirect accessor to feature IDs for the specified feature table. | Cannot be used with `featureProperties`                                          |
+| `featureProperties` | An object describing how to access feature properties.            | Cannot be used with `featureIds`                                                 |
 
-* `featureTable`: the index of the feature table used by this layer
-* `featureIds`: an object describing how to access feature IDs
-* `featureProperties`: an object describing how to access feature properties
+<p>
+<img src="./figures/indirection.png" alt="Indirection Example">
+</p>
 
-`featureIds` and `featureProperties` are mutually exclusive and have different characteristics when interfacing with a feature table.
+The `featureTable` index and looked up feature IDs are used in conjunction with each other to access the per-vertex / per-texel feature property data. For example, to find the year `Building A` was constructed:
 
-Multiple feature layers within a single primitive cannot use the same feature table.
+1. Read the first featureLayer.
+2. Observe that the first feature layer uses the zeroth feature table.
+3. Observe that this feature layer is using per-vertex feature ids, (`{attribute: _FEATURE_ID_0}`)
+4. Go to `_FEATURE_ID_0` in the primitive's `attributes` section to find a reference to a glTF accessor for the per-vertex feature ids.
+5. After using the accessor / bufferview to access the feature ids, observe that the first four feature ids are `0`, and the second four feature ids are `1`.
+6. For each feature id, go to the specified feature table and use the feature id as an index into the provided `values` or `accessor` data. The first four vertices belong to `Building A` and were constructed in `1999`. The last four vertices belong to `Building B` and were constructed in 2015. `Coordinates` requires the feature data to be indirectly accessed via a glTF accessor reference (`3`), but the feature ids can be used as indices into the `Coordinate` data once it is decoded.
 
 #### Feature IDs
 
-Feature IDs are stored in vertex attributes or textures and are used to identify the features in a primitive. Feature IDs, whether sourced from a vertex attribute or texture, are integral values in the range `[0, featureCount - 1]`, where `featureCount` is the number of features in the layer's feature table. Feature properties are stored in the feature table, where feature ID is an index into each property array.
+In order to associate vertices or texels with feature property data, it is necessary to define a `featuresId` object. This object contains the following properties:
 
-The `featureIds` object has the following properties:
+| Property          | Description                                            | Caveats                                 |
+|-------------------|--------------------------------------------------------|-----------------------------------------|
+| `attribute`       | The name of a vertex attribute in this primitive containing feature ids  | Cannot be used with `textureAccessor` . |
+| `textureAccessor` | A view into a texture containing feature ids           | Cannot be used with `attribute`         |
+| `instanceStride`  | Optional property specifying per-instance stride to apply to feature IDs when the mesh is instanced by the `EXT_mesh_gpu_instancing` extension. Set `instanceStride` to 1 and initialize `attribute`'s accessor with zeros (.g. by not defining `bufferView`) to treat each instance as a separate feature. Explicit feature ids and custom strides may provide a lower level of feature granularity if desired. ||
 
-* `attribute`: the name of a vertex attribute containing feature IDs
-* `textureAccessor`: a view into a texture containing feature IDs
-* `instanceStride`: an optional property that specifies the per-instance stride to apply to feature IDs when the mesh is instanced by the `EXT_mesh_gpu_instancing` extension. Set `instanceStride` to 1 and initialize `attribute`'s accessor with zeros (e.g. by not defining `bufferView`) to treat each instance as a separate feature. Explicit feature ids and custom strides may provide a lower level of feature granularity if desired.
-
-`attribute` and `textureAccessor` are mutually exclusive. Per-vertex and per-texel feature IDs cannot be used in the same feature layer.
+Choose between `attribute` or `textureAccessor` depending on if you want to use per-vertex or per-texel feature property data associations respectively. Regardless of choice, the retrieved feature ids should always exist in the range `[0, featureCount - 1]` to prevent out-of-bounds errors: The feature ids are a direct index into the feature property arrays. Note that `attribute` and `textureAccessor` are mutually exclusive. Per-vertex and per-texel feature IDs cannot be used in the same feature layer.
 
 ##### Per-vertex feature IDs
 
-A feature is often represented geometrically as a group of vertices, like the vertices of a building in the [example](#example) above. Each vertex has a feature ID attribute indicating the feature to which it belongs.
+Features that can represented as a collection of vertices should use per-vertex feature ids. Each vertex
+should have a feature id associated with it. A primitive with three features would look like this:
 
-For example, vertices for a primitive with three features may look like this:
-
-```
+```plain
 feature id:  [0,   0,   0,   ..., 1,   1,   1,   ..., 2,   2,   2,   ...]
 position:    [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
 normal:      [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
 ```
 
-Vertices do not need to be ordered by feature ID so the following is also OK:
+Vertices do not need to be ordered by feature id. Interleaved feature ids are supported. (Provided the other attribute buffers are interleaved too.)
 
-```
+```plain
 feature id:  [0,   1,   2,   ..., 2,   1,   0,   ..., 1,   2,   0,   ...]
 position:    [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
 normal:      [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
 ```
 
-Note that a vertex can't belong to more than one feature; in that case, the vertex needs to be duplicated so the feature IDs can be assigned.
-
-The feature ID attribute is specified in a glTF mesh primitive by providing the `_FEATURE_ID_0` indexed attribute semantic.
+Note that a vertex cannot belong to more than one feature; in that case the vertex needs to be duplicated, so the feature ids can be assigned. Specify the feature id attribute in a glTF mesh primitive by providing the `_FEATURE_ID_0` indexed attribute semantic.
 
 ###### Feature ID semantic
 
-This extension adds a new indexed attribute semantic `_FEATURE_ID_0`. All indices must start with 0 and be continuous positive integers: `_FEATURE_ID_0`, `_FEATURE_ID_1`, `_FEATURE_ID_2`, etc.
-
-The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be `false`. There is no restriction on `componentType`. Accessor values must be integral values in the range `[0, featureCount - 1]`.
+The extension adds a new index attribute semantic, `_FEATURE_ID_0`. This attribute should be used for per-vertex feature ids. All `_FEATURE_ID_X` indices must start with zero and be continuous positive integers. e.g (`_FEATURE_ID_0`, `_FEATURE_ID_1`, `_FEATURE_ID_2`). The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be false. There is no restriction on the data type `componentType` to facilitate different byte alignments for the feature id accessor, but note that the feature ids must be **whole** numbers. Finally, feature id values must be in the range `[0, featureCount - 1]`.
 
 ###### Example
 
@@ -238,11 +241,33 @@ An example of two feature layers with per-vertex feature IDs:
 
 ##### Per-texel feature IDs
 
-Alternatively feature IDs can be stored in a texture and accessed with a [`textureAccessor`](#texture-accessor).
+Feature ids can be stored in a texture and accessed with a [`textureAccessor`](#texture-accessor).
 
-For a given point on the mesh's surface, the feature ID is sampled from the feature ID texture using the interpolated texture coordinates of the given TEXCOORD set, just like in traditional texture mapping.
+For a given point on the mesh's surface, the feature id is sampled from the feature id texture using the interpolated texture coordinates of the given `TEXCOORD` set, just like in traditional texture mapping. The texture's sampler must use nearest neighbor filtering, - i.e `minFilter` and `magFilter` must be `9728` (`NEAREST`).
 
 The `textureAccessor`'s `channels` string must be of length one and `normalized` must be false (default). The texture's sampler must use nearest neighbor filtering - i.e. `minFilter` and `magFilter` must be `9728` (`NEAREST`).
+
+##### Texture Accessor
+
+Texture accessors contain a reference to a glTF accessor plus additional information on how to access its values. They can be used for both per-texel feature ids and per-texel properties.
+
+| Property | Description | Caveats
+|--|--|--|
+|`texture`  | A [`textureInfo`](https://github.com/KhronosGroup/glTF/blob/master/specification/2.0/README.md#textureinfo) object |  |
+|`channels`  | A string matching the pattern `/^(?=[rgba]{1,4}$)(?!.*(.).*\1).*$/` (Any permutation of `rgba` that doesn't repeat channels). This channel string also implicitly defines the `type` (`"SCALAR"`, `"VEC2"`, `"VEC3"`, `"VEC4"`) that the per-texel property data is encoded as (per-texel feature ids must always be encoded as `"SCALAR"`). | If the texture does not contain a particular color channel then the maximum value must be returned (e.g. 255 for 8-bit color depth). If the texture accessor is being used to access per-texel feature ids, then the channel string must match the regex `/^[rgba]{1}$/` and `normalized` must be false (the default). |  |
+|`normalized`  | If the texture should be normalized to the `[0.0, 1.0]` range. This property overrides the normalization specified in the native image format (e.g. if `normalized` is true, and the KTX2 image format is `VK_FORMAT_R8_UNORM` the values |  |
+
+Example: read data from a grayscale texture and normalize to the `[0.0, 1.0]` range.
+
+```json
+{
+  "texture": {
+    "index": 0
+  },
+  "channels": "r",
+  "normalized": true
+}
+```
 
 ###### Example
 
@@ -252,7 +277,7 @@ The `textureAccessor`'s `channels` string must be of length one and `normalized`
     {
       "attributes": {
         "POSITION": 0,
-        "TEXCOORD_0": 1,
+        "TEXCOORD_0": 1
       },
       "indices": 2,
       "extensions": {
@@ -280,11 +305,14 @@ The `textureAccessor`'s `channels` string must be of length one and `normalized`
 
 #### Feature properties
 
-In some cases it is wasteful to use feature IDs, like when properties vary vertex-by-vertex or texel-by-texel. Instead properties may be stored directly in the primitive rather than in the feature table.
+If each vertex or texel has a unique data property associated with it, then it is wasteful to create an intermediary list of feature ids to vertices / texels. The `EXT_3dtiles_feature_metadata` extension supports this use case via the `featureProperties` object. This object is similar to the `featureIds` object but directly establishes a one-to-one correspondence between **each** vertex / texel, and the associated property data.
 
-`featureProperties` is an object describing how to access properties stored directly in the primitive. `featureProperties` must contain an entry for each property in the layer's feature table.
+| Property          | Description                                            | Caveats                                 |
+|-------------------|--------------------------------------------------------|-----------------------------------------|
+| `attribute`       | An attribute in this primitive that references property data with a 1:1 correspondence between vertex / texel data. | Cannot be used with `textureAccessor`.  |
+| `textureAccessor` | A view into a texture containing property data with a 1:1 correspondence between vertex / texel data. | Cannot be used with `attribute`. All `texCoord` values must be the same. |
 
-Each entry is an object containing either an `attribute`, the name of a vertex attribute containing property values, or a `textureAccessor`, a view into a texture containing property values. `featureProperties` cannot have a mix of per-vertex and per-texel properties. When `featureProperties` contains per-texel properties, all `texCoord` values must be the same.
+Note that `featureProperties` must contain an entry for each property in the layer's feature table and `featureProperties` cannot mix per-vertex and per-texel properties.
 
 ##### Examples
 
@@ -330,7 +358,7 @@ Per-texel properties:
     {
       "attributes": {
         "POSITION": 0,
-        "TEXCOORD_0": 1,
+        "TEXCOORD_0": 1
       },
       "indices": 2,
       "extensions": {
@@ -369,59 +397,46 @@ Per-texel properties:
 }
 ```
 
-### Texture Accessor
-
-A texture accessor contains a reference to a glTF texture and information for accessing its values:
-
-* `texture` - a `textureInfo` object
-* `channels` - a string that implicitly defines both the type (`"SCALAR"`, `"VEC2"`, `"VEC3"`, `"VEC4"`) and the color channels to read from. Example: `"rgb"` signifies that this property's `type` is `"VEC3"` its values are obtained from the red, green, and blue channels. This is useful when packing properties into the same texture: one texture accessor might be `"r"`, another might be `"gb"` and a last might be `"a"`. The string must match the pattern `/^[rgba]{1,4}$/`. If the texture does not contain a particular color channel then the maximum value must be returned (e.g. 255 for 8-bit color depth).
-* `normalized` - whether the texture data should be normalized to the `[0.0, 1.0]` range or not. This property overrides the normalization specified in the native image format (e.g. if `normalized` is true and the KTX2 image format is `VK_FORMAT_R8_UNORM` the values will still be normalized). Defaults to `false`.
-
-Example: read data from a grayscale texture and normalize to the `[0.0, 1.0]` range.
-
-```json
-{
-  "texture": {
-    "index": 0
-  },
-  "channels": "r",
-  "normalized": true
-}
-```
-
-
 ### Feature Table
 
-A feature table stores information about per-feature application-specific properties. There are two types of feature tables - ones containing property arrays that can be indexed by a feature ID, and ones that simply store metadata about properties that are stored externally in primitives.
+Feature tables store information about feature property data. The property data can be encoded directly in the feature table as a collection of valid JSON data types or references to glTF accessors. This type of feature table is a `ValueTable`. Feature tables can also contain metadata about properties that are stored externally in primitives. This type of feature table is a `DescriptorTable`. Feature layers that use `featureIds` must use `ValueTable` feature tables. Feature layers that use `featureProperties` must use `DescriptorTable` feature tables. A **single** feature table cannot mix `DescriptorTable` / `ValueTable` feature tables.
 
-A feature layer with `featureIds` can only use a feature table of the first type. In this case `featureCount` will be defined, a value indicating the number of features in the feature table, and equivalently, the range of valid feature IDs that can index into the feature table. Property values may be stored in JSON arrays or glTF accessors.
+A feature table may contain any number of properties, or no properties at all. Property names must be unique across all feature tables.
 
-A feature layer with `featureProperties` can only use a feature table of the second type. `featureCount` will not be defined and the feature table will just store metadata rather than actual property values.
+#### ValueTable
 
-Properties are stored by name in the `featureProperties` object. A feature table may contain any number of properties, or no properties at all. Property names must be unique across all feature tables.
+`Value Table` feature tables contain the following properties:
 
-As stated above, feature table properties can be represented in three different ways:
+| Property            | Description                                                                                                                             | Caveats |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------|---------|
+| `featureCount`      | A value indicating the number of features in the feature table | `featureCount` must be a value in the range `[0, featureCount - 1]`        |
+| `featureProperties` | An object containing a list of feature properties, where each feature property is a key value pair corresponding to an array of valid JSON data types or a glTF accessor. | Array elements can be any valid JSON data type, including objects and arrays. `null`s are permitted.  Elements in the array must conform to the `type` property. Valid type values are `"string"`, `"number"`, `"boolean"`, and `"any"` (default), where `"any"` must be used if the array contains arrays, objects, null, or mixed types. The glTF accessor count / array length of JSON data types must match `featureCount`.|
 
-1. `array`: an array of values
-    * Array elements can be any valid JSON data type, including objects and arrays.  Elements may be `null`.
-    * The length of each array must be equal to `featureCount`
-    * Elements in the array must conform to the `type` property. Valid `type` values are `"string"`, `"number"`, `"boolean"`, and `"any"` (default), where `"any"` must be used if the array contains arrays, objects, `null`, or mixed types.
-2. `accessor`: a reference to binary data stored in a glTF accessor
-    * The accessor's `count` must be equal to `featureCount`
-3. `descriptor`: describes the format of external properties
-    * Properties stored in vertex attribute accessors must have the same `type`, `componentType`, and `normalized` values. `normalized` is false by default.
-    * Properties stored in textures must have the same `type` (implicitly defined by `channels`), `componentType` (implicitly defined by the texture's bit depth and signedness), and `normalized`
+#### Descriptor Table
 
-`array`, `accessor`, and `descriptor` are mutually exclusive.
+`Descriptor Table` feature tables contain the following properties:
 
-Properties may also optionally define a `semantic`, an enumerated value describing how the property is to be interpreted. Application-specific semantics must start with an underscore, e.g., `_CLASSIFICATION`. Semantics must be unique within an individual feature table.
+| Property            | Description                                                                                                                             |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `componentType`     | A glTF [component type](https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#accessorcomponenttype-white_check_mark) |
+| `type` | A `"SCALAR"`, `"VEC2"`, `"VEC3"`, or `"VEC4"`|
+| `normalized` | A boolean indicating if the data should be normalized to `[0.0, 1.0]` or not. (Default `false`)|
 
-List of built-in semantics:
+Note that:
+
+* Properties stored in vertex attribute accessors must have the same `type`, `componentType`, and `normalized` values. `normalized` is false by default.
+* Properties stored in textures must have the same `type` (implicitly defined by `channels`), `componentType` (implicitly defined by the texture's bit depth and signedness), and `normalized`
+
+#### Property `semantic`
+
+Properties in `ValueTable` feature tables may also define an optional `semantic.` This is an enumerated value that describes how the property should be interpreted. The `EXT_3dtiles_feature_metadata` extension provides the following built-in semantics:
 
 Semantic | Type | Description
 --|--|--
 `NAME`|`string`| The name of the feature. Names do not have to be unique.
 `ID`|`number` or `string`|A unique identifier for this feature.
+
+Application-specific semantics may also be defined, with the caveat that they must begin with an underscore, e.g. `_CLASSIFICATION`. Semantics must be unique within an individual feature table.
 
 Example feature table with built-in and application-specific semantics:
 
@@ -459,7 +474,7 @@ Example feature table with built-in and application-specific semantics:
 }
 ```
 
-Additional application-specific metadata about a property may be stored in the property's `extras` object:
+Store additional application-specific metadata about the property in its `extras` object:
 
 ```json
 {
@@ -877,8 +892,8 @@ TODO
       "componentType": 5123,
       "count": 6,
       "type": "SCALAR"
-    },
-    
+    }
+
   ],
   "meshes": [
     {
@@ -1315,7 +1330,7 @@ TODO
   ],
   "textures": [
     {
-      "source": 0,
+      "source": 0
     },
     {
       "source": 1,
@@ -1330,7 +1345,7 @@ TODO
     },
     {
       "source": 4
-    },
+    }
   ],
   "materials": [
     {
