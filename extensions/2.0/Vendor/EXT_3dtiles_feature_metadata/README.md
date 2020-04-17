@@ -174,27 +174,6 @@ As shown in the [above example](#property-data-accessing), feature IDs are used 
 
 Note that `attribute` and `textureAccessor` are mutually exclusive. Per-vertex and per-texel feature IDs cannot be used in the same feature layer.
 
-##### Per-vertex feature IDs
-
-Features that can be represented as a collection of vertices should use per-vertex feature IDs. Each vertex
-should have a feature ID associated with it. A primitive with three features would look like this:
-
-```plain
-feature ID:  [0,   0,   0,   ..., 1,   1,   1,   ..., 2,   2,   2,   ...]
-position:    [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
-normal:      [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
-```
-
-Vertices do not need to be ordered by feature ID. Interleaved feature IDs are supported. (Provided the other attribute buffers are interleaved too.)
-
-```plain
-feature ID:  [0,   1,   2,   ..., 2,   1,   0,   ..., 1,   2,   0,   ...]
-position:    [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
-normal:      [xyz, xyz, xyz, ..., xyz, xyz, xyz, ..., xyz, xyz, xyz, ...]
-```
-
-Note that a vertex cannot belong to more than one feature; in that case the vertex needs to be duplicated, so the feature IDs can be assigned. Specify the feature ID attribute in a glTF mesh primitive by providing the `_FEATURE_ID_0` indexed attribute semantic.
-
 ###### Feature ID semantic
 
 The extension adds a new indexed attribute semantic, `_FEATURE_ID_0`. This attribute should be used for per-vertex feature IDs. All `_FEATURE_ID_X` indices must start with zero and be continuous positive integers. e.g (`_FEATURE_ID_0`, `_FEATURE_ID_1`, `_FEATURE_ID_2`). The attribute's accessor `type` must be `"SCALAR"` and `normalized` must be false. There is no restriction on `componentType` to facilitate different byte alignments for the feature ID accessor, but note that the feature IDs must be **whole** numbers. Finally, feature ID values must be in the range `[0, featureCount - 1]`.
