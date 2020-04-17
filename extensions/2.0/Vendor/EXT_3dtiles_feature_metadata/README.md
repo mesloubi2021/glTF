@@ -403,7 +403,7 @@ Feature tables store information about feature property data. The property data 
 
 A feature table may contain any number of properties, or no properties at all. Property names must be unique across all feature tables.
 
-#### ValueTable
+#### Value Table
 
 `Value Table` feature tables contain the following properties:
 
