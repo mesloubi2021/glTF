@@ -140,11 +140,11 @@ The following example is a feature table with a mix of JSON and binary property 
 
 Feature layers are per-primitive and define the mapping between vertices / texels and feature property data. They must always reference a feature table and may also encode feature property data directly. They contain the following properties:
 
-| Property            | Description                                                       | Caveats                                                                          |
-|---------------------|-------------------------------------------------------------------|----------------------------------------------------------------------------------|
-| `featureTable`      | Index of the feature table that this feature layer is using.      | Multiple feature layers in a single primitive cannot use the same feature table. |
-| `featureIds`        | Indirect accessor to feature IDs for the specified feature table. | Cannot be used with `featureProperties`                                          |
-| `featureProperties` | An object describing how to access feature properties.            | Cannot be used with `featureIds`                                                 |
+| Property            | Description                                                       | Caveats                                                                                                                                                                |
+|---------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `featureTable`      | Index of the feature table that this feature layer is using.      | Multiple feature layers in a single primitive cannot use the same feature table. Feature tables used by a single primitive cannot have any of the same property names. |
+| `featureIds`        | Indirect accessor to feature IDs for the specified feature table. | Cannot be used with `featureProperties`                                                                                                                                |
+| `featureProperties` | An object describing how to access feature properties.            | Cannot be used with `featureIds`                                                                                                                                       |
 
 <p>
 <img src="./figures/indirection.png" alt="Indirection Example">
@@ -395,7 +395,7 @@ Per-texel properties:
 
 Feature tables store information about feature property data. The property data can be encoded directly in the feature table as a collection of valid JSON data types or references to glTF accessors. This type of feature table is a `ValueTable`. Feature tables can also contain metadata about properties that are stored externally in primitives. This type of feature table is a `DescriptorTable`. Feature layers that use `featureIds` must use `ValueTable` feature tables. Feature layers that use `featureProperties` must use `DescriptorTable` feature tables.
 
-A feature table may contain any number of properties, or no properties at all. Property names must be unique across all feature tables.
+A feature table may contain any number of properties, or no properties at all.
 
 #### ValueTable
 
