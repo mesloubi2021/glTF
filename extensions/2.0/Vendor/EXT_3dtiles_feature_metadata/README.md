@@ -146,6 +146,8 @@ Feature layers are per-primitive and define the mapping between vertices / texel
 | `featureIds`        | Indirect accessor to feature IDs for the specified feature table. | Cannot be used with `featureProperties`                                          |
 | `featureProperties` | An object describing how to access feature properties.            | Cannot be used with `featureIds`                                                 |
 
+### Property Data Accessing
+
 <p>
 <img src="./figures/indirection.png" alt="Indirection Example">
 </p>
@@ -161,7 +163,8 @@ The `featureTable` index and looked up feature IDs are used in conjunction with 
 
 #### Feature IDs
 
-In order to associate vertices or texels with feature property data, it is necessary to define a `featuresId` object. This object contains the following properties:
+As shown in the [above example](#property-data-accessing), feature IDs are used as an index to establish the relationship between feature property data and a vertex / texel. The `featureIds` object in a primitive describes the type of feature property data association (if it's on a per-vertex or per-texel basis) and which attribute / texture contains the feature ID data. Feature IDs must always exist in the range `[0, featureCount - 1]`, where `featureCount` is the maximum length of the feature property data arrays for the specified feature table (see [Feature Tables](#feature-table)).
+
 
 | Property          | Description                                            | Caveats                                 |
 |-------------------|--------------------------------------------------------|-----------------------------------------|
@@ -169,7 +172,7 @@ In order to associate vertices or texels with feature property data, it is neces
 | `textureAccessor` | A view into a texture containing feature IDs           | Cannot be used with `attribute`         |
 | `instanceStride`  | Optional property specifying per-instance stride to apply to feature IDs when the mesh is instanced by the `EXT_mesh_gpu_instancing` extension. Set `instanceStride` to 1 and initialize `attribute`'s accessor with zeros (e.g. by not defining `bufferView`) to treat each instance as a separate feature. Explicit feature IDs and custom strides may provide a lower level of feature granularity if desired. ||
 
-Choose between `attribute` or `textureAccessor` depending on if you want to use per-vertex or per-texel feature property data associations respectively. Regardless of choice, the retrieved feature IDs should always exist in the range `[0, featureCount - 1]` to prevent out-of-bounds errors: The feature IDs are a direct index into the feature property arrays. Note that `attribute` and `textureAccessor` are mutually exclusive. Per-vertex and per-texel feature IDs cannot be used in the same feature layer.
+Note that `attribute` and `textureAccessor` are mutually exclusive. Per-vertex and per-texel feature IDs cannot be used in the same feature layer.
 
 ##### Per-vertex feature IDs
 
