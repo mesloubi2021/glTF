@@ -285,8 +285,8 @@ If each vertex or texel has a unique data property associated with it, then it i
 
 | Property          | Description                                            | Caveats                                 |
 |-------------------|--------------------------------------------------------|-----------------------------------------|
-| `attribute`       | An attribute in this primitive that references property data with a 1:1 correspondence between vertex data. | Cannot be used with `textureAccessor`.  |
-| `textureAccessor` | A view into a texture containing property data with a 1:1 correspondence between texel data. | Cannot be used with `attribute`. All `texCoord` values must be the same within a feature layer. |
+| `attribute`       | An attribute in this primitive that references property data with a 1:1 correspondence with vertex data. | Cannot be used with `textureAccessor`.  |
+| `textureAccessor` | A view into a texture containing property data with a 1:1 correspondence with texel data. | Cannot be used with `attribute`. All `texCoord` values must be the same within a feature layer. |
 
 Note that `featureProperties` must contain an entry for each property in the layer's feature table and `featureProperties` cannot mix per-vertex and per-texel properties.
 
