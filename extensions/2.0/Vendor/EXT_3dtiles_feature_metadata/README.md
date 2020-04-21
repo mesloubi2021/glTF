@@ -281,12 +281,12 @@ Example: read data from a grayscale texture and normalize to the `[0.0, 1.0]` ra
 
 #### Feature properties
 
-If each vertex or texel has a unique data property associated with it, then it is wasteful to create an intermediary list of feature IDs for vertices / texels. The `EXT_3dtiles_feature_metadata` extension supports this use case via the `featureProperties` object. This object is similar to the `featureIds` object but directly establishes a one-to-one correspondence between **each** vertex / texel, and the associated property data.
+If each vertex or texel has a unique data property associated with it, then it is wasteful to create an intermediary list of feature IDs for vertices / texels. The `EXT_3dtiles_feature_metadata` extension supports this use case via the `featureProperties` object inside of a primitive. This object is similar to the `featureIds` object but directly establishes a one-to-one correspondence between **each** vertex / texel, and the associated property data. Note that the `featureProperties` object in a primitive is distinct from the `featureProperties` object in the [feature table](#feature-table): The former establishes a one-to-one relationship between **each** vertex / texel, the latter specifies property data that must be indexed using feature IDs.
 
 | Property          | Description                                            | Caveats                                 |
 |-------------------|--------------------------------------------------------|-----------------------------------------|
-| `attribute`       | An attribute in this primitive that references property data with a 1:1 correspondence with vertex data. | Cannot be used with `textureAccessor`.  |
-| `textureAccessor` | A view into a texture containing property data with a 1:1 correspondence with texel data. | Cannot be used with `attribute`. All `texCoord` values must be the same within a feature layer. |
+| `attribute`       | An attribute in this primitive that references property data with a one-to-one correspondence with vertex data. | Cannot be used with `textureAccessor`.  |
+| `textureAccessor` | A view into a texture containing property data with a one-to-one correspondence with texel data. | Cannot be used with `attribute`. All `texCoord` values must be the same within a feature layer. |
 
 Note that `featureProperties` must contain an entry for each property in the layer's feature table and `featureProperties` cannot mix per-vertex and per-texel properties.
 
@@ -375,42 +375,112 @@ Per-texel properties:
 
 ### Feature Table
 
-Feature tables store information about feature property data. The property data can be encoded directly in the feature table as a collection of valid JSON data types or references to glTF accessors. This type of feature table is a `ValueTable`. Feature tables can also contain metadata about properties that are stored externally in primitives. This type of feature table is a `DescriptorTable`. Feature layers that use `featureIds` must use `ValueTable` feature tables. Feature layers that use `featureProperties` must use `DescriptorTable` feature tables.
+Feature tables store feature property data directly (as a collection of valid JSON data types) or provide references to glTF accessors where the feature property data can be indirectly accessed. They may also contain references to per-vertex or per-texel [feature properties](#feature-properties) with additional metadata about the `componentType` / `normalized` / `type` status of the feature property data. Feature tables are split into two subcategories: `Value` feature tables are feature tables that refer to data that must be indexed using feature IDs. `Descriptor` feature tables are feature tables that refer to per-vertex or per-texel data that does not use feature IDs for indexing.
 
-A feature table may contain any number of properties, or no properties at all.
+#### Value Tables
 
-#### Value Table
+`Value` feature tables may encode feature property data directly or refer to glTF accessors with the necessary data. They require feature IDs to associate a given vertex or texel with property data.
 
-`Value Table` feature tables contain the following properties:
+##### Encoding Property Data Directly in Value Tables
 
-| Property            | Description                                                                                                                             | Caveats |
-|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------|---------|
-| `featureCount`      | A value indicating the number of features in the feature table | |
-| `featureProperties` | An object containing a list of feature properties, where each feature property is a key value pair corresponding to an array of valid JSON data types or a glTF accessor. | Array elements can be any valid JSON data type, including objects and arrays. `null`s are permitted.  Elements in the array must conform to the `type` property. Valid type values are `"string"`, `"number"`, `"boolean"`, and `"any"` (default), where `"any"` must be used if the array contains arrays, objects, null, or mixed types. The glTF accessor count / array length of JSON data types must match `featureCount`.|
+`Value` feature tables directly encode feature property data or provide references to glTF accessors. Consider the following example:
 
-#### Descriptor Table
+```json
+  "extensions": {
+    "EXT_3dtiles_feature_metadata": {
+      "featureTables": [
+        {
+          "featureCount": 2,
+          "featureProperties": {
+            "Name": {
+              "semantic": "_COLOR",
+              "array": {
+                "type": "string",
+                "values": ["Cyan", "Yellow"]
+              }
+            },
+          }
+        }
+    }
+  }
+```
 
-`Descriptor Table` feature tables contain the following properties:
+* The `featureCount` key is required and specifies how many elements each feature property data array contains. All feature property data arrays **must** have the same length.
+* The [semantic](#property-`semantic`) key is optional and provides context for the purpose of the property.
+* Property data can be directly encoded via an `array: { … }` section in a `Value` feature table.
+  * The `type` is required and must be one of the following: `string`, `number`, `boolean`, or `any` (the default.)
+  * The `any` type should be used if the array contains nested arrays, objects, nulls, or heterogeneous data types.
+  * `values` is required and must be an array of elements of the aforementioned types. The array length must be equal to `featureCount`.
 
-| Property            | Description                                                                                                                             |
-|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| `componentType`     | A glTF [component type](../../../../specification/2.0#accessorcomponenttype-white_check_mark)|
-| `type`              | A glTF [type](../../../../specification/2.0#accessortype-white_check_mark)|
-| `normalized`        | A boolean indicating if the data should be normalized to `[0.0, 1.0]` or not. (Default `false`)|
+##### Encoding Property Data in Value Tables as glTF Accessors
 
-Note that:
+```json
+"extensions": {
+  "EXT_3dtiles_feature_metadata": {
+    "featureTables": [
+      {
+        "featureCount": 2,
+        "featureProperties": {
+          "Location": {
+            "semantic": "_LOCATION",
+            "accessor": 3
+          }
+        }
+      }
+    ]
+  }
+}
+```
 
-* Properties stored in vertex attribute accessors must have the same `type`, `componentType`, and `normalized` values. `normalized` is false by default.
-* Properties stored in textures must have the same `type` (implicitly defined by `channels`), `componentType` (implicitly defined by the texture's bit depth and signedness), and `normalized`.
+* `featureCount` is required and specifies how many elements each referenced glTF accessor must contain. In this example, the third glTF accessor must have a `count` of `2` to satisfy this requirement.
+* The `accessor` keyword is required and must refer to a glTF accessor containing feature ID indexable property data.
+
+#### Encoding Property Metadata in Descriptor Tables
+
+`Descriptor` feature tables contains property metadata about feature property data with a one-to-one correspondence to vertices or texels. They differ from `Value` feature tables in that `featureCount` should be omitted, and that they only contain information on how to interpret the feature property data, not on how to access it. The primitive contains the reference to the actual glTF accessor containing the desired feature property data.
+
+```json
+  "extensions": {
+    "EXT_3dtiles_feature_metadata": {
+      "featureTables": [
+        {
+          "featureProperties": {
+            "Intensity": {
+              "descriptor": {
+                "componentType": 5123,
+                "type": "SCALAR",
+                "normalized": true
+              }
+            }
+          }
+        }
+      ]
+    }
+```
+
+* `featureCount` should not be present in a `Descriptor` table.
+* `componentType` is required and should be a glTF [component type](../../../../specification/2.0#accessorcomponenttype-white_check_mark)
+* `type` is required and should be a glTF [type](../../../../specification/2.0#accessortype-white_check_mark)
+* `normalized` is an optional boolean (default: `false`) and specifies if the data should be normalized to the range `[0.0, 1.0]`.
+
+These three properties **must** match the values in their corresponding glTF accessors. Additionally, if the referenced data is per-texel, then:
+
+* `type` **must** match the specified channels for the texel.
+* `componentType` **must** correspond to the texture's bit depth and signedness
+
+Examples of illegal scenarios for texels include but are not limited to:
+
+* Specifying a `VEC2` for the type but the channels are `RGB`
+* Specifying a componentType of `UNSIGNED_BYTE` but the texture componentType is `SHORT`
 
 #### Property `semantic`
 
 Properties in feature tables may also define an optional `semantic.` This is an enumerated value that describes how the property should be interpreted. The `EXT_3dtiles_feature_metadata` extension provides the following built-in semantics:
 
-Semantic | Type | Description
---|--|--
-`NAME`|`string`| The name of the feature. Names do not have to be unique.
-`ID`|`number` or `string`|A unique identifier for this feature.
+| Semantic | Type | Description |
+|----------|------|-------------|
+|`NAME`|`string`| The name of the feature. Names do not have to be unique.|
+|`ID`|`number` or `string`|A unique identifier for this feature.|
 
 Application-specific semantics may also be defined, with the caveat that they must begin with an underscore, e.g. `_CLASSIFICATION`. Semantics must be unique within an individual feature table.
 
