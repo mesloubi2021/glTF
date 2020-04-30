@@ -778,6 +778,107 @@ TODO
 }
 ```
 
+### Point cloud with per-point properties
+
+```json
+{
+  "accessors": [
+    {
+      "name": "Positions",
+      "bufferView": 0,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 8,
+      "type": "VEC3"
+    },
+    {
+      "name": "Colors",
+      "bufferView": 1,
+      "byteOffset": 0,
+      "componentType": 5121,
+      "count": 8,
+      "stride": 4,
+      "type": "VEC3"
+    },
+    {
+      "name": "Intensity",
+      "bufferView": 3,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "count": 8,
+      "type": "SCALAR",
+      "normalized": true
+    },
+    {
+      "name": "Classification",
+      "bufferView": 4,
+      "byteOffset": 0,
+      "componentType": 5121,
+      "count": 8,
+      "type": "SCALAR"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "COLOR_0": 1,
+            "_INTENSITY": 2,
+            "_CLASSIFICATION": 3
+          },
+          "mode": 0,
+          "extensions": {
+            "EXT_3dtiles_feature_metadata": {
+              "featureLayers": [
+                {
+                  "featureTable": 0,
+                  "featureProperties": {
+                    "Intensity": {
+                      "attribute": "_INTENSITY"
+                    },
+                    "Classification": {
+                      "attribute": "_CLASSIFICATION"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "extensionsUsed": [
+    "EXT_3dtiles_feature_metadata"
+  ],
+  "extensions": {
+    "EXT_3dtiles_feature_metadata": {
+      "featureTables": [
+        {
+          "featureProperties": {
+            "Intensity": {
+              "descriptor": {
+                "componentType": 5123,
+                "type": "SCALAR",
+                "normalized": true
+              }
+            },
+            "Classification": {
+              "descriptor": {
+                "componentType": 5121,
+                "type": "SCALAR"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
 ### Point cloud with per-point properties and per-group properties
 
 ```json
