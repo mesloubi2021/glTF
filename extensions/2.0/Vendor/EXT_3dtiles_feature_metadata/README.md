@@ -17,14 +17,19 @@ Written against the glTF 2.0 spec. Depends on [`EXT_mesh_gpu_instancing`](https:
 
 ## Overview
 
-**Features** are geometric entities in 3D space and may have application specific properties associated with them. These properties may span a myriad of domains, such as the heights of buildings in a city, the names of different pipes in a CAD model, the temperatures of different points in a point cloud, or the age of different trees in a forest of instanced tree models. This extension adds a mechanism for storing an unlimited amount of feature metadata in an glTF asset and identifying features in the asset on a per-vertex or per-texel basis.
+**Features** are geometric entities in 3D space and may have application specific properties associated with them. These properties may span a myriad of domains, such as the heights of buildings in a city, the names of different pipes in a CAD model, the temperatures of different points in a point cloud, or the age of different trees in a forest of instanced tree models. This extension adds a mechanism for storing an unlimited amount of feature metadata in a glTF asset and identifying features in the asset on a per-vertex or per-texel basis.
 
 <p style="text-align: center">
 <img src="./figures/feature-table-buildings.png" alt="Feature Table Buildings Example">
 </p>
 
+The `EXT_3dtiles_feature_metadata` extension consists of **feature layers** and **feature tables**.
 
-The `EXT_3dtiles_feature_metadata` extension consists of **feature layers** and **feature tables**. Feature layers are per-primitive and are used to lookup feature tables. The root-level `EXT_3dtiles_feature_metadata` extension object contains one or more feature tables: Feature tables are where the feature property data is encoded directly, or a reference to a glTF accessor for indirect data retrieval.
+Feature layers are defined on a glTF primitive to specify how the vertices or texels in that primitive are mapped to features. In the diagram above, a glTF consists of two houses batched together into a single primitive. A feature layer defined on that primitive indicates that all of the vertices making up the first house have a feature ID of `0`, while all vertices making up the second house have the feature ID `1`.
+
+A feature table, defined in the root-level `EXT_3dtiles_feature_metadata` extension object, then defines the properties (also known as attributes or metadata) associated with each of these features. In the diagram, each feature has an `address` property in the feature table.
+
+A single primitive may have multiple feature layers, allowing, for example, the roof, doors, and windows of the buildings to also be treated as separate features with their own properties. A single feature table may also be shared among multiple primitives.
 
 Splitting feature layers and feature tables into distinct categories makes this extension flexible and space-efficient. A vertex or texel in a primitive can be associated with multiple different properties simultaneously; no data duplication is necessary. For example, a group of points in a point cloud could represent specific areas of a building by name **and** also have per-vertex intensity data associated with them. Multiple feature layers and feature tables also facilitate heterogeneous mesh data to be combined into a single glTF asset.
 
@@ -140,11 +145,11 @@ The following example is a feature table with a mix of JSON and binary property 
 
 Feature layers are per-primitive and define the mapping between vertices / texels and feature property data. They must always reference a feature table and may also encode feature property data directly. They contain the following properties:
 
-| Property            | Description                                                       | Caveats                                                                                                                                                                |
-|---------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `featureTable`      | Index of the feature table that this feature layer is using.      | Multiple feature layers in a single primitive cannot use the same feature table. Feature tables used by a single primitive cannot have any of the same property names. |
-| `featureIds`        | Indirect accessor to feature IDs for the specified feature table. | Cannot be used with `featureProperties`                                                                                                                                |
-| `featureProperties` | An object describing how to access feature properties.            | Cannot be used with `featureIds`                                                                                                                                       |
+| Property            | Description                                                       | Caveats                                 |
+|---------------------|-------------------------------------------------------------------|-----------------------------------------|
+| `featureTable`      | Index of the feature table that this feature layer is using.      |                                         |
+| `featureIds`        | Indirect accessor to feature IDs for the specified feature table. | Cannot be used with `featureProperties` |
+| `featureProperties` | An object describing how to access feature properties.            | Cannot be used with `featureIds`        |
 
 ### Property Data Accessing
 
@@ -413,7 +418,7 @@ Feature tables store feature property data directly (as a collection of valid JS
 * Property data can be directly encoded via an `array: { … }` section in a `Value` feature table.
   * The `type` is optional and must be one of the following: `"string"`, `"number"`, `"boolean"`, or `"any"`. When not supplied, the default type is `"any"`.
   * The `any` type should be used if the array contains nested arrays, objects, nulls, or heterogeneous data types.
-  * `values` is required and must be an array of elements of the aforementioned types. The array length must be equal to `featureCount`.
+  * `values` must be an array of elements of the aforementioned types. The array length must be equal to `featureCount`.
 
 ##### Encoding Property Data in Value Tables as glTF Accessors
 
