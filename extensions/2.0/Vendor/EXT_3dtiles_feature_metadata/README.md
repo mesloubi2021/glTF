@@ -17,7 +17,7 @@ Written against the glTF 2.0 spec. Depends on [`EXT_mesh_gpu_instancing`](https:
 
 ## Overview
 
-**Features** are geometric entities in 3D space and may have application specific properties associated with them. These properties may span a myriad of domains, such as the heights of buildings in a city, the names of different pipes in a CAD model, the temperatures of different points in a point cloud, or the age of different trees in a forest of instanced tree models. This extension adds a mechanism for storing an unlimited amount of feature metadata in a glTF asset and identifying features in the asset on a per-vertex or per-texel basis.
+**Features** are geometric entities in 3D space and may have application specific properties associated with them. These properties may span a myriad of domains, such as the heights of buildings in a city, the names of different structures in a CAD model, the classification of different points in a point cloud, or the age of different trees in a forest of instanced tree models. This extension adds a mechanism for storing an unlimited amount of feature metadata in a glTF asset and identifying features in the asset on a per-vertex or per-texel basis.
 
 <p style="text-align: center">
 <img src="./figures/feature-table-buildings.png" alt="Feature Table Buildings Example">
