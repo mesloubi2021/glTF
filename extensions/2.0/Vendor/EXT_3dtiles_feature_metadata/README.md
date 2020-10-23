@@ -414,6 +414,7 @@ Feature tables store feature property data directly (as a collection of valid JS
 ```
 
 * The `featureCount` key is required and specifies how many elements each feature property data array contains. All feature property data arrays **must** have the same length.
+* The `class` key is optional and associates the feature table with an application-specific class name.
 * The [semantic](#property-semantic) key is optional and provides context for the purpose of the property.
 * Property data can be directly encoded via an `array: { … }` section in a `Value` feature table.
   * The `type` is optional and must be one of the following: `"string"`, `"number"`, `"boolean"`, or `"any"`. When not supplied, the default type is `"any"`.
@@ -428,6 +429,7 @@ Feature tables store feature property data directly (as a collection of valid JS
     "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
+          "class": "Building",
           "featureCount": 2,
           "featureProperties": {
             "Location": {
@@ -1611,6 +1613,7 @@ TODO
     "EXT_3dtiles_feature_metadata": {
       "featureTables": [
         {
+          "class": "Material",
           "featureCount": 5,
           "featureProperties": {
             "MaterialId": {
@@ -1622,6 +1625,7 @@ TODO
           }
         },
         {
+          "class": "Classification",
           "featureCount": 7,
           "featureProperties": {
             "ClassificationId": {
@@ -1633,6 +1637,7 @@ TODO
           }
         },
         {
+          "class": "Accuracy",
           "featureProperties": {
             "Accuracy": {
               "descriptor": {
@@ -1647,6 +1652,7 @@ TODO
           }
         },
         {
+          "class": "Vegetation",
           "featureProperties": {
             "VegetationDensity": {
               "descriptor": {
