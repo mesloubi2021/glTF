@@ -20,14 +20,23 @@ This extension adds metadata information to the glTF model. While this extension
 ```javascript
 "extensions": {
     "PTC_onshape_metadata": {
+        "documentId" : "c5986491b733a231c220c65a",
+        "elementId" : "4c52322aa3d6c2699898a3fc",
         "id": ["JHD"],
         "hidden": true
-        }
+    }
 }
 ```
 
-This extension adds id and hidden to the glTF model:
+This extension adds documentId, elementId, id and hidden to the glTF model:
 
+### Document ID
+
+A string representing the ID of the Onshape document containing the element the GlTF was derived for.
+
+### Element ID
+
+A string representing the ID of the Onshape element the GlTF was derived for, such as a Part Studio element.
 
 ### ID
 

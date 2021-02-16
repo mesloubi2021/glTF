@@ -5,6 +5,16 @@
     "description": "glTF extension for specifying IDs and visibility.",
     "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
     "properties": {
+        "documentId" : {
+            "type" : "string",
+            "minLength": 1,
+            "description" : "An identifier of the document this object relates to."
+        },
+        "elementId" : {
+            "type" : "string",
+            "minLength": 1,
+            "description" : "An identifier for the element this object relates to."
+        },
         "id": {
             "anyOf":[
                 {
