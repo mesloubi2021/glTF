@@ -7,12 +7,12 @@
     "properties": {
         "documentId" : {
             "type" : "string",
-            "minLength": 1,
+            "minLength": 24,
             "description" : "An identifier of the document this object relates to."
         },
         "elementId" : {
             "type" : "string",
-            "minLength": 1,
+            "minLength": 24,
             "description" : "An identifier for the element this object relates to."
         },
         "id": {
