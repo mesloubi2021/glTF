@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# EXT_geopose
+# EXT_geopose_basic_euler
 
 **Version 0.0.0**, May 17, 2021
 
@@ -49,7 +49,7 @@ This extension uses WGS84([EPSG:4979](https://epsg.io/4979)) as the coordinate r
 ```json
 {
   "extensions": {
-    "EXT_geopose": {
+    "EXT_geopose_basic_euler": {
       "longitude": 46.7,
       "latitude": 25.067,
       "height": 691.0,
@@ -65,4 +65,4 @@ This extension uses WGS84([EPSG:4979](https://epsg.io/4979)) as the coordinate r
 
 ## Schema Updates
 
-Updates to the schema can be found in the [extension schema](schema/gltf.EXT_geopose.schema.json).
+Updates to the schema can be found in the [extension schema](schema/gltf.EXT_geopose_basic_euler.schema.json).
