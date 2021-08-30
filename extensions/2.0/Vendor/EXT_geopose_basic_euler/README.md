@@ -1,8 +1,6 @@
 <!-- omit in toc -->
 # EXT_geopose_basic_euler
 
-**Version 0.0.0**, May 17, 2021
-
 <!-- omit in toc -->
 ## Contributors
 
