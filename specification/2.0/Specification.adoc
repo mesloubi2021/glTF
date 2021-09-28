@@ -2618,6 +2618,7 @@ This chunk **MUST** be padded with trailing zeros (`0x00`) to satisfy alignment 
 When the binary buffer is empty or when it is stored by other means, this chunk **SHOULD** be omitted.
 
 [[properties-reference]]
+[%collapsible]
 = Properties Reference
 ifndef::revdate[]
 [NOTE]
@@ -2694,6 +2695,7 @@ include::PropertiesReference.adoc[]
 * Alex Wood, Analytical Graphics, Inc
 
 [appendix]
+[%collapsible]
 [[appendix-a-json-schema-reference]]
 = JSON Schema Reference (Informative)
 ifndef::revdate[]
