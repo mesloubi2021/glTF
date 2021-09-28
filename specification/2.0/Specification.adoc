@@ -2618,7 +2618,6 @@ This chunk **MUST** be padded with trailing zeros (`0x00`) to satisfy alignment 
 When the binary buffer is empty or when it is stored by other means, this chunk **SHOULD** be omitted.
 
 [[properties-reference]]
-[%collapsible]
 = Properties Reference
 ifndef::revdate[]
 [NOTE]
@@ -2630,9 +2629,11 @@ To suggest changes, open a Pull Request to edit the https://github.com/KhronosGr
 ====
 endif::[]
 
+[%collapsible]
+====
 // Generated with wetzel
 include::PropertiesReference.adoc[]
-
+====
 
 [[acknowledgments]]
 = Acknowledgments
@@ -2695,7 +2696,6 @@ include::PropertiesReference.adoc[]
 * Alex Wood, Analytical Graphics, Inc
 
 [appendix]
-[%collapsible]
 [[appendix-a-json-schema-reference]]
 = JSON Schema Reference (Informative)
 ifndef::revdate[]
@@ -2708,8 +2708,11 @@ To suggest changes, open a Pull Request to edit the https://github.com/KhronosGr
 ====
 endif::[]
 
+[%collapsible]
+====
 // Generated with wetzel
 include::JsonSchemaReference.adoc[]
+====
 
 [appendix]
 [[appendix-b-brdf-implementation]]
