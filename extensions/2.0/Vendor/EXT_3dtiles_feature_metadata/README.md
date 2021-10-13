@@ -1,3 +1,5 @@
+### ⚠️ `EXT_3dtiles_feature_metadata` has been replaced by [`EXT_mesh_features`](https://github.com/CesiumGS/glTF/tree/3d-tiles-next/extensions/2.0/Vendor/EXT_mesh_features) ⚠️
+
 # EXT\_3dtiles\_feature\_metadata
 
 ## Contributors
