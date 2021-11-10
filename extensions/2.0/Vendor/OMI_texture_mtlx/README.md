@@ -20,6 +20,9 @@ MaterialX is an open standard for transfer of rich material and look-development
 
 ## glTF Schema Updates
 
+The `OMI_texture_materialx` extension is added to the `materials` node.
+
+<!-- 
 The `OMI_texture_materialx` extension is added to the `textures` node and specifies a `source` property that points to the index of the `images` node which in turn points to the MaterialX image.
 
 The following glTF will load `image.mtlx` in clients that support this extension, and otherwise fall back to `image.png`.
@@ -68,11 +71,11 @@ When used in the glTF Binary (.glb) format the `images` node that points to the 
         "bufferView": 2
     }
 ]
-```
+``` -->
 
 ### JSON Schema
 
-[glTF.OMI_texture_materialx.schema.json](schema/glTF.OMI_texture_materialx.schema.json)
+<!-- [glTF.OMI_texture_materialx.schema.json](schema/glTF.OMI_texture_materialx.schema.json) -->
 
 ## Best Practices
 
