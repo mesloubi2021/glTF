@@ -30,6 +30,7 @@ SPDX-License-Identifier: CC-BY-4.0
 * [EXT_lights_image_based](2.0/Vendor/EXT_lights_image_based/README.md)
 * [EXT_mesh_gpu_instancing](2.0/Vendor/EXT_mesh_gpu_instancing/README.md)
 * [EXT_meshopt_compression](2.0/Vendor/EXT_meshopt_compression/README.md)
+* [EXT_primitive_voxels](2.0/Vendor/EXT_primitive_voxels/README.md)
 * [EXT_texture_webp](2.0/Vendor/EXT_texture_webp/README.md)
 
 #### Vendor Extensions
