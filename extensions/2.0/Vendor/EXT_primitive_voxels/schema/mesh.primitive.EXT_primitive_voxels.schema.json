@@ -14,17 +14,40 @@
             "type": "array",
             "description": "Dimensions of the voxel grid. x/y/z for a box, r/theta/z for a cylinder, lat/lon/height for an ellipsoid.",
             "items": {
-              "type": "integer",
-              "minimum": 1
+                "type": "integer",
+                "minimum": 1
             },
             "minItems": 3,
             "maxItems": 3
         },
-        "neighborEdgeCount": {
-            "type": "integer",
-            "description": "The number of rows of neighboring tiles' voxel data.",
-            "minimum": 0,
-            "default": 0
+        "neighboringEdges": {
+            "type": {
+              "properties": {
+                  "leftCount": {
+                      "type": "array",
+                      "description": "Number of neighboring data values left of the grid.",
+                      "items": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "default": 0
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                  },
+                  "rightCount": {
+                      "type": "array",
+                      "description": "Number of neighboring data values right of the grid.",
+                      "items": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "default": 0
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                  }
+                }
+            },
+            "description": "The number of rows of neighboring tiles' voxel data."
         }
     },
     "required": ["dimensions"]
