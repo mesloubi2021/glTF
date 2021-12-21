@@ -14,7 +14,7 @@
             "type": "array",
             "description": "",
             "items": {
-                "$ref": "featureIdAttribute.schema.json"
+                "$ref": "featureId.schema.json"
             },
             "minItems": 1
         },
