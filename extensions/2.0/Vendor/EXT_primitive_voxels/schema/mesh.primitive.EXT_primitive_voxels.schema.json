@@ -23,9 +23,9 @@
         "neighboringEdges": {
             "type": {
               "properties": {
-                  "leftCount": {
+                  "beforeCount": {
                       "type": "array",
-                      "description": "Number of neighboring data values left of the grid.",
+                      "description": "Number of neighboring data values before each dimension of the grid.",
                       "items": {
                           "type": "integer",
                           "minimum": 0,
@@ -34,9 +34,9 @@
                       "minItems": 3,
                       "maxItems": 3
                   },
-                  "rightCount": {
+                  "afterCount": {
                       "type": "array",
-                      "description": "Number of neighboring data values right of the grid.",
+                      "description": "Number of neighboring data values after each dimension of the grid.",
                       "items": {
                           "type": "integer",
                           "minimum": 0,
