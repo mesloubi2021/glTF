@@ -1,5 +1,9 @@
 # EXT_primitive_voxels
 
+<p align="center">
+  <img src="figures/voxel_cube.png">
+</p>
+
 ## Contributors
 - Daniel Krupka, Cesium
 - Ian Lilley, Cesium
@@ -46,9 +50,9 @@ The extension adds three new primitive modes, corresponding to voxel grid geomet
 - `0x80000001` (`2147483649`) - A cylinder. The grid is a stack of concentric rings, evenly divided around the circumference.
 - `0x80000002` (`2147483650`) - An ellipsoid. The grid is a set of concentric ellipsoids, divided evenly in latitude and longitude.
 
-![Rectangular Voxel Grid](figures/box.png)
-![Cylindrical Voxel Grid](figures/cylinder.png)
-![Ellipsoid Voxel Grid](figures/sphere.png)
+|Box|Cylinder|Ellipsoid|
+| ------------- | ------------- | ------------- |
+|![Rectangular Voxel Grid](figures/box.png)|![Cylindrical Voxel Grid](figures/cylinder.png)|![Ellipsoid Voxel Grid](figures/sphere.png)|
 
 These grids all define "unit" objects centered at the origin, contained in the bounding box between `(-1, -1, -1)` and `(1, 1, 1)`. Node transforms
 should be used to position, orient, and scale the voxel grid as needed. The `POSITION` attribute is _not_ required or used by this extension - all positioning
