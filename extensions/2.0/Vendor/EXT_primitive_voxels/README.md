@@ -29,8 +29,8 @@ This extension allows primitives to use their attribute data to represent volume
             "EXT_primitive_voxels": {
               "dimensions": [8, 8, 8],
               "neighboringEdges": {
-                "leftCount": [1, 1, 1],
-                "rightCount": [1, 1, 1]
+                "beforeCount": [1, 1, 1],
+                "afterCount": [1, 1, 1]
               }
             }
           }
@@ -59,15 +59,16 @@ The `dimensions` property of the extension specifies the voxel grid dimensions:
 - r/z/theta for cylinders
 - lon/lat/height for ellipsoids
 
-Dimensions must be nonzero.
+Dimensions must be nonzero. Elements are laid out in memory first-axis-contiguous, e.g. for boxes, `x` data is contiguous (up to stride).
 
 The `neighboringEdges` property specifies how many rows of attribute data in each dimension come from
 neighboring grids. This is useful in situations where the primitive represents a single tile in a larger grid, and
-data from neighboring tiles is needed for non-local effects e.g. blurring, antialiasing. `neighboringEdges.leftCount` and `neighboringEdges.rightCount` specify
-the count for neighbors before and after the grid in each dimension, e.g. a `leftCount` of 1 and a `rightCount` of 2 in the `y` dimension mean that each
+data from neighboring tiles is needed for non-local effects e.g. blurring, antialiasing. `neighboringEdges.beforeCount` and `neighboringEdges.afterCount` specify
+the count for neighbors before and after the grid in each dimension, e.g. a `beforeCount` of 1 and a `afterCount` of 2 in the `y` dimension mean that each
 series of values in a given `y`-slice is preceded by one value and followed by two.
 
-The neighbor data must be supplied with the rest of the voxel data - this means if `d1`, `d2`, `d3` are the grid dimensions and `n` is `neighborEdgeCount`, the attribute must supply `(d1 + n)*(d2 + n)*(d3 + n)` elements.
+The neighbor data must be supplied with the rest of the voxel data - this means if `dimensions` is `[d1,d2,d3]`, `beforeCount` is `[a1, a2, a3]`, and `afterCount` is `[b1, b2, b3]`,
+the attribute must supply `(d1 + a1 + b1)*(d2 + a2 + b2)*(d3 + a3 + b3)` elements.
 
 ## Optional vs. Required
 This extension is required, meaning it should be placed in both the `extensionsUsed` list and `extensionsRequired` list.
