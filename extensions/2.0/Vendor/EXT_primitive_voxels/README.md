@@ -32,6 +32,10 @@ This extension allows primitives to use their attribute data to represent volume
           "extensions": {
             "EXT_primitive_voxels": {
               "dimensions": [8, 8, 8],
+              "bounds": {
+                "minimum": [0.25, 0.5, 0.5],
+                "maximum": [0.375, 0.625, 0.625]
+              },
               "neighboringEdges": {
                 "beforeCount": [1, 1, 1],
                 "afterCount": [1, 1, 1]
@@ -65,13 +69,19 @@ The `dimensions` property of the extension specifies the voxel grid dimensions:
 
 Dimensions must be nonzero. Elements are laid out in memory first-axis-contiguous, e.g. for boxes, `x` data is contiguous (up to stride).
 
+The `bounds` property describes how the voxel is clipped before rendering in voxel space. `bounds.minimum` and `bounds.maximum` specify a "rectangular" region of the voxel in the appropriate
+coordinate systems:
+- Boxes: a rectangular region of the voxel, between `(-1, -1, -1)` and `(1, 1, 1)`
+- Cylinders: a slice of the cylinder, between `(0, -1, 0)` and `(1, 1, 2*pi)`
+- Ellipsoids: a surface patch with height, between `(-pi, -pi/2, 0)` and `(pi, pi/2, 1)`
+
 The `neighboringEdges` property specifies how many rows of attribute data in each dimension come from
 neighboring grids. This is useful in situations where the primitive represents a single tile in a larger grid, and
 data from neighboring tiles is needed for non-local effects e.g. blurring, antialiasing. `neighboringEdges.beforeCount` and `neighboringEdges.afterCount` specify
 the count for neighbors before and after the grid in each dimension, e.g. a `beforeCount` of 1 and a `afterCount` of 2 in the `y` dimension mean that each
 series of values in a given `y`-slice is preceded by one value and followed by two.
 
-The neighbor data must be supplied with the rest of the voxel data - this means if `dimensions` is `[d1,d2,d3]`, `beforeCount` is `[a1, a2, a3]`, and `afterCount` is `[b1, b2, b3]`,
+The neighbor data must be supplied with the rest of the voxel data - this means if `dimensions` is `[d1, d2, d3]`, `beforeCount` is `[b1, b2, b3]`, and `afterCount` is `[a1, a2, a3]`,
 the attribute must supply `(d1 + a1 + b1)*(d2 + a2 + b2)*(d3 + a3 + b3)` elements.
 
 ## Optional vs. Required

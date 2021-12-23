@@ -20,6 +20,28 @@
             "minItems": 3,
             "maxItems": 3
         },
+        "bounds": {
+            "type": {
+                "properties": {
+                    "minimum": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                    },
+                    "maximum": {
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        },
+                        "minItems": 3,
+                        "maxItems": 3
+                    }
+                }
+            }
+        },
         "neighboringEdges": {
             "type": {
               "properties": {
