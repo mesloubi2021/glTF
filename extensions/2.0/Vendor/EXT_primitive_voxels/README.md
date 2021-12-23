@@ -54,6 +54,8 @@ The extension adds three new primitive modes, corresponding to voxel grid geomet
 - `0x80000001` (`2147483649`) - A cylinder. The grid is a stack of concentric rings, evenly divided around the circumference.
 - `0x80000002` (`2147483650`) - An ellipsoid. The grid is a set of concentric ellipsoids, divided evenly in latitude and longitude.
 
+The lowest byte is reserved for future voxel modes: `0x80000000`-`0x800000FF`.
+
 |Box|Cylinder|Ellipsoid|
 | ------------- | ------------- | ------------- |
 |![Rectangular Voxel Grid](figures/box.png)|![Cylindrical Voxel Grid](figures/cylinder.png)|![Ellipsoid Voxel Grid](figures/sphere.png)|
