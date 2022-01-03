@@ -71,9 +71,9 @@ The `dimensions` property of the extension specifies the voxel grid dimensions:
 
 Dimensions must be nonzero. Elements are laid out in memory first-axis-contiguous, e.g. for boxes, `x` data is contiguous (up to stride).
 
-The `bounds` property describes how the voxel is clipped before rendering in voxel space. `bounds.minimum` and `bounds.maximum` specify a "rectangular" region of the voxel in the appropriate
+The `bounds` property describes which section of the primitive is mapped to the voxel grid. `bounds.minimum` and `bounds.maximum` specify a "rectangular" region of the voxel in the appropriate
 coordinate systems:
-- Boxes: a rectangular region of the voxel, between `(-1, -1, -1)` and `(1, 1, 1)`
+- Boxes: a rectangular region of the box, between `(-1, -1, -1)` and `(1, 1, 1)`. **This is essentially a no-op - prefer using node transforms for boxes**.
 - Cylinders: a slice of the cylinder, between `(0, -1, 0)` and `(1, 1, 2*pi)`
 - Ellipsoids: a surface patch with height, between `(-pi, -pi/2, 0)` and `(pi, pi/2, 1)`
 
