@@ -1,3 +1,21 @@
 {
-  
+    "$id": "extras.animationClip.schema.json",
+    "title": "AnimationClip",
+    "type": "object",
+    "description": "A keyframee animation in string format.",
+    "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
+    "properties": {
+        "keyframeTracks": {
+            "type": "array",
+            "description": "An array of keyframe tracks. An animation track defines with strings the properties that will be animated",
+            "items": {
+                "$ref": "animation.channel.schema.json"
+            },
+            "minItems": 1
+        },
+        "name": { },
+        "extensions": { },
+        "extras": { }
+    },
+    "required": [ "keyframeTracks" ]
 }
