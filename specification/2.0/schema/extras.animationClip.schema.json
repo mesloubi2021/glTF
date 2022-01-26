@@ -2,7 +2,7 @@
     "$id": "extras.animationClip.schema.json",
     "title": "AnimationClip",
     "type": "object",
-    "description": "A keyframee animation in string format.",
+    "description": "A keyframe animation in string format.",
     "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
     "properties": {
         "keyframeTracks": {
