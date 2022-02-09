@@ -1,0 +1,33 @@
+{
+    "$id": "extras.animationController.layers.schema.json",
+    "title": "Animation Controller Layer",
+    "type": "object",
+    "description": "A layer to handle animation weights.",
+    "allOf": [{ "$ref": "glTFChildOfRootProperty.schema.json" }],
+    "properties": {
+        "states": {
+            "allOf": [{ "$ref": "extras.animationController.layers.states.schema.json" }],
+            "description": "The animation states in a given layer."
+        },
+        "transitions": {
+            "allOf": [{ "$ref": "extras.animationController.layers.transitions.schema.json" }],
+            "description": "The transitions between states."
+        },
+        "blendMode": {
+            "anyOf": [{
+                    "const": "override",
+                    "description": "Layer animation will be overriden (bottom to top)"
+                },
+                {
+                    "const": "additive",
+                    "description": "Layer animations will be added"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "extensions": {},
+        "extras": {}
+    }
+}

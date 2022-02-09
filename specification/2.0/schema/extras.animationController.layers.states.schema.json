@@ -1,0 +1,21 @@
+{
+    "$id": "extras.animationController.layers.states.schema.json",
+    "title": "Animation States",
+    "type": "object",
+    "description": "Animation states, that define how animation clips will work.",
+    "allOf": [{ "$ref": "glTFChildOfRootProperty.schema.json" }],
+    "properties": {
+        "clip": {
+            "allOf": [{ "$ref": "glTFid.schema.json" }],
+            "description": "The index of the animation clip for this state."
+        },
+        "speed": {
+            "type": "number",
+            "default": 1.0,
+            "description": "The speed of the animation state."
+        },
+        "name": {},
+        "extensions": {},
+        "extras": {}
+    }
+}

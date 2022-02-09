@@ -1,0 +1,50 @@
+{
+    "$id": "extras.animationController.schema.json",
+    "title": "AnimationController",
+    "type": "object",
+    "description": "An animation controller to handle animations with parameters.",
+    "allOf": [{ "$ref": "glTFChildOfRootProperty.schema.json" }],
+    "properties": {
+        "node": {
+            "type": "array",
+            "description": "The indices of root objects this animation controller will be applied.",
+            "items": {
+                "$ref": "glTFid.schema.json"
+            },
+            "minItems": 1
+        },
+        "layers": {
+            "allOf": [{ "$ref": "extras.animationController.layers.schema.json" }],
+            "description": "The animation layers in array order."
+        },
+        "parameters": {
+            "type": "array",
+            "items": {
+                "anyOf": [{
+                        "type": "number",
+                        "items": {
+                            "value": "boolean"
+                        }
+                    },
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "boolean"
+                    }
+                ]
+
+            },
+            "description": "The parameters that will be edited by the end user."
+        },
+        "timeScale": {
+            "type": "number",
+            "default": 1.0,
+            "description": "The overall speed of the Animation Controller.",
+        },
+        "name": {},
+        "extensions": {},
+        "extras": {}
+    },
+    "required": ["layers", "parameters"]
+}

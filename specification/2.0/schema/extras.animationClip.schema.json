@@ -3,19 +3,24 @@
     "title": "AnimationClip",
     "type": "object",
     "description": "A keyframe animation in string format.",
-    "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
+    "allOf": [{ "$ref": "glTFChildOfRootProperty.schema.json" }],
     "properties": {
         "keyframeTracks": {
             "type": "array",
             "description": "An array of keyframe tracks. An animation track defines with strings the properties that will be animated",
             "items": {
-                "$ref": "animation.channel.schema.json"
+                "$ref": "extras.animationClip.keyframeTrack.schema.json"
             },
             "minItems": 1
         },
-        "name": { },
-        "extensions": { },
-        "extras": { }
+        "loop": {
+            "type": "boolean",
+            "default": true,
+            "description": "Specifies whether the clip will be looped."
+        },
+        "name": {},
+        "extensions": {},
+        "extras": {}
     },
-    "required": [ "keyframeTracks" ]
+    "required": ["keyframeTracks"]
 }

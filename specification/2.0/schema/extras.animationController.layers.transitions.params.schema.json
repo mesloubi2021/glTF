@@ -1,0 +1,26 @@
+{
+    "$id": "extras.animationController.layers.transitions.params.schema.json",
+    "title": "Transition optional parameters",
+    "type": "object",
+    "description": "Optional parameters for transitions.",
+    "allOf": [{ "$ref": "glTFChildOfRootProperty.schema.json" }],
+    "properties": {
+        "exitTime": {
+            "type": "number",
+            "description": "Normalized Exit time from current state."
+        },
+        "offset": {
+            "type": "number",
+            "description": "Normalized Start time from next state."
+        },
+        "duration": {
+            "type": "number",
+            "description": "Transition duration in either percentage or seconds"
+        },
+        "fixedDuration": {
+            "type": "boolean",
+            "default": true,
+            "description": "wether duration is seconds (true) or percentage (false)."
+        }
+    }
+}
