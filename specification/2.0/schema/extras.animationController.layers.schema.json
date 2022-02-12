@@ -27,6 +27,18 @@
                 }
             ]
         },
+        "weight": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "default": 1.0,
+            "description": "Transition duration in either percentage or seconds"
+        },
+        "initialState": {
+            "allOf": [{ "$ref": "glTFid.schema.json" }],
+            "description": "The index of the animation state it will be applied frfom."
+        },
+        "name": {},
         "extensions": {},
         "extras": {}
     }
