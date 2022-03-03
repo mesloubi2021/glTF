@@ -13,6 +13,7 @@
         "id": {
             "type": "string",
             "minLength": 1,
+            "pattern": "^[a-zA-Z]\\w*$",
             "description": "Unique identifier for the schema."
         },
         "name": {
@@ -34,16 +35,20 @@
             "type": "object",
             "description": "A dictionary, where each key is a class ID and each value is an object defining the class. Class IDs may contain only alphanumeric and underscore characters.",
             "minProperties": 1,
-            "additionalProperties": {
-                "$ref": "class.schema.json"
+            "patternProperties": {
+                "^[a-zA-Z]\\w*$": {
+                    "$ref": "class.schema.json"
+                }
             }
         },
         "enums": {
             "type": "object",
             "description": "A dictionary, where each key is an enum ID and each value is an object defining the values for the enum. Enum IDs may contain only alphanumeric and underscore characters.",
             "minProperties": 1,
-            "additionalProperties": {
-                "$ref": "enum.schema.json"
+            "patternProperties": {
+                "^[a-zA-Z]\\w*$": {
+                    "$ref": "enum.schema.json"
+                }
             }
         },
         "extensions": {},
