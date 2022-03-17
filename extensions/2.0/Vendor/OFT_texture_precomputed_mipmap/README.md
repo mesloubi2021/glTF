@@ -20,6 +20,8 @@ The extension is added to the `textures` node and specifies a `sources` list who
 
 The levels must start with `0` and end with the maximum level of the mipmap as specified in WebGL specification.
 
+The source image of level `0` must be the same as the source image of the specified texture.
+
 ## Example:
 
 ```json
