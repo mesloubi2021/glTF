@@ -63,9 +63,9 @@ The lowest byte is reserved for future voxel modes: `0x80000000`-`0x800000FF`.
 These grids all define "unit" objects centered at the origin, contained in the bounding box between `(-1, -1, -1)` and `(1, 1, 1)`. Node transforms should be used to position, orient, and scale the voxel grid as needed. The `POSITION` attribute is _not_ required or used by this extension - all positioning is through node transforms.
 
 The `dimensions` property of the extension specifies the voxel grid dimensions:
-- x/y/z for boxes
-- radius/height/angle for cylinders
-- longitude/latitude/height for ellipsoids
+- x / y / z for boxes
+- radius / height / angle for cylinders
+- longitude / latitude / height for ellipsoids
 
 Dimensions must be nonzero. Elements are laid out in memory first-axis-contiguous, e.g. for boxes, `x` data is contiguous (up to stride).
 
