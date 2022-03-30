@@ -76,8 +76,7 @@ The `bounds` property describes which section of the primitive is mapped to the 
 
 The `padding` property specifies how many rows of attribute data in each dimension come from neighboring grids. This is useful in situations where the primitive represents a single tile in a larger grid, and data from neighboring tiles is needed for non-local effects e.g. trilinear interpolation, blurring, antialiasing. `padding.before` and `padding.after` specify the number of rows before and after the grid in each dimension, e.g. a `padding.before` of 1 and a `padding.after` of 2 in the `y` dimension mean that each series of values in a given `y`-slice is preceded by one value and followed by two.
 
-The padding data must be supplied with the rest of the voxel data - this means if `dimensions` is `[d1, d2, d3]`, `beforeCount` is `[b1, b2, b3]`, and `afterCount` is `[a1, a2, a3]`,
-the attribute must supply `(d1 + a1 + b1)*(d2 + a2 + b2)*(d3 + a3 + b3)` elements.
+The padding data must be supplied with the rest of the voxel data - this means if `dimensions` is `[d1, d2, d3]`, `padding.before` is `[b1, b2, b3]`, and `padding.after` is `[a1, a2, a3]`, the attribute must supply `(d1 + a1 + b1)*(d2 + a2 + b2)*(d3 + a3 + b3)` elements.
 
 ## Optional vs. Required
 This extension is required, meaning it should be placed in both the `extensionsUsed` list and `extensionsRequired` list.
