@@ -71,7 +71,7 @@ Dimensions must be nonzero. Elements are laid out in memory first-axis-contiguou
 
 The `bounds` property describes which section of the primitive is mapped to the voxel grid. `bounds.min` and `bounds.max` specify a "rectangular" region of the voxel grid in the appropriate coordinate systems:
 - Boxes: a rectangular region of the box, between `(-1, -1, -1)` and `(1, 1, 1)`. **This is essentially a no-op - prefer using node transforms for boxes**.
-- Cylinders: a slice of the cylinder, between `(0, -1, 0)` and `(1, 1, 2*pi)`
+- Cylinders: a slice of the cylinder, between `(0, -1, -pi)` and `(1, 1, pi)`
 - Ellipsoids: a surface patch with height, between `(-pi, -pi/2, 0)` and `(pi, pi/2, 1)`
 
 The `padding` property specifies how many rows of attribute data in each dimension come from neighboring grids. This is useful in situations where the primitive represents a single tile in a larger grid, and data from neighboring tiles is needed for non-local effects e.g. trilinear interpolation, blurring, antialiasing. `padding.before` and `padding.after` specify the number of rows before and after the grid in each dimension, e.g. a `padding.before` of 1 and a `padding.after` of 2 in the `y` dimension mean that each series of values in a given `y`-slice is preceded by one value and followed by two.
