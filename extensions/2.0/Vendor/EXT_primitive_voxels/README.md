@@ -36,7 +36,7 @@ This extension allows primitives to use their attribute data to represent volume
                 "min": [0.25, 0.5, 0.5],
                 "max": [0.375, 0.625, 0.625]
               },
-              "neighboringEdges": {
+              "padding": {
                 "before": [1, 1, 1],
                 "after": [1, 1, 1]
               }
