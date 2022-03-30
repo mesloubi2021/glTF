@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "enum.schema.json",
-    "title": "Enum in EXT_feature_metadata",
+    "title": "Enum in EXT_structural_metadata",
     "type": "object",
     "description": "An object defining the values of an enum.",
     "allOf": [
@@ -21,8 +21,8 @@
             "description": "The description of the enum."
         },
         "valueType": {
-            "description": "The type of the integer enum value.",
             "default": "UINT16",
+            "description": "The type of the integer enum value.",
             "anyOf": [
                 {
                     "const": "INT8"
