@@ -64,8 +64,8 @@ These grids all define "unit" objects centered at the origin, contained in the b
 
 The `dimensions` property of the extension specifies the voxel grid dimensions:
 - x/y/z for boxes
-- r/z/theta for cylinders
-- lon/lat/height for ellipsoids
+- radius/height/angle for cylinders
+- longitude/latitude/height for ellipsoids
 
 Dimensions must be nonzero. Elements are laid out in memory first-axis-contiguous, e.g. for boxes, `x` data is contiguous (up to stride).
 
