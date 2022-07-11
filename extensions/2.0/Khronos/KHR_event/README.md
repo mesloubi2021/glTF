@@ -34,7 +34,18 @@ Written against the glTF 2.0 spec. The event extension needs to be combined with
         "type": "OnInteraction",
         "logic": 2,
         "node": 0,
-        "radius": 10.0
+        "boundingSphere": 10.0
+    },
+    {
+        "name": "Event, that is triggered after user interacted within a bounding box",
+        "type": "OnInteraction",
+        "logic": 3,
+        "node": 1,
+        "boundingBox": [
+            1.0,
+            2.0,
+            1.0
+        ]
     }
 ]
 ```
