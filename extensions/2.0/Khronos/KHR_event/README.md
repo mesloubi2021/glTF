@@ -1,5 +1,48 @@
 # KHR\_event
 
+## Contributors
+
+* Norbert Nopper, UX3D [@UX3DGpuSoftware](https://twitter.com/UX3DGpuSoftware)
+
+## Status
+
+Draft
+
+## Dependencies
+
+Written against the glTF 2.0 spec. The event extension needs to be combined with an extension which allows executing logic, e.g. KHR_logic.
+
+## Overview
+
+```json
+"events": [
+    {
+        "name": "Event, that is triggered every frame",
+        "type": "OnFrame",
+        "logic": 0,
+        "deltaTime": 0.01,
+        "totalTime": 10.08
+    },
+    {
+        "name": "Event, that is triggered if the value is changed",
+        "type": "OnValueChanged",
+        "logic": 1,
+        "pointer": "/nodes/0/translation"
+    },
+    {
+        "name": "Event, that is triggered after user interacted within a bounding sphere",
+        "type": "OnInteraction",
+        "logic": 2,
+        "node": 0,
+        "radius": 10.0
+    }
+]
+```
+
+## References
+
+ToDo: Add
+
 ## Appendix: Full Khronos Copyright Statement
 
 Copyright 2018-2021 The Khronos Group Inc.
