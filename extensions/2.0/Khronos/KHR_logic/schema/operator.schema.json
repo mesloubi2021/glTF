@@ -52,7 +52,7 @@
         },
         "defaultValues": {
             "type": "array",
-            "description": "The defaulr values of this operand.",
+            "description": "The default values of this operand.",
             "items": {
                 "oneOf": [
                     {
@@ -76,6 +76,33 @@
             },
             "minItems": 1
         },
+        "inputPointers": {
+            "type": "array",
+            "description": "The JSON pointer referencing valid glTF properties. If not present, this operand is using the default values.",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1
+        },
+        "outputValues": {
+            "type": "array",
+            "description": "The output values of this operand. If present, the implementation **MUST** allow to access these values via a JSON pointer.",
+            "items": {
+                "oneOf": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "boolean"
+                    }
+                ]
+            },
+            "minItems": 1
+        },
+
         "name": { },
         "extensions": { },
         "extras": { }
