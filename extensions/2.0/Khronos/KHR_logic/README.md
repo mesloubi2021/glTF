@@ -10,7 +10,7 @@ See [Appendix](#appendix-full-khronos-copyright-statement) for full Khronos Copy
 
 ## Status
 
-Experimental
+Draft
 
 ## Dependencies
 
@@ -18,17 +18,58 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
-## Adding logic
+```json
+"logics": [
+    {
+        "name": "An entry point of a logic",
+        "operator": 0
+    }
+],
+"operators": [
+    {
+        "name": "A plus operator",
+        "operand": "+",
+        "type": "number",
+        "defaultValues": [
+            1.0,
+            4.0
+        ]
+    },
+    {
+        "name": "A minus operator using another operator for input",
+        "operand": "-",
+        "type": "number",
+        "defaultValues": [
+            0.0,
+            3.0
+        ],
+        "inputOperators": [
+            1
+            -1
+        ]
+    },
+    {
+        "name": "An operator which is just gathering a scalar",
+        "operand": "IDENTITY",
+        "type": "number",
+        "defaultValues": [
+            0.0
+        ],
+        "inputPointers": [
+            "/materials/0/alphaCutoff"
+        ]
+    }    
+]
 
-### Definition
+```
 
-### Example
+## References
 
-### Extension compatibility and fallback behaviour
+ToDo: Add
 
 ## Appendix: Full Khronos Copyright Statement
 
-Copyright 2017-2018 The Khronos Group Inc.
+Copyright 2018-2022 The Khronos Group Inc.
 
 Some parts of this Specification are purely informative and do not define requirements
 necessary for compliance and so are outside the Scope of this Specification. These

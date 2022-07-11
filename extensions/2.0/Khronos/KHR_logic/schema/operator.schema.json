@@ -5,15 +5,12 @@
     "description": "Operator definition.",
     "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
     "properties": {
-        "function": {
+        "operand": {
             "default": "VALUE",
-            "description": "ToDo: Add more operators.",
+            "description": "ToDo: Add all operands.",
             "anyOf": [
                 {
-                    "const": "VALUE"
-                },
-                {
-                    "const": "IDENTIY"
+                    "const": "IDENTITY"
                 },
                 {
                     "const": "NOT"
@@ -25,13 +22,19 @@
                     "const": "OR"
                 },
                 {
+                    "const": "+"
+                },
+                {
+                    "const": "-"
+                },
+                {
                     "type": "string"
                 }
             ]
         },
         "type": {
             "default": "number",
-            "description": "Allowed types. Has to be identical with properties insidw values.",
+            "description": "Allowed types.",
             "anyOf": [
                 {
                     "const": "number"
@@ -47,9 +50,9 @@
                 }
             ]
         },
-        "values": {
+        "defaultValues": {
             "type": "array",
-            "description": "The values of this operator.",
+            "description": "The defaulr values of this operand.",
             "items": {
                 "oneOf": [
                     {
@@ -67,7 +70,7 @@
         },
         "inputOperators": {
             "type": "array",
-            "description": "The indices of this operator's input operators. If not present, this operator is a jsut container for values.",
+            "description": "The indices of this operator's input operators. If not present, this operand is using the default values.",
             "items": {
                 "$ref": "glTFid.schema.json"
             },
@@ -78,8 +81,8 @@
         "extras": { }
     },
     "required": [
-        "function",
+        "operand",
         "type",
-        "values"
+        "defaultValues"
     ]
 }
