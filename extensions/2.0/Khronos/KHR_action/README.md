@@ -22,13 +22,13 @@ Written against the glTF 2.0 spec. The event extension needs to be combined with
 "actions": [
     {
         "name": "Action for writing a value to a translation node and using another node for input",
-        "type": "Write",
+        "type": "WriteToPointer",
         "logic": 3,
         "outputPointer": "/nodes/1/translation",
         "inputPointer": "/nodes/0/translation"
     },
     {
-        "name": "Action for writing to scale and using the resul from logic operand node",
+        "name": "Action for writing to scale and using the output values from the logic operand",
         "type": "Write",
         "logic": 4,
         "outputPointer": "/nodes/2/scale",
