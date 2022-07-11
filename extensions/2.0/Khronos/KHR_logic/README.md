@@ -44,8 +44,11 @@ Written against the glTF 2.0 spec.
             3.0
         ],
         "inputOperators": [
-            1
+            1,
             -1
+        ],
+        "outputValues": [
+            0.0
         ]
     },
     {
@@ -58,9 +61,28 @@ Written against the glTF 2.0 spec.
         "inputPointers": [
             "/materials/0/alphaCutoff"
         ]
+    },
+    {
+        "name": "An operator which is just generating a scale value for three different operands",
+        "operand": "IDENTITY",
+        "type": "number",
+        "defaultValues": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "inputOperators": [
+            0,
+            1,
+            2
+        ],
+        "outputValues": [
+            1.0,
+            1.0,
+            1.0
+        ]
     }    
 ]
-
 ```
 
 ## References
