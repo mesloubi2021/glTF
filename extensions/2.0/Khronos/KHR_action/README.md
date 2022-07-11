@@ -1,8 +1,48 @@
 # KHR\_action
 
+## Contributors
+
+* Jan Hermes, Continental
+* Norbert Nopper, UX3D [@UX3DGpuSoftware](https://twitter.com/UX3DGpuSoftware)
+
+Copyright 2017-2021 The Khronos Group Inc. All Rights Reserved. glTF is a trademark of The Khronos Group Inc.
+See [Appendix](#appendix-full-khronos-copyright-statement) for full Khronos Copyright Statement.
+
+## Status
+
+Draft
+
+## Dependencies
+
+Written against the glTF 2.0 spec. The event extension needs to be combined with an extension which allows executing logic, e.g. KHR_logic.
+
+## Overview
+
+```json
+"actions": [
+    {
+        "name": "Action for writing a value to a translation node and using another node for input",
+        "type": "Write",
+        "logic": 3,
+        "outputPointer": "/nodes/1/translation",
+        "inputPointer": "/nodes/0/translation"
+    },
+    {
+        "name": "Action for writing to scale and using the resul from logic operand node",
+        "type": "Write",
+        "logic": 4,
+        "outputPointer": "/nodes/2/scale",
+    },
+]
+```
+
+## References
+
+ToDo: Add
+
 ## Appendix: Full Khronos Copyright Statement
 
-Copyright 2018-2021 The Khronos Group Inc.
+Copyright 2018-2022 The Khronos Group Inc.
 
 Some parts of this Specification are purely informative and do not define requirements
 necessary for compliance and so are outside the Scope of this Specification. These
