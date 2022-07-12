@@ -2,6 +2,7 @@
 
 ## Contributors
 
+* Jan Hermes, Continental
 * Norbert Nopper, UX3D [@UX3DGpuSoftware](https://twitter.com/UX3DGpuSoftware)
 
 ## Status
@@ -14,32 +15,41 @@ Written against the glTF 2.0 spec. The event extension needs to be combined with
 
 ## Overview
 
+ToDo:
+
+### Examples
+
 ```json
 "events": [
     {
-        "name": "Event, that is triggered every frame",
-        "type": "OnFrame",
+        "name": "Event is triggered every frame update",
+        "type": "OnUpdate",
         "logic": 0,
         "deltaTime": 0.01,
         "totalTime": 10.08
     },
     {
-        "name": "Event, that is triggered if the value is changed",
+        "name": "Event is triggered after the value is changed",
         "type": "OnValueChanged",
         "logic": 1,
         "pointer": "/nodes/0/translation"
     },
     {
-        "name": "Event, that is triggered after user interacted within a bounding sphere",
+        "name": "Event is triggered by the engine/viewer on demand",
+        "type": "OnDemand",
+        "logic": 2
+    },
+    {
+        "name": "Event is triggered after user interacted within a bounding sphere",
         "type": "OnInteraction",
-        "logic": 2,
+        "logic": 3,
         "node": 0,
         "boundingSphere": 10.0
     },
     {
         "name": "Event, that is triggered after user interacted within a bounding box",
         "type": "OnInteraction",
-        "logic": 3,
+        "logic": 4,
         "node": 1,
         "boundingBox": [
             1.0,
@@ -52,7 +62,8 @@ Written against the glTF 2.0 spec. The event extension needs to be combined with
 
 ## References
 
-ToDo: Add
+* [Unity Visual Scripting Events](https://docs.unity3d.com/Packages/com.unity.visualscripting@1.8/manual/vs-events-reference.html)
+* [Unreal Engine Visual Scripting](https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/Blueprints/UserGuide/Events/)
 
 ## Appendix: Full Khronos Copyright Statement
 
