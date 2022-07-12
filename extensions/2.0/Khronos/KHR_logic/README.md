@@ -2,6 +2,7 @@
 
 ## Contributors
 
+* Ben Houston, Threekit
 * Jan Hermes, Continental
 * Norbert Nopper, UX3D [@UX3DGpuSoftware](https://twitter.com/UX3DGpuSoftware)
 
