@@ -6,7 +6,7 @@
     "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
     "properties": {
         "operand": {
-            "default": "VALUE",
+            "default": "IDENTITY",
             "description": "ToDo: Add all operands.",
             "anyOf": [
                 {
@@ -86,7 +86,7 @@
         },
         "outputValues": {
             "type": "array",
-            "description": "The output values of this operand. If present, the implementation **MUST** allow to access these values via a JSON pointer.",
+            "description": "The output values of this operand. If present, the implementation **MUST** allow to access these values with a JSON pointer.",
             "items": {
                 "oneOf": [
                     {
