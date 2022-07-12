@@ -5,7 +5,7 @@
 * Jan Hermes, Continental
 * Norbert Nopper, UX3D [@UX3DGpuSoftware](https://twitter.com/UX3DGpuSoftware)
 
-Copyright 2017-2021 The Khronos Group Inc. All Rights Reserved. glTF is a trademark of The Khronos Group Inc.
+Copyright 2017-2022 The Khronos Group Inc. All Rights Reserved. glTF is a trademark of The Khronos Group Inc.
 See [Appendix](#appendix-full-khronos-copyright-statement) for full Khronos Copyright Statement.
 
 ## Status
@@ -17,6 +17,10 @@ Draft
 Written against the glTF 2.0 spec. The event extension needs to be combined with an extension which allows executing logic, e.g. KHR_logic.
 
 ## Overview
+
+ToDo:
+
+### Examples
 
 ```json
 "actions": [
@@ -38,7 +42,7 @@ Written against the glTF 2.0 spec. The event extension needs to be combined with
 
 ## References
 
-ToDo: Add
+ToDo:
 
 ## Appendix: Full Khronos Copyright Statement
 
