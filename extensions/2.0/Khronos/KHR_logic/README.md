@@ -18,6 +18,10 @@ Written against the glTF 2.0 spec.
 
 ## Overview
 
+ToDo:
+
+### Examples
+
 ```json
 "logics": [
     {
@@ -87,7 +91,7 @@ Written against the glTF 2.0 spec.
 
 ## References
 
-ToDo: Add
+ToDo:
 
 ## Appendix: Full Khronos Copyright Statement
 
