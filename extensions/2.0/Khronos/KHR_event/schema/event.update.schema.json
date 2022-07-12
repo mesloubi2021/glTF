@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "event/update",
+    "type": "object",
+    "description": "Event update definition.",
+    "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
+    "properties": {
+        "deltaTime": {
+            "type": "number",
+            "description": "The delta time passed since last frame.",
+            "minimum": 0.0
+        },
+        "totalTime": {
+            "type": "number",
+            "description": "The total time passed since start.",
+            "minimum": 0.0
+        },
+        "name": { },
+        "extensions": { },
+        "extras": { }
+    },
+    "required": [
+        "deltaTime",
+        "totalTime"
+    ]
+}

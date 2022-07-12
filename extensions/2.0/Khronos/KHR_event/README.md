@@ -27,38 +27,56 @@ ToDo:
     {
         "name": "Event is triggered every frame update",
         "type": "OnUpdate",
-        "logic": 0,
-        "deltaTime": 0.01,
-        "totalTime": 10.08
+        "logic": [ 
+            0
+        ],
+        "update": {
+            "deltaTime": 0.01,
+            "totalTime": 10.08
+        }
     },
     {
         "name": "Event is triggered after the value is changed",
         "type": "OnValueChanged",
-        "logic": 1,
-        "pointer": "/nodes/0/translation"
+        "logic": [
+            1
+        ],
+        "valueChanged": {
+            "pointer": "/nodes/0/translation"
+        }
     },
     {
         "name": "Event is triggered by the engine/viewer on demand",
         "type": "OnDemand",
-        "logic": 2
+        "logic": [
+            2
+        ]
     },
     {
         "name": "Event is triggered after user interacted within a bounding sphere",
         "type": "OnInteraction",
-        "logic": 3,
-        "node": 0,
-        "boundingSphere": 10.0
+        "logic": [
+            3
+        ],
+        "interaction": {
+            "node": 0,
+            "boundingSphere": 10.0
+        }
     },
     {
         "name": "Event, that is triggered after user interacted within a bounding box",
         "type": "OnInteraction",
-        "logic": 4,
-        "node": 1,
-        "boundingBox": [
-            1.0,
-            2.0,
-            1.0
-        ]
+        "logic": [
+            4
+        ],
+        "interaction": {
+            "node": 1,
+            "boundingBox": [
+                1.0,
+                2.0,
+                1.0
+            ]
+        }
     }
 ]
 ```

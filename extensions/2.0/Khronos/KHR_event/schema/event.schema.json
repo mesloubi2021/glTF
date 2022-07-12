@@ -1,0 +1,59 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "event",
+    "type": "object",
+    "description": "Event definition.",
+    "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
+    "properties": {
+        "type": {
+            "description": "Allowed types.",
+            "anyOf": [
+                {
+                    "const": "OnUpdate"
+                },
+                {
+                    "const": "OnValueChanged"
+                },
+                {
+                    "const": "OnDemand"
+                },
+                {
+                    "const": "OnInteraction"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "logic": {
+            "type": "array",
+            "description": "The indices of used logics.",
+            "items": {
+                "$ref": "glTFid.schema.json"
+            },
+            "minItems": 1
+        },
+        "update": {
+            "type": "object",
+            "$ref": "event.update.schema.json"
+        },
+        "valueChanged": {
+            "type": "object",
+            "$ref": "event.valuechanged.schema.json"
+        },
+        "interaction": {
+            "type": "object",
+            "$ref": "event.interaction.schema.json"
+        },
+        "name": { },
+        "extensions": { },
+        "extras": { }
+    },
+    "required": [
+        "type",
+        "logic"
+    ],
+    "not": {
+        "required": [ "update", "valueChanged", "interaction" ]
+    }
+}
