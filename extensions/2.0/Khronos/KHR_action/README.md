@@ -26,14 +26,14 @@ ToDo:
 "actions": [
     {
         "name": "Action for writing a value to a translation node and using another node for input",
-        "type": "WriteToPointer",
+        "type": "ToPointer",
         "logic": 3,
         "outputPointer": "/nodes/1/translation",
         "inputPointer": "/nodes/0/translation"
     },
     {
         "name": "Action for writing to scale and using the output values from the logic operand",
-        "type": "Write",
+        "type": "ToPointer",
         "logic": 4,
         "outputPointer": "/nodes/2/scale",
     },
