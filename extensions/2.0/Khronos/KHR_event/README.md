@@ -5,6 +5,9 @@
 * Jan Hermes, Continental
 * Norbert Nopper, UX3D [@UX3DGpuSoftware](https://twitter.com/UX3DGpuSoftware)
 
+Copyright 2018-2022 The Khronos Group Inc. All Rights Reserved. glTF is a trademark of The Khronos Group Inc.
+See [Appendix](#appendix-full-khronos-copyright-statement) for full Khronos Copyright Statement.
+
 ## Status
 
 Draft
@@ -67,7 +70,7 @@ ToDo:
 
 ## Appendix: Full Khronos Copyright Statement
 
-Copyright 2018-2021 The Khronos Group Inc.
+Copyright 2018-2022 The Khronos Group Inc.
 
 Some parts of this Specification are purely informative and do not define requirements
 necessary for compliance and so are outside the Scope of this Specification. These
