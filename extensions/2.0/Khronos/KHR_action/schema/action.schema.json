@@ -23,14 +23,7 @@
         "outputPointer": {
             "type": "string",
             "description": "JSON pointer of the value to change."
-        },
-        "inputPointer": {
-            "type": "string",
-            "description": "JSON pointer of the value to retrieve the value for the outputPointer. If not defined, the value is the result of the logic."
-        },
-        "name": { },
-        "extensions": { },
-        "extras": { }
+        }
     },
     "required": [
         "type",
