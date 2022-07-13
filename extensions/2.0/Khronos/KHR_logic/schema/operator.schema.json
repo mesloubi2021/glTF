@@ -50,9 +50,9 @@
                 }
             ]
         },
-        "defaultValues": {
+        "constValues": {
             "type": "array",
-            "description": "The default values of this operand.",
+            "description": "The constant and initial values of this operand.",
             "items": {
                 "oneOf": [
                     {

@@ -35,7 +35,7 @@ ToDo:
         "name": "A plus operator",
         "operand": "+",
         "type": "number",
-        "defaultValues": [
+        "constValues": [
             1.0,
             4.0
         ]
@@ -44,12 +44,12 @@ ToDo:
         "name": "A minus operator using another operator for input",
         "operand": "-",
         "type": "number",
-        "defaultValues": [
+        "constValues": [
             0.0,
             3.0
         ],
         "inputOperators": [
-            1,
+            0,
             -1
         ],
         "outputValues": [
@@ -60,7 +60,7 @@ ToDo:
         "name": "An operator which is just gathering a scalar",
         "operand": "IDENTITY",
         "type": "number",
-        "defaultValues": [
+        "constValues": [
             0.0
         ],
         "inputPointers": [
@@ -71,7 +71,7 @@ ToDo:
         "name": "An operator which is just generating a scale value for three different operands",
         "operand": "IDENTITY",
         "type": "number",
-        "defaultValues": [
+        "constValues": [
             1.0,
             1.0,
             1.0
