@@ -30,11 +30,7 @@ ToDo:
         "type": "OnUpdate",
         "logic": [ 
             0
-        ],
-        "update": {
-            "deltaTime": 0.01,
-            "totalTime": 10.08
-        }
+        ]
     },
     {
         "name": "Event is triggered after the value is changed",

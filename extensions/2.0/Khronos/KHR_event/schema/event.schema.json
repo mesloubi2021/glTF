@@ -33,10 +33,6 @@
             },
             "minItems": 1
         },
-        "update": {
-            "type": "object",
-            "$ref": "event.update.schema.json"
-        },
         "valueChanged": {
             "type": "object",
             "$ref": "event.valuechanged.schema.json"
