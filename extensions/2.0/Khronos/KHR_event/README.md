@@ -26,17 +26,24 @@ ToDo:
 ```json
 "events": [
     {
+        "name": "Event is triggered at start",
+        "type": "OnStart",
+        "logic": [ 
+            0
+        ]
+    },
+    {
         "name": "Event is triggered every frame update",
         "type": "OnUpdate",
         "logic": [ 
-            0
+            1
         ]
     },
     {
         "name": "Event is triggered after the value is changed",
         "type": "OnValueChanged",
         "logic": [
-            1
+            2
         ],
         "valueChanged": {
             "pointer": "/nodes/0/translation"
@@ -46,14 +53,14 @@ ToDo:
         "name": "Event is triggered by the engine/viewer on demand",
         "type": "OnDemand",
         "logic": [
-            2
+            3
         ]
     },
     {
         "name": "Event is triggered after user interacted within a bounding sphere",
         "type": "OnInteraction",
         "logic": [
-            3
+            4
         ],
         "interaction": {
             "node": 0,
@@ -64,7 +71,7 @@ ToDo:
         "name": "Event, that is triggered after user interacted within a bounding box",
         "type": "OnInteraction",
         "logic": [
-            4
+            5
         ],
         "interaction": {
             "node": 1,

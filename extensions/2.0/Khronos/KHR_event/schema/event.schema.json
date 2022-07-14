@@ -9,6 +9,9 @@
             "description": "Allowed types.",
             "anyOf": [
                 {
+                    "const": "OnStart"
+                },
+                {
                     "const": "OnUpdate"
                 },
                 {
@@ -50,6 +53,6 @@
         "logic"
     ],
     "not": {
-        "required": [ "update", "valueChanged", "interaction" ]
+        "required": [ "valueChanged", "interaction" ]
     }
 }
