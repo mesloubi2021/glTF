@@ -4,6 +4,14 @@
     "type": "object",
     "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
     "properties": {
+        "logics": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "$ref": "logic.schema.json"
+            },
+            "minItems": 1
+        },
         "operators": {
             "type": "array",
             "items": {
@@ -16,6 +24,7 @@
         "extras": { }
     },
     "required": [
+        "logics",
         "operators"
     ]
 }

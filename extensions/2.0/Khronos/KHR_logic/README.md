@@ -27,6 +27,7 @@ ToDo:
 "logics": [
     {
         "name": "An entry point of a logic",
+        "type": ""
         "operator": 0
     }
 ],
