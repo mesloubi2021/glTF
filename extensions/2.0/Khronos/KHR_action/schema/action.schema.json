@@ -18,16 +18,16 @@
         },
         "logic": {
             "allOf": [ { "$ref": "glTFid.schema.json" } ],
-            "description": "The index of the logic triggering this action."
+            "description": "The index of the logic triggering this action and the retrieving the output value from."
         },
-        "outputPointer": {
+        "pointer": {
             "type": "string",
-            "description": "JSON pointer of the value to change."
+            "description": "JSON pointer of the value to change and write to."
         }
     },
     "required": [
         "type",
         "logic",
-        "outputPointer"
+        "pointer"
     ]
 }
