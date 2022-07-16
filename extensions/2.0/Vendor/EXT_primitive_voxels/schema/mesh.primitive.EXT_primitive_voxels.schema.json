@@ -12,7 +12,7 @@
     "properties": {
         "dimensions": {
             "type": "array",
-            "description": "Dimensions of the voxel grid. x/y/z for a box, r/theta/z for a cylinder, lat/lon/height for an ellipsoid.",
+            "description": "Dimensions of the voxel grid. x/y/z for a box, r/z/theta for a cylinder, lon/lat/height for an ellipsoid.",
             "items": {
                 "type": "integer",
                 "minimum": 1
@@ -21,56 +21,14 @@
             "maxItems": 3
         },
         "bounds": {
-            "type": {
-                "properties": {
-                    "minimum": {
-                        "type": "array",
-                        "items": {
-                            "type": "number"
-                        },
-                        "minItems": 3,
-                        "maxItems": 3
-                    },
-                    "maximum": {
-                        "type": "array",
-                        "items": {
-                            "type": "number"
-                        },
-                        "minItems": 3,
-                        "maxItems": 3
-                    }
-                }
-            }
+            "$ref": "bounds.schema.json"
         },
-        "neighboringEdges": {
-            "type": {
-              "properties": {
-                  "beforeCount": {
-                      "type": "array",
-                      "description": "Number of neighboring data values before each dimension of the grid.",
-                      "items": {
-                          "type": "integer",
-                          "minimum": 0,
-                          "default": 0
-                      },
-                      "minItems": 3,
-                      "maxItems": 3
-                  },
-                  "afterCount": {
-                      "type": "array",
-                      "description": "Number of neighboring data values after each dimension of the grid.",
-                      "items": {
-                          "type": "integer",
-                          "minimum": 0,
-                          "default": 0
-                      },
-                      "minItems": 3,
-                      "maxItems": 3
-                  }
-                }
-            },
-            "description": "The number of rows of neighboring tiles' voxel data."
+        "padding": {
+            "$ref": "padding.schema.json"
         }
     },
-    "required": ["dimensions"]
+    "required": [
+        "dimension",
+        "bounds"
+    ]
 }
