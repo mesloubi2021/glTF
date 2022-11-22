@@ -9,7 +9,7 @@ NOTE: Currently we are merging this proposal with the Adobe behavior extension.
 * Ben Houston, Threekit
 * Jan Hermes, Continental
 * Dwight Rogers, Adobe
-* Emmet Lalish, Google
+* Emmett Lalish, Google
 * Ken Xu, NVIDIA
 
 Copyright 2018-2022 The Khronos Group Inc. All Rights Reserved. glTF is a trademark of The Khronos Group Inc.
@@ -271,11 +271,11 @@ Flow nodes can be used to define a more complex control flow inside the node gra
 
 ### Query Nodes
 
-* set : Set a value of glTF object properties or of one of the behavior's variables, relies upon the KHR_animation_pointer extension, with the caveat below for additional paths.
+* get : Get a value of glTF object properties or of one of the behavior's variables, relies upon the KHR_animation_pointer extension, with the caveat below for additional paths.
 
 ### Action Nodes
 
-* get : Get a value from glTF object properties or from one of the behavior's variables, relies upon the KHR_animation_pointer extension, with the caveat below for additional paths.
+* set : Set a value from glTF object properties or from one of the behavior's variables, relies upon the KHR_animation_pointer extension, with the caveat below for additional paths.
 * animation play/cancel : start, stop animations
 * sound play/cancel : start, stop sounds, relies upon the KHR_sound extension
 * interpolate to: takes the current value and target value along with delta time, and easing function and executes that in the background, relies upon the KHR_animation_pointer extension.
