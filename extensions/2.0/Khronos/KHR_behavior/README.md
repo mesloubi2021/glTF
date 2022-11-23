@@ -62,6 +62,204 @@ From these requirements, the main features can be deducted:
 * No access outside glTF
 * No spawning of glTF objects
 
+## Action object
+
+*This object is a simplified version of the below `behaviorNode`, renamed `action` to clarify the distinction with glTF `node`. This section will focus on Layer 0, but the hope is that the rest of the Layer 1 concepts below could apply equally well in this framework. The `behaviorNode` is left for comparison's sake until we decide on which semantics to use. The biggest difference is instead of `flow` defining the next node to trigger, `action` uses `input` to define the previous `action` that triggers this upon its completion.*
+
+The `name` is not required, akin to other glTF objects. The `type` is required and denotes the available `parameters`. For Level 0, all parameters must be constants. The `input` is the action which will trigger this action upon completion. Actions are generally asynchronous, though some may complete immediately when triggered. 
+
+There are two groups of actions: `trigger` actions are started by the user agent (and therefore have no `input`) and `internal` are triggered by other actions. The `triggers` are categorized into `active` and `passive`. Actions that are `active` imply user-activation (in the browser sense, like a click), including session start. `passive` actions are more continuous, like proximity and hover. 
+
+The `internal` actions are categorized into `stateful` and `stateless`. Here the meaning of `stateful` is that the action maintains internal state that changes the flow of the graph from one invocation to the next. This includes geometric and visibility properties of the scene, like animations, because those changes could cause `passive` `trigger` actions to fire automatically. On the other hand, `stateless` actions may only affect the visual state of the glTF scene (material properties), which is not readable by any Level 0 actions. 
+
+The `input` to `internal` actions is a list, which generally must be length 1, but certain actions allow more for AND/OR functionality. Additionally, some `stateful` actions have multiple outputs, only one of which is fired upon completion for a given invocation. The desired output of an action can be selected with the optional `output` parameter of the `input` item.
+
+### Changing properties
+
+The main purpose of these actions is to change something visible to the user, which will be a scene property of some kind. Most of these properties will be set via the `stateless/interpTo` action which targets any non-geometric property from the `KHR_animation_pointers` extension. This function does not specify a "from" condition - it always interpolates from the current value to the specified value in a specified amount of time with a specified easing function. Instant update is achieved by setting the time to zero. 
+
+The other main way of changing the scene is via `stateful/animation`, which functions the same way - consider it as interpolating the time value of the animation track from its current value to the value specified (or the start or end if not). Playing a given animation track will overwrite the transforms on any affected nodes, so to avoid sudden transitions it is best practice to start all animations from the same resting pose and to transition any other animation tracks and node transforms applied to the affected nodes back to their initial conditions before playing the next animation track.
+
+### Security requirements for Level 0
+
+To avoid the possibility of chaos arising or the need to implement feedback control systems, positions/orientations that are interpolated to must be static. However, they can be runtime-dependent: e.g. move to the position of some animated node. The final position of this node will be the position of that node when the interpTo action was fired, but it will not continue to follow that node as it animates. 
+
+To avoid creating a Turing machine, Level 0 restricts loops and recursion by requiring each `input` action index to be less than the index of this action. This forces the behavior graph to be a directed structure that always progresses from `trigger` to termination without loops.
+
+Considering that state is maintained across invocations, a Turing machine is still devisable in the sense of each clock cycle being initiated by a user interaction. By giving the user ultimate control over the progression of this program, we ensure a malicious behavior designer cannot create a virus that executes on its own.
+
+However, a second safeguard is necessary as `passive` actions can be triggered by either user input or geometric changes to the scene, e.g. a node moving into proximity of the camera or a mesh translating under the cursor to initiate hover. This could be exploited by a malicious designer to cause repeated progression through the behavior program at frame rate without user interaction. Therefore Level 0 requires that any `stateful` action must not include any `passive` actions in its call stack, since only `stateful` actions can cause `passive` actions to trigger.
+
+### Actions categorized
+
+Only Level 0 actions for now, probably not a complete list:
+
+`active`:
+- start
+- select
+
+`passive`:
+- hoverStart
+- hoverEnd
+- proximityStart
+- proximityEnd
+- inViewStart
+- inViewEnd
+
+`stateless`:
+- interpTo
+- waitAll
+- anyOf
+- delay
+- playSound
+- stop
+
+`stateful`:
+- animation
+- moveTo
+- turnTo
+- visibility
+- flipflop
+- multiGate
+- doOnce
+
+Most of these are described below in the original document. Only `flipflop` and `multiGate` have multiple outputs. Only `waitAll` and `anyOf` have multiple inputs. The `stop` action lists another action in its parameter list; it will stop that action any others downstream from it when triggered, effectively canceling an entire behavior and leaving the scene at its current state.
+
+### Examples
+
+This example's first behavior opens the door when it is clicked, and closes it when clicked again. No need for two animations, it is simply played backward via the `speed` parameter. This also means it will operate naturally when clicked in rapid succession: opening partly, then closing again without discontinuity. 
+
+The second behavior indicates to the user they should try selecting the door by blinking it red when they get close to it and it is in view, or if they hover over it. This action will reoccur whenever the user moves away and returns.
+
+```json
+{
+  "actions":[
+    // Door activation behavior
+    {// 0
+      "name": "Activate Door",
+      "type": "active/select",
+      "parameters": {
+        "mesh": 5
+      }
+    },
+    {// 1
+      "name": "Open/Close",
+      "type": "stateful/flipflop",
+      "input": [
+        {
+          "action": 0,
+        }
+      ],
+      "parameters": {
+        "animation": 2
+      }
+    },
+    {// 2
+      "name": "Open Door",
+      "type": "stateful/animation",
+      "input": [
+        {
+          "action": 1,
+          "output": 0
+        }
+      ],
+      "parameters": {
+        "animation": 2
+      }
+    },
+    {// 3
+      "name": "Close Door",
+      "type": "stateful/animation",
+      "input": [
+        {
+          "action": 1,
+          "output": 1
+        }
+      ],
+      "parameters": {
+        "animation": 2,
+        "speed": -1
+      }
+    },
+    // Door indication behavior
+    {// 4
+      "name": "Near Door",
+      "type": "passive/proximityStart",
+      "parameters": {
+        "mesh": 5,
+        "distance": 2
+      }
+    },
+    {// 5
+      "name": "Looking At Door",
+      "type": "passive/inViewStart",
+      "parameters": {
+        "mesh": 5
+      }
+    },
+    {// 6
+      "name": "At Door",
+      "type": "stateless/waitAll",
+      "input": [
+        {
+          "action": 4,
+        },
+        {
+          "action": 5,
+        }
+      ]
+    },
+    {// 7
+      "name": "Hovering Over Door",
+      "type": "passive/hoverStart",
+      "parameters": {
+        "mesh": 5
+      }
+    },
+    {// 8
+      "name": "At Door",
+      "type": "stateless/anyOf",
+      "input": [
+        {
+          "action": 6,
+        },
+        {
+          "action": 7,
+        }
+      ]
+    },
+    {// 9
+      "name": "Indicate Door",
+      "type": "stateless/interpTo",
+      "input": [
+        {
+          "action": 8,
+        }
+      ],
+      "parameters": {
+        "pointer": 37,// door emissiveFactor
+        "value": [1, 0, 0, 0],
+        "time": 0.3
+      }
+    },
+    {// 10
+      "name": "Reset Door Color",
+      "type": "stateless/interpTo",
+      "input": [
+        {
+          "action": 9,
+        }
+      ],
+      "parameters": {
+        "pointer": 37,// door emissiveFactor
+        "value": [0, 0, 0, 0],
+        "time": 0.3
+      }
+    }
+  ]
+}
+```
+
 ## New glTF object
 
 `behaviorNode`  
