@@ -64,7 +64,7 @@ From these requirements, the main features can be deducted:
 
 ## Action object
 
-*This object is a simplified version of the below `behaviorNode`, renamed `action` to clarify the distinction with glTF `node`. This section will focus on Layer 0, but the hope is that the rest of the Layer 1 concepts below could apply equally well in this framework. The `behaviorNode` is left for comparison's sake until we decide on which semantics to use. The biggest difference is instead of `flow` defining the next node to trigger, `action` uses `input` to define the previous `action` that triggers this upon its completion.*
+*This object is a subset of the below `behaviorNode`, renamed `action` to clarify the distinction with glTF `node`. This section will focus on Layer 0, but the hope is that the rest of the Layer 1 concepts below could apply equally well in this framework, with the addition of the `function` object described after `action`. The `behaviorNode` is left for comparison's sake until we decide on which semantics to use. The biggest difference is instead of `flow` defining the next node to trigger, `action` uses `input` to define the previous `action` that triggers this upon its completion.*
 
 The `name` is not required, akin to other glTF objects. The `type` is required and denotes the available `parameters`. For Level 0, all parameters must be constants. The `input` is the action which will trigger this action upon completion. Actions are generally asynchronous, though some may complete immediately when triggered. 
 
@@ -72,7 +72,7 @@ There are two groups of actions: `trigger` actions are started by the user agent
 
 The `internal` actions are categorized into `stateful` and `stateless`. Here the meaning of `stateful` is that the action maintains internal state that changes the flow of the graph from one invocation to the next. This includes geometric and visibility properties of the scene, like animations, because those changes could cause `passive` `trigger` actions to fire automatically. On the other hand, `stateless` actions may only affect the visual state of the glTF scene (material properties), which is not readable by any Level 0 actions. 
 
-The `input` to `internal` actions is a list, which generally must be length 1, but certain actions allow more for AND/OR functionality. Additionally, some `stateful` actions have multiple outputs, only one of which is fired upon completion for a given invocation. The desired output of an action can be selected with the optional `output` parameter of the `input` item.
+The `input` to `internal` actions is a list, where any `action` in the list completing will start this `action`. Additionally, some `stateful` actions have multiple outputs, only one of which is fired upon completion for a given invocation. The desired output of an action can be selected with the optional `output` parameter of the `input` item.
 
 ### Changing properties
 
@@ -109,10 +109,10 @@ Only Level 0 actions for now, probably not a complete list:
 `stateless`:
 - interpTo
 - waitAll
-- anyOf
+- gate
 - delay
 - playSound
-- stop
+- terminate
 
 `stateful`:
 - animation
@@ -123,16 +123,66 @@ Only Level 0 actions for now, probably not a complete list:
 - multiGate
 - doOnce
 
-Most of these are described below in the original document. Only `flipflop` and `multiGate` have multiple outputs. Only `waitAll` and `anyOf` have multiple inputs. The `stop` action lists another action in its parameter list; it will stop that action any others downstream from it when triggered, effectively canceling an entire behavior and leaving the scene at its current state.
+Most of these are described below in the original document. Only `flipflop` and `multiGate` have multiple outputs. The `terminate` action lists another action in its parameter list; it will stop that action and any others downstream from it when triggered, effectively canceling an entire behavior and leaving the scene at its current state.
+
+## Function object
+
+*While `action` objects represent the async `behaviorNodes`, `function` objects represent the synchronous or immediate `behaviorNodes`, focusing on values rather than events.*
+
+In addition to the `actions` list, there is also a `functions` list. Each `function` takes one or more `value` parameters as input and produces one `value` output. Any `parameter` in either an `action` or a `function` can be either a literal constant or a reference to a `function` output.
+
+Each `function` is synchronous and a given `function` graph can be thought of as a call stack, beginning with an `action` parameter and calling each parameter `function` in turn up the stack until it terminates at either a constant or a query. The stacks are then unwound down to produce the final requested parameter `value`. 
+
+Execution is deterministic because the `functions` are all synchronous and pure, meaning they have no state and no side-effects. They cannot affect the scene states they are querying directly: only `action` nodes can do that. A `function` graph runs before the `action` that calls it via its parameter list, and after that `action`'s input `action` completed. This means if both of these actions are changing the same scene state value, that value will be deterministically in the final state of the input `action` when queried. 
+
+In addition to querying scene properties and animation states, the state of `passive` triggers can also be queried, which can be especially useful in combination with a gate `action`. 
+
+### Security requirements for Level 0
+
+Replacing constant parameters with `functions` is allowed in general across Level 0, as long as all functions are pure, stateless, and side-effect-free. Like `actions`, `functions` must only reference indices less than their own to prevent recursion. They do not impact the fundamental restriction that the Turing machine can only advance via explicit user activation.
+
+### Functions categorized
+
+`query`:
+- property
+- animationTime
+- animationSpeed
+- audioTime
+- audioPlaying
+- hover
+- proximity
+- inView
+
+`math`:
+- see list below
+
+`channel`:
+- see list below
 
 ### Examples
 
-This example's first behavior opens the door when it is clicked, and closes it when clicked again. No need for two animations, it is simply played backward via the `speed` parameter. This also means it will operate naturally when clicked in rapid succession: opening partly, then closing again without discontinuity. 
+This example's first behavior opens the door when it is clicked, and closes it when clicked again. No need for two animations: it is simply played backward via the `speed` parameter. This also means it will operate naturally when clicked in rapid succession: opening partly, then closing again without discontinuity. 
 
-The second behavior indicates to the user they should try selecting the door by blinking it red when they get close to it and it is in view, or if they hover over it. This action will reoccur whenever the user moves away and returns.
+The second behavior indicates to the user they should try selecting the door by blinking it red when they get close to it and it is in view, or if they hover over it. This action will reoccur whenever the user moves away and returns. It uses `functions` to accomplish this by gating on the value of the e.g. proximity state. This is different than a `waitAll` because in that case the user would have to *both* move away and turn away, then come back before it would re-fire. Instead it will refire even when the user turns away and back again without moving.
 
 ```json
 {
+  "functions":[
+    {// 0
+      "name": "Near Door",
+      "type": "query/proximity",
+      "parameters": {
+        "mesh": 5
+      }
+    },
+    {// 1
+      "name": "Looking at Door",
+      "type": "query/inView",
+      "parameters": {
+        "mesh": 5
+      }
+    }
+  ],
   "actions":[
     // Door activation behavior
     {// 0
@@ -168,6 +218,19 @@ The second behavior indicates to the user they should try selecting the door by 
       }
     },
     {// 3
+      "name": "Open Door Sound",
+      "type": "stateless/playSound",
+      "input": [
+        {
+          "action": 1,
+          "output": 0
+        }
+      ],
+      "parameters": {
+        "audio": 0
+      }
+    },
+    {// 4
       "name": "Close Door",
       "type": "stateful/animation",
       "input": [
@@ -181,59 +244,82 @@ The second behavior indicates to the user they should try selecting the door by 
         "speed": -1
       }
     },
+    {// 5
+      "name": "Close Door Sound",
+      "type": "stateless/playSound",
+      "input": [
+        {
+          "action": 1,
+          "output": 1
+        }
+      ],
+      "parameters": {
+        "audio": 1
+      }
+    },
     // Door indication behavior
-    {// 4
-      "name": "Near Door",
+    {// 6
+      "name": "Approach Door",
       "type": "passive/proximityStart",
       "parameters": {
         "mesh": 5,
         "distance": 2
       }
     },
-    {// 5
-      "name": "Looking At Door",
+    {// 7
+      "name": "At Door",
+      "type": "stateless/gate",
+      "input": [
+        {
+          "action": 6
+        }
+      ],
+      "parameters": {
+        "if": {
+          "function": 1
+        }
+      }
+    },
+    {// 8
+      "name": "Look at Door",
       "type": "passive/inViewStart",
       "parameters": {
         "mesh": 5
       }
     },
-    {// 6
+    {// 9
       "name": "At Door",
-      "type": "stateless/waitAll",
+      "type": "stateless/gate",
       "input": [
         {
-          "action": 4,
-        },
-        {
-          "action": 5,
+          "action": 8
         }
-      ]
+      ],
+      "parameters": {
+        "if": {
+          "function": 0
+        }
+      }
     },
-    {// 7
-      "name": "Hovering Over Door",
+    {// 10
+      "name": "Hover on Door",
       "type": "passive/hoverStart",
       "parameters": {
         "mesh": 5
       }
     },
-    {// 8
-      "name": "At Door",
-      "type": "stateless/anyOf",
-      "input": [
-        {
-          "action": 6,
-        },
-        {
-          "action": 7,
-        }
-      ]
-    },
-    {// 9
+    {// 11
       "name": "Indicate Door",
       "type": "stateless/interpTo",
       "input": [
         {
-          "action": 8,
+          "action": 7,
+        },
+        {
+          "action": 9,
+        },
+        {
+          "action": 10,
         }
       ],
       "parameters": {
@@ -242,12 +328,12 @@ The second behavior indicates to the user they should try selecting the door by 
         "time": 0.3
       }
     },
-    {// 10
+    {// 12
       "name": "Reset Door Color",
       "type": "stateless/interpTo",
       "input": [
         {
-          "action": 9,
+          "action": 11,
         }
       ],
       "parameters": {
