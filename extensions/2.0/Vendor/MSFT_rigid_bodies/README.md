@@ -29,7 +29,9 @@ The `MSFT_rigid_bodies` extension can be added to any `node` to define one or mo
 | |Type|Description|
 |-|-|-|
 |**rigidBody**|`object`|Allow the physics engine to move this node and its children.|
-|**joint**|`object`|Constrain the motion of this node relative to another.|
+|**collider**|`object`|Describes the physical representation of a node's shape.|
+|**trigger**|`object`|Describes a volume which can detect collisions, but not react to them.|
+|**joint**|`object`|Constrains the motion of this node relative to another.|
 
 ### Units
 
@@ -66,9 +68,9 @@ Rigid bodies have the following properties:
 
 ### Colliders
 
-To specify the geometry used to detect overlaps, we use the MSFT\_collision\_primitives extension. By default, a node with a collision primitive should not participate in the physics simulation, as that geometry may be used for application-specific use-cases. In order to indicate that a `collider` should be used in the physics simulation, that node should have a `physicsMaterial` property, which indicates that it generates some physical response from interactions with other colliders. A collider attached to a node with `MSFT_rigid_bodies` should be interpreted as an object which cannot generate a collision response (i.e. no impulses are applied as a result of collision detection), but instead, should be used as a "trigger", which the application may utilize to generate callbacks for implementation of application-specific logic.
-If the node is part of a rigid body (i.e. itself or an ascendent has `rigidBody` properties) then the collider belongs to that rigid body and should move with it during simulation.
-Otherwise the collider exists as a static object in the physics simulation which can be collided with but can not be moved.
+To specify the geometry used to detect overlaps, we use the MSFT\_collision_primitives extension. To add collision geometry and enable a node to generate impulses from collision detection, a node's `collider` property is used. This property supplies two fields; the `collider` property indexes into the set of top level collision primitives and describes the collision volume used by that node, while the `physicsMaterial` indexes into the top level set of physics materials.
+
+If the node is part of a rigid body (i.e. itself or an ascendent has `rigidBody` properties) then the collider belongs to that rigid body and should move with it during simulation. Otherwise the collider exists as a static object in the physics simulation which can be collided with but can not be moved.
 
 Implementations of this extension should ensure that collider transforms are always kept in sync with node transforms - for example animated node transforms should be applied to the physics engine (even for static colliders).
 
@@ -84,7 +86,8 @@ You can control how objects should respond during collisions by tweaking their f
 |**collider**|`integer`|The index of a top level `Collider`.|
 
 
-The top level array of `physicsMaterial` objects is provided by adding the `MSFT_rigid_bodies` extension to any root `glTF` object, while the colliers array is provided by the `MSFT_collision_primitives` extension. If a collider has no physics material assigned, that collider should not generate impulses when overlapping with other colliders - implementations may use this behaviour to trigger callbacks, which can implement application-specific logic; such objects are typically called "triggers", "phantoms", "sensors", or "overlap volumes" in physics simulation engines.
+The top level array of `physicsMaterial` objects is provided by adding the `MSFT_RigidBodies` extension to any root `glTF` object, while the colliers array is provided by the `MSFT_collision_primitives` extension. If a collider has no physics material assigned, the simulation engine may choose any appropriate default values.
+
 
 Physics materials offer the following properties:
 
@@ -101,6 +104,14 @@ When a pair of colliders collide during physics simulation, the applied friction
 * Else if either uses "MINIMUM" : The smallest of the two values should be used.
 * Else if either uses "MAXIMUM" : The largest of the two values should be used.
 * Else if either uses "MULTIPLY" : The two values should be multiplied with each other.
+
+### Triggers
+
+A useful construct in a physics engine is a collision volume which does not generate impulses when overlapping with other volumes - implementations may use this behaviour to trigger callbacks, which can implement application-specific logic; such objects are typically called "triggers", "phantoms", "sensors", or "overlap volumes" in physics simulation engines.
+
+A node may have a `trigger` property set; this is similar to the `collider` in that it references a collision volume defined by the MSFT\_collision_primitives extension but lacks a physics material.
+
+Describing the precise mechanism by which overlap events are generated and what occurs as a result is beyond the scope of this specification; physics simulation engines will typically output overlap begin/end events as an output from the simulation step, which is hooked into application-specific business logic.
 
 ### Joints
 
