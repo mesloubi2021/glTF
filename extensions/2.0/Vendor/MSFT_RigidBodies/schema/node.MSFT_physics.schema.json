@@ -9,13 +9,13 @@
             "allOf" : [ { "$ref" : "node.MSFT_RigidBodies.rigidBody.schema.json" } ],
             "description" : "A set of parameter values that enable this node and its children to be moved by physics simuation."
         },
-        "physicsMaterial" : {
-            "allOf": [ { "$ref": "glTFid.schema.json" } ],
-            "description": "The index of the physics material in the top level physicsMaterials array."
-        },
         "collider" : {
-            "allOf": [ { "$ref": "glTFid.schema.json" } ],
-            "description": "The index of the collider in the top level colliders array."
+            "allOf" : [ { "$ref" : "node.MSFT_RigidBodies.collider.schema.json" } ],
+            "description" : "A set of parameter values that are used to describe how this node detects and responds to collision with other objects in the scene."
+        },
+        "trigger" : {
+            "allOf" : [ { "$ref" : "node.MSFT_RigidBodies.trigger.schema.json" } ],
+            "description" : "A set of parameter values that are used to describe how this node detects collision with other objects in the scene, but does not apply impulses to simulated objects."
         },
         "joint" : {
             "allOf" : [ { "$ref" : "node.MSFT_RigidBodies.joint.schema.json" } ],
