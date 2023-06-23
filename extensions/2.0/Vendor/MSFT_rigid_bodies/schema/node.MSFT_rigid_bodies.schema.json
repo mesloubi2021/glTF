@@ -5,8 +5,8 @@
     "description" : "Physics properties for a node.",
     "allOf" : [ { "$ref" : "glTFChildOfRootProperty.schema.json" } ],
     "properties" : {
-        "rigidBody" : {
-            "allOf" : [ { "$ref" : "node.MSFT_rigid_bodies.rigid_body.schema.json" } ],
+        "motion" : {
+            "allOf" : [ { "$ref" : "node.MSFT_rigid_bodies.motion.schema.json" } ],
             "description" : "A set of parameter values that enable this node and its children to be moved by physics simuation."
         },
         "collider" : {

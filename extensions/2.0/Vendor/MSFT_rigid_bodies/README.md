@@ -26,7 +26,7 @@ The `MSFT_rigid_bodies` extension can be added to any `node` to define one or mo
 
 | |Type|Description|
 |-|-|-|
-|**rigidBody**|`object`|Allow the physics engine to move this node and its children.|
+|**motion**|`object`|Allows the physics engine to move this node, describing parameters for that motion.|
 |**collider**|`object`|Describes the physical representation of a node's shape.|
 |**trigger**|`object`|Describes a volume which can detect collisions, but not react to them.|
 |**joint**|`object`|Constrains the motion of this node relative to another.|
@@ -37,19 +37,19 @@ Units used in this specification are the same as those in the [glTF specificatio
 
 | Property | Units|
 |-|-|
-|`rigidBody.mass`|Kilograms (kg)|
-|`rigidBody.inertiaTensor`|Kilogram meter squared (kg·m<sup>2</sup>)|
-|`rigidBody.linearVelocity`|Meters per second (m·s<sup>-1</sup>)|
-|`rigidBody.angularVelocity`|Radians per second (rad·s<sup>-1</sup>)|
+|`motion.mass`|Kilograms (kg)|
+|`motion.inertiaTensor`|Kilogram meter squared (kg·m<sup>2</sup>)|
+|`motion.linearVelocity`|Meters per second (m·s<sup>-1</sup>)|
+|`motion.angularVelocity`|Radians per second (rad·s<sup>-1</sup>)|
 |`joint.constraint.springConstant`|Newton per meter (N·m<sup>-1</sup>)|
 
 ### Rigid Bodies
 
-If a `node` has `rigidBody` properties, that implies that its transform should driven by the physics engine.
+If a `node` has `motion` properties, that implies that its transform should driven by the physics engine.
 The physics engine should update the node's local transform after every simulation step.
 
 All descendant nodes should move with that node - i.e. the physics engine should treat them as part of a single rigid body.
-However if a descendant node has its own `rigidBody` properties, that should be treated as an independent rigid body during simulation - there is no implicit requirement that it follows its 'parent' rigid body.
+However if a descendant node has its own `motion` properties, that should be treated as an independent rigid body during simulation - there is no implicit requirement that it follows its 'parent' rigid body.
 
 If a rigid body node's transform is animated by animations in the file, those animations should take priority over the physics simulation. Rigid bodies should follow the transforms provided by the animations.
 
@@ -74,7 +74,7 @@ To specify the geometry used to perform collision detection, we use the MSFT\_co
 |**physicsMaterial**|`integer`|Indexes into the top level `physicsMaterials` and describes the collision response of the material which the collider is made from.|
 |**collisionFilter**|`integer`|Indexes into the top level `collisionFilters` and describes a filter which determines if this collider should perform collision detection against another collider.|
 
-If the node is part of a rigid body (i.e. itself or an ascendant has `rigidBody` properties) then the collider belongs to that rigid body and should move with it during simulation. Otherwise the collider exists as a static object in the physics simulation which can be collided with but can not be moved.
+If the node is part of a rigid body (i.e. itself or an ascendant has `motion` properties) then the collider belongs to that rigid body and should move with it during simulation. Otherwise the collider exists as a static object in the physics simulation which can be collided with but can not be moved.
 
 Implementations of this extension should ensure that collider transforms are always kept in sync with node transforms - for example animated node transforms should be applied to the physics engine (even for static colliders).
 
@@ -133,9 +133,9 @@ Describing the precise mechanism by which overlap events are generated and what 
 
 If a `node` has `joint` properties, that implies it should be constrained to another object during physics simulation.
 Joints require a `connectedNode` property, defining the other end of the joint, in addition to a `jointLimits` property, which indexes into the top level array of `physicsJointLimits` and determines how the range of motion is restricted.
-In order for the joint to have any effect on the simulation, at least one of the connected nodes or its ancestors should have `rigidBody` properties (otherwise the nodes cannot be moved by the physics engine).
+In order for the joint to have any effect on the simulation, at least one of the connected nodes or its ancestors should have `motion` properties (otherwise the nodes cannot be moved by the physics engine).
 
-The transform of the node (or the `connectedNode`) from the first parent `rigidBody` defines the constraint space - for example if a joint were to eliminate all degrees of freedom, the physics simulation should attempt to move the rigidBody nodes such that the transforms of the constrained child nodes become aligned with each other.
+The transform of the joint node from the first parent `motion` (or the simulation's fixed reference frame, if no such `motion` exists) defines the constraint space in that body. Similarly, the transform from the `connectedNode` to the first ancestor `motion` (or fixed frame) defines the constraint space within that body. If a joint were to eliminate all degrees of freedom, the physics simulation should attempt to move the `motion` nodes such that the transforms of the constrained child nodes (i.e. the `joint` node and the node at index `connectedNode`) become aligned with each other in world space.
 
 The top level array of `physicsJointLimits` objects is provided by adding the `MSFT_rigid_bodies` extension to any root `glTF` object and contains an array of joints. Joints must contain one of more `constraint` objects.
 Each of these constraints removes some of the relative movement permitted between the two connected nodes.
