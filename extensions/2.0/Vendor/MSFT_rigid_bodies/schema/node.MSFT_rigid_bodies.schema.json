@@ -14,7 +14,7 @@
             "description" : "A set of parameter values that are used to provide a collision geometry for physics simulation."
         },
         "trigger" : {
-            "allOf" : [ { "$ref" : "node.MSFT_rigid_bodies.collider.schema.json" } ],
+            "allOf" : [ { "$ref" : "node.MSFT_rigid_bodies.trigger.schema.json" } ],
             "description" : "A set of parameter values that are used to provide a collision geometry for trigger events."
         },
         "joint" : {

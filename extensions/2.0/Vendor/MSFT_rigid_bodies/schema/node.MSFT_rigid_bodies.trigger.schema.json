@@ -8,6 +8,11 @@
         "collider" : {
             "allOf": [ { "$ref": "glTFid.schema.json" } ],
             "description": "The index of the collider in the top level colliders array."
+        },
+        "collisionFilter" : {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The index of the filter information in the top level collisionFilters array."
         }
+    }
     }
 }

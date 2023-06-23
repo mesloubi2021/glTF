@@ -38,27 +38,6 @@
                 }
             ]
         },
-        "collisionSystem": {
-            "type": "array",
-            "description": "An array of strings representing the names of the collision system which this collider belongs to.",
-            "items": {
-                "type": "string"
-            }
-        },
-        "collideWithSystems": {
-            "type": "array",
-            "description": "An array of string representing the name of the collision systems which this node can collide with.",
-            "items": {
-                "type": "string"
-            }
-        },
-        "notCollideWithSystems": {
-            "type": "array",
-            "description": "An array of strings representing the names of the collision systems which this node does not collide with.",
-            "items": {
-                "type": "string"
-            }
-        },
         "extensions" : {},
         "extras" : {}
     },

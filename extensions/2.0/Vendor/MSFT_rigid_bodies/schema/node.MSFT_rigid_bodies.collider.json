@@ -12,6 +12,10 @@
         "physicsMaterial" : {
             "allOf": [ { "$ref": "glTFid.schema.json" } ],
             "description": "The index of the physics material in the top level physicsMaterials array."
+        },
+        "collisionFilter" : {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The index of the filter information in the top level collisionFilters array."
         }
     }
 }

@@ -20,6 +20,14 @@
                 "$ref" : "glTF.MSFT_rigid_bodies.joint_limit.schema.json"
             },
             "minItems": 1
+        },
+        "collisionFilters": {
+            "type": "array",
+            "description": "An array providing collision filter descriptions.",
+            "items": {
+                "$ref" : "glTF.MSFT_rigid_bodies.collision_filter.schema.json"
+            },
+            "minItems": 1
         }
-     }
+    }
 }

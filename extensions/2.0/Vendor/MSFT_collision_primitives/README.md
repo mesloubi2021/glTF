@@ -38,24 +38,6 @@ The sphere, box, capsule, cylinder and convex types all represent convex objects
 
 If you want your collider to have an offset from the local space (for example a sphere _not_ centered at local origin, or a rotated box), you should add an extra node to the hierarchy and apply your transform and your collider properties to that.
 
-**Collision Filtering**
-
-By default each `collider` can generate collisions with every other `collider`, provided they are sufficiently close. If you want certain objects in your scene to ignore collisions with others, you can provide the following optional collider properties:
-
-| |Type|Description|
-|-|-|-|
-|**collisionSystems**|`[string]`|An array of arbitrary strings indicating the `system` a node is in.|
-|**notCollideWithSystems**|`[string]`|An array of strings representing the systems which this node will _not_ collide with|
-|**collideWithSystems**|`[string]`|An array of strings representing the systems which this node can collide with|
-
-Both `collideWithSystems` and `notCollideWithSystems` are provided so that users can override the default collision behaviour with minimal configuration -- only one of these should be specified per-collider. Note, given knowledge of all the systems in a scene and one of the vvalues `notCollideWithSystems`/`collideWithSystems` the unspecified field can be calculated: `collideWithSystems = notCollideWithSystems'`
-
-`notCollideWithSystems` is useful for an object which should collide with everything except those listed in `notCollideWithSystems` (i.e., used to opt-out of collisions) while `collideWithSystems` is the inverse -- the collider should _not_ collide with any other collider excpet those listed in `collideWithSystems`
-
-A node `A` will collide with node `B` if `A.collisionSystem ⊆ B.collideWithSystems && A.collisionSystem ⊄ B.notCollideWithSystems`
-
-Note, that this can generate asymmetric states - `A` might determine that it _does_ collide with `B`, but `B` may determine that it _does not_ collide with `A`. As the default behaviour is that collision should be enabled, both `doesCollide(A, B)` and `doesCollide(B, A)` tests should be performed and collision should not occur if either returns false.
-
 ### JSON Schema
 
 * **JSON schema**: [glTF.MSFT_collision_primitives.schema.json](schema/glTF.MSFT_collision_primitives.schema.json)
