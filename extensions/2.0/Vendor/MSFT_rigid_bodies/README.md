@@ -16,11 +16,9 @@ Written against glTF 2.0 spec.
 
 ## Overview
 
-This extension adds the ability to specify physics properties to a glTF asset, suitable for a rigid body simulation.
-An implementation of this extension can use these properties to animate node transforms by simulating them using a physics engine.
-Objects within the asset can collide with each other and be constrained together to produce physically plausible interactions.
+This extension adds the ability to specify physical properties to a glTF asset, suitable for a rigid body simulation. An implementation of this extension can use the properties described by this extension to animate node transforms by simulating them using a rigid body simulation engine. Objects within the asset can collide with each other and be constrained together to produce physically plausible interactions. For shorthand, this document will refer to a "simulation," "engine," or "physics engine" - this should be understood to mean "rigid body simulation software."
 
-Note, since all physics engines behave differently to each other, deterministic simulation should never be assumed. Even the same engine is likely to behave different on different platforms.
+Note, rigid body engines which exist today (in particular, those which operate in real-time contexts) make a large variety of approximations which have associated trade-offs, limitations, and artifacts. As such, the same asset is very likely to behave differently in different engines or with different settings applied to one engine. An implementation should make a best effort to implement this specification within those limitations; this requires some discretion on the part of the implementer - for example, a video game is very likely willing to accept inaccuracies which would be unacceptable in a robotic training application.
 
 ## glTF Schema Updates
 
@@ -68,9 +66,15 @@ Rigid bodies have the following properties:
 
 ### Colliders
 
-To specify the geometry used to detect overlaps, we use the MSFT\_collision_primitives extension. To add collision geometry and enable a node to generate impulses from collision detection, a node's `collider` property is used. This property supplies two fields; the `collider` property indexes into the set of top level collision primitives and describes the collision volume used by that node, while the `physicsMaterial` indexes into the top level set of physics materials.
+To specify the geometry used to perform collision detection, we use the MSFT\_collision\_primitives extension. To add collision geometry and enable a node to generate impulses from collision detection, a node's `collider` property is used. This property supplies three fields; the `collider` property indexes into the set of top level collision primitives and describes the collision volume used by that node, while the `physicsMaterial` indexes into the top level set of physics materials (see the "Collision Response" section of this document) and the `collisionFilter` indexes into the top level set of collision filters (see the "Collision Filtering" section of this document).
 
-If the node is part of a rigid body (i.e. itself or an ascendent has `rigidBody` properties) then the collider belongs to that rigid body and should move with it during simulation. Otherwise the collider exists as a static object in the physics simulation which can be collided with but can not be moved.
+| |Type|Description|
+|-|-|-|
+|**collider**|`integer`|The index of a top level `Collider`, which provides the geometry of the shape.|
+|**physicsMaterial**|`integer`|Indexes into the top level `physicsMaterials` and describes the collision response of the material which the collider is made from.|
+|**collisionFilter**|`integer`|Indexes into the top level `collisionFilters` and describes a filter which determines if this collider should perform collision detection against another collider.|
+
+If the node is part of a rigid body (i.e. itself or an ascendant has `rigidBody` properties) then the collider belongs to that rigid body and should move with it during simulation. Otherwise the collider exists as a static object in the physics simulation which can be collided with but can not be moved.
 
 Implementations of this extension should ensure that collider transforms are always kept in sync with node transforms - for example animated node transforms should be applied to the physics engine (even for static colliders).
 
@@ -78,16 +82,9 @@ Note that, depending on the simulation engine in use, `convex` and `trimesh` col
 
 **Collision Response**
 
-You can control how objects should respond during collisions by tweaking their friction and restitution values. This is done by providing the following collider property:
+You can control how objects should respond during collisions by tweaking their friction and restitution values as well as by controlling which pairs of colliders should interact. This is done by providing the following collider properties:
 
-| |Type|Description|
-|-|-|-|
-|**physicsMaterial**|`integer`|The index of a top level `physicsMaterial`.|
-|**collider**|`integer`|The index of a top level `Collider`.|
-
-
-The top level array of `physicsMaterial` objects is provided by adding the `MSFT_RigidBodies` extension to any root `glTF` object, while the colliers array is provided by the `MSFT_collision_primitives` extension. If a collider has no physics material assigned, the simulation engine may choose any appropriate default values.
-
+The top level arrays of `physicsMaterials` and `collisionFilters` objects are provided by adding the `MSFT_rigid_bodies` extension to any root `glTF` object, while the colliers array is provided by the `MSFT_collision_primitives` extension. If a collider has no physics material assigned, the simulation engine may choose any appropriate default values.
 
 Physics materials offer the following properties:
 
@@ -95,7 +92,7 @@ Physics materials offer the following properties:
 |-|-|-|
 |**staticFriction**|`number`|The friction used when an object is laying still on a surface.<br/>Typical range from 0 to 1.|
 |**dynamicFriction**|`number`|The friction used when already moving.<br/>Typical range from 0 to 1.|
-|**restitution**|`number`|The bouncyness of the surface.<br/>Typical range from 0 to 1.|
+|**restitution**|`number`|The bounciness of the surface.<br/>Typical range from 0 to 1.|
 |**frictionCombine**|`string`|How to combine two friction values.<br/>"AVERAGE", "MINIMUM", "MAXIMUM", or "MULTIPLY".|
 |**restitutionCombine**|`string`|How to combine two restitution values.<br/>"AVERAGE", "MINIMUM", "MAXIMUM", or "MULTIPLY".|
 
@@ -105,13 +102,32 @@ When a pair of colliders collide during physics simulation, the applied friction
 * Else if either uses "MAXIMUM" : The largest of the two values should be used.
 * Else if either uses "MULTIPLY" : The two values should be multiplied with each other.
 
+**Collision Filtering**
+
+By default each `collider` will generate collisions with every other `collider`, provided they are sufficiently close. If you want certain objects in your scene to ignore collisions with others, you can set the `collisionFilter` property of the collider, which indexes into the top level `collisionFilters` object provided by this extension. The filter object defines the following optional properties:
+
+| |Type|Description|
+|-|-|-|
+|**collisionSystems**|`[string]`|An array of arbitrary strings indicating the `system` a node is in.|
+|**notCollideWithSystems**|`[string]`|An array of strings representing the systems which this node will _not_ collide with|
+|**collideWithSystems**|`[string]`|An array of strings representing the systems which this node can collide with|
+
+Both `collideWithSystems` and `notCollideWithSystems` are provided so that users can override the default collision behavior with minimal configuration -- only one of these should be specified per object. Note, given knowledge of all the systems in a scene and one of the values `notCollideWithSystems`/`collideWithSystems` the unspecified field can be calculated: `collideWithSystems = notCollideWithSystems'`
+
+`notCollideWithSystems` is useful for an object which should collide with everything except those listed in `notCollideWithSystems` (i.e., used to opt-out of collisions) while `collideWithSystems` is the inverse -- the collider should _not_ collide with any other collider except those listed in `collideWithSystems`
+
+A node `A` will collide with node `B` if `A.collisionSystem ⊆ B.collideWithSystems && A.collisionSystem ⊄ B.notCollideWithSystems`
+
+Note, that this can generate asymmetric states - `A` might determine that it _does_ collide with `B`, but `B` may determine that it _does not_ collide with `A`. As the default behavior is that collision should be enabled, both `doesCollide(A, B)` and `doesCollide(B, A)` tests should be performed and collision should not occur if either returns false.
+
+
 ### Triggers
 
-A useful construct in a physics engine is a collision volume which does not generate impulses when overlapping with other volumes - implementations may use this behaviour to trigger callbacks, which can implement application-specific logic; such objects are typically called "triggers", "phantoms", "sensors", or "overlap volumes" in physics simulation engines.
+A useful construct in a physics engine is a collision volume which does not generate impulses when overlapping with other volumes - implementations may use this behavior to trigger callbacks, which can implement application-specific logic; such objects are typically called "triggers", "phantoms", "sensors", or "overlap volumes" in physics simulation engines.
 
-A node may have a `trigger` property set; this is similar to the `collider` in that it references a collision volume defined by the MSFT\_collision_primitives extension but lacks a physics material.
+A node may have a `trigger` property set; this is similar to the `collider` in that it references a collision volume defined by the MSFT\_collision\_primitives extension but lacks a physics material. It does, however, provide a collision filter with the same semantics as the `collider`.
 
-Describing the precise mechanism by which overlap events are generated and what occurs as a result is beyond the scope of this specification; physics simulation engines will typically output overlap begin/end events as an output from the simulation step, which is hooked into application-specific business logic.
+Describing the precise mechanism by which overlap events are generated and what occurs as a result is beyond the scope of this specification; simulation software will typically output overlap begin/end events as an output from the simulation step, which is hooked into application-specific business logic.
 
 ### Joints
 
