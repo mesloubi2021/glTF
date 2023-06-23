@@ -7,7 +7,7 @@
     "properties" : {
         "staticFriction" : {
             "type" : "number",
-            "description" : "The friction used when an object is laying still on a surface. Usually a value from 0 to 1. A value of zero feels like ice, a value of 1 will make it very hard to get the object moving.",
+            "description" : "The friction used when an object is laying still on a surface. Usually a value from 0 to 1. A value of zero feels like ice, a value of 1 will make it very hard to get the object moving. Simulations which do not differentiate between static and dynamic friction should use the dynamic friction value.",
             "minimum": 0.0,
             "default" : 0.6
         },
@@ -19,7 +19,7 @@
         },
         "restitution" : {
             "type" : "number",
-            "description" : "How bouncy is the surface? A value of 0 will not bounce. A value of 1 will bounce without any loss of energy, certain approximations are to be expected though that might add small amounts of energy to the simulation.",
+            "description" : "How bouncy is the surface? A value of 0 will not bounce. A value of 1 will bounce without any loss of energy.",
             "minimum" : 0.0,
             "default" : 0.0
         },
