@@ -38,7 +38,7 @@ Units used in this specification are the same as those in the [glTF specificatio
 | Property | Units|
 |-|-|
 |`motion.mass`|Kilograms (kg)|
-|`motion.inertiaTensor`|Kilogram meter squared (kg·m<sup>2</sup>)|
+|`motion.inertiaDiagonal`|Kilogram meter squared (kg·m<sup>2</sup>)|
 |`motion.linearVelocity`|Meters per second (m·s<sup>-1</sup>)|
 |`motion.angularVelocity`|Radians per second (rad·s<sup>-1</sup>)|
 |`joint.constraint.springConstant`|Newton per meter (N·m<sup>-1</sup>)|
@@ -53,13 +53,14 @@ However if a descendant node has its own `motion` properties, that should be tre
 
 If a rigid body node's transform is animated by animations in the file, those animations should take priority over the physics simulation. Rigid bodies should follow the transforms provided by the animations.
 
-Rigid bodies have the following properties:
+Rigid body motions have the following properties:
 
 | |Type|Description|
 |-|-|-|
 |**isKinematic**|`boolean`|Treat the rigid body as having infinite mass. Its velocity will be constant during simulation.|
 |**mass**|`number`|The mass of the rigid body. Larger values imply the rigid body is harder to move.|
-|**inertiaTensor**|`number[9]`|Mass distribution of the rigid body in local space. Larger values imply the rigid body is harder to rotate.|
+|**inertiaOrientation**|`number[4]`|The rotation quaternion rotating from inertia major axis space to body space|
+|**inertiaDiagonal**|`number[3]`|The principal moments of inertia.  Larger values imply the rigid body is harder to rotate.|
 |**centerOfMass**|`number[3]`|Center of mass of the rigid body in local space.|
 |**linearVelocity**|`number[3]`|Initial linear velocity of the rigid body in local space.|
 |**angularVelocity**|`number[3]`|Initial angular velocity of the rigid body in local space.|
@@ -78,7 +79,7 @@ If the node is part of a rigid body (i.e. itself or an ascendant has `motion` pr
 
 Implementations of this extension should ensure that collider transforms are always kept in sync with node transforms - for example animated node transforms should be applied to the physics engine (even for static colliders).
 
-Note that, depending on the simulation engine in use, `convex` and `trimesh` colliders may impose a large computational cost when converting to native types if the source mesh contains many vertices. In addition, real-time engines generally prefer to avoid collisions between two `trimesh` objects. For best performance and behaviour, consult the manual for the physics simulation engine you are using.
+Note that, depending on the simulation engine in use, `convex` and `trimesh` colliders may impose a large computational cost when converting to native types if the source mesh contains many vertices. In addition, real-time engines generally prefer to avoid collisions between two `trimesh` objects. For best performance and behavior, consult the manual for the physics simulation engine you are using.
 
 **Collision Response**
 

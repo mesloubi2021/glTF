@@ -27,18 +27,25 @@
             "maxItems": 3,
             "default": [ 0.0, 0.0, 0.0 ]
         },
-        "inertiaTensor" : {
+        "inertiaDiagonal" : {
             "type": "array",
-            "description": "A 3x3 matrix describing the mass distribution of the object in local space.",
+            "description": "The principal moments of inertia.  Larger values imply the rigid body is harder to rotate.",
             "items": {
                 "type": "number"
             },
-            "minItems": 9,
-            "maxItems": 9,
-            "default": [
-                1.0, 0.0, 0.0,
-                0.0, 1.0, 0.0,
-                0.0, 0.0, 1.0 ]
+            "minItems": 3,
+            "maxItems": 3,
+            "default": [ 1.0, 1.0, 1.0 ]
+        },
+        "inertiaDiagonal" : {
+            "type": "array",
+            "description": "The rotation quaternion rotating from inertia major axis space to body space.",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 4,
+            "maxItems": 4,
+            "default": [ 0.0, 0.0, 0.0, 1.0 ]
         },
         "linearVelocity" : {
             "type": "array",
