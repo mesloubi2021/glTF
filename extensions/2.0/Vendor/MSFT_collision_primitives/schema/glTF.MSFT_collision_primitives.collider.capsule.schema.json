@@ -7,18 +7,23 @@
     "properties" : {
         "height" : {
             "type" : "number",
-            "description": "The height of the capsule, centered along the Y axis.",
+            "description": "The distance between the centers of the two capping spheres of capsule.",
             "minimum": 0.0,
             "default" : 0.5
         },
-        "radius" : {
+        "radiusBottom" : {
             "type" : "number",
-            "description": "The radius of the capsule.",
+            "description": "The radius of the sphere located at the bottom of the capsule (i.e. the sphere at the half-height along -Y)",
+            "minimum": 0.0,
+            "default" : 0.25
+        },
+        "radiusTop" : {
+            "type" : "number",
+            "description": "The radius of the sphere located at the top of the capsule (i.e. the sphere at the half-height along +Y)",
             "minimum": 0.0,
             "default" : 0.25
         },
         "extensions" : {},
         "extras" : {}
-    },
-    "required": ["height", "radius"]
+    }
 }

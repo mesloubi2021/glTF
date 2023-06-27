@@ -18,6 +18,5 @@
         },
         "extensions" : {},
         "extras" : {}
-    },
-    "required": ["size"]
+    }
 }

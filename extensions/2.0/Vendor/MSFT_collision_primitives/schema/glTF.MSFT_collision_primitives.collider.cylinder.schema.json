@@ -11,14 +11,19 @@
             "minimum": 0.0,
             "default" : 0.5
         },
-        "radius" : {
+        "radiusBottom" : {
             "type" : "number",
-            "description": "The radius of the cylinder around the axis.",
+            "description": "The radius of the bottom of the cylinder (the disk located along -Y.)",
+            "minimum": 0.0,
+            "default" : 0.25
+        },
+        "radiusTop" : {
+            "type" : "number",
+            "description": "The radius of the top of the cylinder (the disk located along +Y.)",
             "minimum": 0.0,
             "default" : 0.25
         },
         "extensions" : {},
         "extras" : {}
-    },
-    "required": ["height", "radius"]
+    }
 }

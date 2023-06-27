@@ -13,6 +13,5 @@
         },
         "extensions" : {},
         "extras" : {}
-    },
-    "required": ["radius"]
+    }
 }

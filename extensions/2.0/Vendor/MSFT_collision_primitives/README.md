@@ -29,7 +29,7 @@ To describe the shape that represents this node, should use, colliders must defi
 |-|-|-|
 |**sphere**|`object`|A sphere centered at the origin in local space.|
 |**box**|`object`|An axis-aligned box centered at the origin in local space.|
-|**capsule**|`object`|A capsule centered at the origin and aligned along the Y axis in local space.|
+|**capsule**|`object`|A capsule centered at the origin and defined by two "capping" spheres, aligned along the Y axis in local space.|
 |**cylinder**|`object`|A cylinder centered at the origin and aligned along the Y axis in local space.|
 |**convex**|`object`|A convex hull wrapping a `mesh` object.|
 |**trimesh**|`object`|A triangulated representation of a `mesh` object.|
