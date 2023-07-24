@@ -18,18 +18,11 @@ Written against glTF 2.0 spec.
 
 This extension adds the ability to specify physical properties to a glTF asset, suitable for a rigid body simulation. An implementation of this extension can use the properties described by this extension to animate node transforms by simulating them using a rigid body simulation engine. Objects within the asset can collide with each other and be constrained together to produce physically plausible interactions. For shorthand, this document will refer to a "simulation," "engine," or "physics engine" - this should be understood to mean "rigid body simulation software."
 
+![Object relationship diagram](figures/Overview.png)
+This diagram augments the overview diagram in the [main glTF repository](https://github.com/KhronosGroup/glTF).
+
+
 Note, rigid body engines which exist today (in particular, those which operate in real-time contexts) make a large variety of approximations which have associated trade-offs, limitations, and artifacts. As such, the same asset is very likely to behave differently in different engines or with different settings applied to one engine. An implementation should make a best effort to implement this specification within those limitations; this requires some discretion on the part of the implementer - for example, a video game is very likely willing to accept inaccuracies which would be unacceptable in a robotic training application.
-
-## glTF Schema Updates
-
-The `MSFT_rigid_bodies` extension can be added to any `node` to define one or more of the following properties:
-
-| |Type|Description|
-|-|-|-|
-|**motion**|`object`|Allows the physics engine to move this node, describing parameters for that motion.|
-|**collider**|`object`|Describes the physical representation of a node's shape.|
-|**trigger**|`object`|Describes a volume which can detect collisions, but not react to them.|
-|**joint**|`object`|Constrains the motion of this node relative to another.|
 
 ### Units
 
@@ -42,6 +35,18 @@ Units used in this specification are the same as those in the [glTF specificatio
 |`motion.linearVelocity`|Meters per second (m·s<sup>-1</sup>)|
 |`motion.angularVelocity`|Radians per second (rad·s<sup>-1</sup>)|
 |`joint.constraint.springConstant`|Newton per meter (N·m<sup>-1</sup>)|
+
+## glTF Schema Updates
+
+The `MSFT_rigid_bodies` extension can be added to any `node` to define one or more of the following properties:
+
+| |Type|Description|
+|-|-|-|
+|**motion**|`object`|Allows the physics engine to move this node, describing parameters for that motion.|
+|**collider**|`object`|Describes the physical representation of a node's shape.|
+|**trigger**|`object`|Describes a volume which can detect collisions, but not react to them.|
+|**joint**|`object`|Constrains the motion of this node relative to another.|
+
 
 ### Rigid Bodies
 
@@ -105,7 +110,7 @@ When a pair of colliders collide during physics simulation, the applied friction
 
 **Collision Filtering**
 
-By default each `collider` will generate collisions with every other `collider`, provided they are sufficiently close. If you want certain objects in your scene to ignore collisions with others, you can set the `collisionFilter` property of the collider, which indexes into the top level `collisionFilters` object provided by this extension. The filter object defines the following optional properties:
+By default each `collider` will generate a collision response with every other `collider` should they be overlapping or sufficiently close together to be considered in contact. If you want certain objects in your scene to ignore collisions with others, you can set the `collisionFilter` property of the collider, which indexes into the top level `collisionFilters` object provided by this extension. The filter object defines the following optional properties:
 
 | |Type|Description|
 |-|-|-|
@@ -124,7 +129,7 @@ Note, that this can generate asymmetric states - `A` might determine that it _do
 
 ### Triggers
 
-A useful construct in a physics engine is a collision volume which does not generate impulses when overlapping with other volumes - implementations may use this behavior to trigger callbacks, which can implement application-specific logic; such objects are typically called "triggers", "phantoms", "sensors", or "overlap volumes" in physics simulation engines.
+A useful construct in a physics engine is a collision volume which does not generate impulses when overlapping with other volumes - implementations may use this behavior to generate events, which can implement application-specific logic; such objects are typically called "triggers", "phantoms", "sensors", or "overlap volumes" in physics simulation engines.
 
 A node may have a `trigger` property set; this is similar to the `collider` in that it references a collision volume defined by the MSFT\_collision\_primitives extension but lacks a physics material. It does, however, provide a collision filter with the same semantics as the `collider`.
 
@@ -166,8 +171,8 @@ Additionally, each constraint has an optional `springConstant` and `springDampin
 By default, an infinite spring constant is assumed, implying hard limits. Specifying these spring values will cause constraints to become soft at the limits.
 
 This approach of building joints from a set of individual constraints is flexible enough to allow for many types of bilateral joints.
-For example, to define a hinged door you would place connected nodes at the point where the physical hinge would be and add: a 3D linear constraint with zero maximum distance;
-a 1D angular constraint describing the swing of the door around it's vertical axis; a 2D angular constraint with zero limits about the remaining two axes.
+For example, to define a hinged door can be constructed by locating connected nodes at the point where the physical hinge would be on each body, adding a 3D linear constraint with zero maximum distance;
+a 1D angular constraint describing the swing of the door around it's vertical axis, and a 2D angular constraint with zero limits about the remaining two axes.
 
 Note however that some types of constraint are currently not possible to describe.
 For example, a pulley, which needs a third transform in order to calculate a distance, cannot be described. Similarly, this does not have a mechanism to link two axes by some factor, such as a screw, whose translation is affected by the amount of rotation about some axis.
@@ -178,10 +183,12 @@ For example, a pulley, which needs a third transform in order to calculate a dis
 
 ## Known Implementations
 
-[Blender exporter](https://github.com/eoineoineoin/glTF_Physics_Blender_Exporter) (work in progress)
+[Blender importer/exporter](https://github.com/eoineoineoin/glTF_Physics_Blender_Exporter)
 
-[Godot importer](https://github.com/eoineoineoin/glTF_Physics_Godot_Importer) (work in progress)
+[Babylon.js importer](https://github.com/eoineoineoin/glTF_Physics_Babylon)
+
+[Godot importer](https://github.com/eoineoineoin/glTF_Physics_Godot_Importer)
 
 ## Validator
 
-To do
+[glTF validator](https://github.com/eoineoineoin/glTF-Validator)

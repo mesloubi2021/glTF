@@ -29,8 +29,8 @@ To describe the shape that represents this node, should use, colliders must defi
 |-|-|-|
 |**sphere**|`object`|A sphere centered at the origin in local space.|
 |**box**|`object`|An axis-aligned box centered at the origin in local space.|
-|**capsule**|`object`|A capsule centered at the origin and defined by two "capping" spheres, aligned along the Y axis in local space.|
-|**cylinder**|`object`|A cylinder centered at the origin and aligned along the Y axis in local space.|
+|**capsule**|`object`|A capsule centered at the origin and defined by two "capping" spheres with potentially different radii, aligned along the Y axis in local space.|
+|**cylinder**|`object`|A cylinder centered at the origin and aligned along the Y axis in local space, with potentially different radii at each end.|
 |**convex**|`object`|A convex hull wrapping a `mesh` object.|
 |**trimesh**|`object`|A triangulated representation of a `mesh` object.|
 
@@ -44,10 +44,12 @@ If you want your collider to have an offset from the local space (for example a 
 
 ## Known Implementations
 
-[Blender exporter](https://github.com/eoineoineoin/glTF_Physics_Blender_Exporter) (work in progress)
+[Blender importer/exporter](https://github.com/eoineoineoin/glTF_Physics_Blender_Exporter)
 
-[Godot importer](https://github.com/eoineoineoin/glTF_Physics_Godot_Importer) (work in progress)
+[Babylon.js importer](https://github.com/eoineoineoin/glTF_Physics_Babylon)
+
+[Godot importer](https://github.com/eoineoineoin/glTF_Physics_Godot_Importer)
 
 ## Validator
 
-To do
+[glTF validator](https://github.com/eoineoineoin/glTF-Validator)
