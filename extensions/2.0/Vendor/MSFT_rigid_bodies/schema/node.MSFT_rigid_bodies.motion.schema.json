@@ -37,7 +37,7 @@
             "maxItems": 3,
             "default": [ 1.0, 1.0, 1.0 ]
         },
-        "inertiaDiagonal" : {
+        "inertiaOrientation" : {
             "type": "array",
             "description": "The rotation quaternion rotating from inertia major axis space to body space.",
             "items": {
