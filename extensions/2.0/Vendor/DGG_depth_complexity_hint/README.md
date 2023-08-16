@@ -39,7 +39,10 @@ The motivation behind this extension is to improve both of the mentioned aspects
 
 The following images show a visual illustration of the issue and its solution (data courtesy of adidas AG):
 
+*Rendered example (BablyonJS) with default rendering:*
 ![example without OIT](no-depth-pre-pass.png "Rendered example (BablyonJS) with default rendering.")
+
+*Rendered example (BablyonJS) with OIT enabled, after interpreting DGG_depth_complexity_hint:*
 ![example with OIT](depth-pre-pass.png "Rendered example (BablyonJS) with OIT enabled, after interpreting DGG_depth_complexity_hint.")
 
 
