@@ -37,6 +37,12 @@ The motivation behind this extension is to improve both of the mentioned aspects
 2. reduce runtime complexity.
 
 
+The following images show a visual illustration of the issue and its solution (data courtesy of adidas AG):
+
+![example without OIT](no-depth-pre-pass.png "Rendered example (BablyonJS) with default rendering.")
+![example with OIT](depth-pre-pass.png "Rendered example (BablyonJS) with OIT enabled, after interpreting DGG_depth_complexity_hint.")
+
+
 ## Overview
 
 This extensions provides, for each mesh in the glTF scene, an optional hint on its depth complexity.
