@@ -183,7 +183,7 @@ For example, a pulley, which needs a third transform in order to calculate a dis
 
 ## Known Implementations
 
-[Blender importer/exporter](https://github.com/eoineoineoin/glTF_Physics_Blender_Exporter)
+[Blender importer/exporter](https://github.com/eoineoineoin/glTF_Physics_Blender_Exporter/tree/hk_users) -- If you're a Havok customer who is currently using this extension, you want the linked `hk_users` branch.
 
 [Babylon.js importer](https://github.com/eoineoineoin/glTF_Physics_Babylon)
 
