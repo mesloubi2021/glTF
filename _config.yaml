@@ -1,11 +1,11 @@
 remote_theme: just-the-docs/just-the-docs
-logo: "img/mylogo.jpg"
+logo: "https://wallabyway.github.io/Khronos-glTF-repo-GHPages-test/specification/figures/glTF_RGB_June16.svg"
 heading_anchors: true
 search_enabled: true
-footer_content: "<a href=\"https://github.com/wallabyway/dummy-docs/issues\">Report an issue</a> with this page. <a href=\"https://stackoverflow.com/questions/tagged/autodesk-tandem\">Ask a Question</a> on StackOverflow"
+footer_content: "<a href=\"https://github.com/wallabyway/Khronos-glTF-repo-GHPages-test/pulls\">Report an issue</a> with this page. <a href=\"https://stackoverflow.com/questions/tagged/gltf\">Ask a Question</a> on StackOverflow"
 aux_links:
-  "APIs on Postman":
-    - "https://documenter.getpostman.com/view/15787353/UVeFMRdB"
+  "GitHub Docs":
+    - "https://github.com/wallabyway/Khronos-glTF-repo-GHPages-test"
 search:
   # Split pages into sections that can be searched individually
   # Supports 1 - 6, default: 2
@@ -29,3 +29,14 @@ search:
   # Enable or disable the search button that appears in the bottom right corner of every page
   # Supports true or false (default)
   button: false
+nav_external_links:
+  - title: YouTube Tutorials
+    url: https://www.youtube.com/playlist?list=PLYO7XTAX41FNxuIeJPoOCxILnXvoqGh8k
+  - title: Sample Assets
+    url: https://github.com/KhronosGroup/glTF-Sample-Assets
+  - title: Blogs
+    url: https://www.khronos.org/blog/tags/tag/gltf
+  - title: Khronos glTF Page
+    url: https://www.khronos.org/gltf/
+  - title: Join us on Slack (glTF Community)
+    url: http://gltfworkspace.slack.com
