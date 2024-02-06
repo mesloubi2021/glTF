@@ -1,0 +1,29 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "object.metadata.schema.json",
+    "title": "Object Metadata in CATENDA_metadata",
+    "type": "object",
+    "description": "Metadata for an object.",
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "parentId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "ID of the parent object, if any."
+        },
+        "attributes": {
+            "type": "object",
+            "description": "A dictionary of all attributes for the current object, where the key is the id of the attribute.",
+            "minProperties": 1,
+            "additionalProperties": {
+                "$ref": "object.metadata.attribute.schema.json"
+            }
+        },
+        "extensions": {},
+        "extras": {}
+    }
+}

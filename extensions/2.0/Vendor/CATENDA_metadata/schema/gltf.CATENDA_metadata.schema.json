@@ -1,0 +1,24 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "glTF.CATENDA_metadata.schema.json",
+    "title": "CATENDA_metadata glTF extension",
+    "type": "object",
+    "description": "glTF extension that provides metadata for the objects of a Catenda model.",
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "objects": {
+            "type": "object",
+            "description": "A dictionary of all metadata, where the key is the id of the object.",
+            "minProperties": 1,
+            "additionalProperties": {
+                "$ref": "object.metadata.schema.json"
+            }
+        },
+        "extensions": {},
+        "extras": {}
+    }
+}

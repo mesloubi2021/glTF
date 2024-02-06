@@ -1,0 +1,53 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "object.metadata.attribute.schema.json",
+    "title": "Object Metadata Attribute in CATENDA_metadata",
+    "type": "object",
+    "description": "Object metadata attribute.",
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "type": {
+            "type": "string",
+            "description": "The type attribute's value.",
+            "anyOf": [
+                {
+                    "enum": [ "number" ],
+                    "description": "A numerical value."
+                },
+                {
+                    "enum": [ "boolean" ],
+                    "description": "A boolean value."
+                },
+                {
+                    "enum": [ "string" ],
+                    "description": "A string value."
+                },
+                {
+                    "enum": [ "datetime" ],
+                    "description": "A datetime."
+                },
+                {
+                    "enum": [ "uri" ],
+                    "description": "An URI."
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "value": {
+            "anyOf" : [{"type" :["number", "boolean", "string"]}],
+            "description": "The attribute's value."
+        },
+        "extensions": {},
+        "extras": {}
+    },
+    "required": [
+        "type",
+        "value"
+    ]
+}
