@@ -11,28 +11,22 @@
     ],
     "properties": {
         "type": {
-            "type": "string",
             "description": "The type attribute's value.",
             "anyOf": [
                 {
-                    "enum": [ "number" ],
-                    "description": "A numerical value."
+                    "const": "NUMBER"
                 },
                 {
-                    "enum": [ "boolean" ],
-                    "description": "A boolean value."
+                    "const": "BOOLEAN"
                 },
                 {
-                    "enum": [ "string" ],
-                    "description": "A string value."
+                    "const": "STRING"
                 },
                 {
-                    "enum": [ "datetime" ],
-                    "description": "A datetime."
+                    "const": "DATETIME"
                 },
                 {
-                    "enum": [ "uri" ],
-                    "description": "An URI."
+                    "const": "URI"
                 },
                 {
                     "type": "string"
