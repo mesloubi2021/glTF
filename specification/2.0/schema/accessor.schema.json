@@ -55,6 +55,11 @@
                     "type": "integer"
                 },
                 {
+                    "const": 5130,
+                    "description": "DOUBLE",
+                    "type": "integer"
+                },
+                {
                     "type": "integer"
                 }
             ]
