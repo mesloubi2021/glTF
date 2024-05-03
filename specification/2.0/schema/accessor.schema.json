@@ -45,8 +45,23 @@
                     "type": "integer"
                 },
                 {
+                    "const": 5124,
+                    "description": "INT",
+                    "type": "integer"
+                },
+                {
                     "const": 5125,
                     "description": "UNSIGNED_INT",
+                    "type": "integer"
+                },
+                {
+                    "const": 5134,
+                    "description": "INT64",
+                    "type": "integer"
+                },
+                {
+                    "const": 5135,
+                    "description": "UNSIGNED_INT64",
                     "type": "integer"
                 },
                 {
