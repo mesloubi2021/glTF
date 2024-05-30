@@ -20,15 +20,25 @@
             "minItems": 3,
             "maxItems": 3
         },
-        "bounds": {
-            "$ref": "bounds.schema.json"
+        "box": {
+            "$ref": "box.schema.json"
+        },
+        "cylinder": {
+            "$ref": "cylinder.schema.json"
+        },
+        "ellipsoid": {
+            "$ref": "ellipsoid.schema.json"
         },
         "padding": {
             "$ref": "padding.schema.json"
         }
     },
     "required": [
-        "dimension",
-        "bounds"
+        "dimensions"
+    ], 
+    "oneOf": [
+        { "required": [ "box" ] },
+        { "required": [ "cylinder" ] },
+        { "required": [ "ellipsoid" ] }
     ]
 }

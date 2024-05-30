@@ -1,9 +1,9 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "bounds.schema.json",
-    "title": "Bounds",
+    "$id": "box.schema.json",
+    "title": "Box",
     "type": "object",
-    "description": "The bounds property describes which section of the primitive is mapped to the voxel grid. bounds.min and bounds.max specify a rectangular region of the voxel grid in the appropriate coordinate system.",
+    "description": "The box property indicates that the voxels conform to a box-based grid. box.min and box.max represent the corners of the box grid in local coordinates.",
     "allOf": [
         {
             "$ref": "glTFProperty.schema.json"

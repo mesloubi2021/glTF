@@ -1,0 +1,73 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "ellipsoid.schema.json",
+    "title": "Ellipsoid",
+    "type": "object",
+    "description": "The ellipsoid property indicates that the voxels conform to an ellipsoidal grid. Each sub-property defines the section of the ellipsoid that the grid actually occupies.",
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "radii": {
+            "type": "array",
+            "description": "The radii of the ellipsoid along the X, Y, and Z axes in the local coordinate system.",
+            "items": {
+                "type": "number",
+                "minimum": 0
+            },
+            "minItems": 3,
+            "maxItems": 3
+        },
+        "longitude": {
+            "type": "array",
+            "description": "The range along the longitude of the ellipsoid that the grid occupies. The elements represent the minimum and maximum values (west and east) respectively.",
+            "items": {
+                "type": "number",
+                "minimum": -180.0,
+                "maximum": 180.0
+            },
+            "minItems": 2,
+            "maxItems": 2
+        },
+        "latitude": {
+            "type": "array",
+            "description": "The range along the latitude of the ellipsoid that the grid occupies. The elements represent the minimum and maximum values (south and north) respectively.",
+            "items": {
+                "type": "number",
+                "minimum": -90.0,
+                "maximum": 90.0
+            },
+            "minItems": 2,
+            "maxItems": 2
+        },
+        "ratio": {
+            "type": "array",
+            "description": "The ratio along the radii of the ellipsoid that the grid occupies. The elements represent the minimum and maximum values respectively.",
+            "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+            },
+            "minItems": 2,
+            "maxItems": 2
+        },
+        "height": {
+            "type": "array",
+            "description": "The range of height above or below the ellipsoid that the grid occupies. Negative values are inside the ellipsoid, while positive values are outside. The elements represent the minimum and maximum values respectively.",
+            "items": {
+                "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+        }
+    },
+    "required": [
+        "radii"
+    ],
+    "oneOf": [
+        "ratio",
+        "height"
+    ]
+}
