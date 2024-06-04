@@ -3,7 +3,7 @@
     "$id": "mesh.primitive.EXT_implicit_geometry.schema.json",
     "title": "EXT_primitive_voxels glTF Mesh Primitive extension",
     "type": "object",
-    "description": "`EXT_implicit_geometry` extension for a primitive in a glTF model, to define implicit 3D geometry",
+    "description": "`EXT_implicit_geometry` extension for a primitive in a glTF model to represent implicit 3D geometry",
     "allOf": [
         {
             "$ref": "glTFProperty.schema.json"

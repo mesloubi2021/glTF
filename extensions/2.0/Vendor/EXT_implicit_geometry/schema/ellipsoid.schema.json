@@ -12,7 +12,7 @@
     "properties": {
         "radii": {
             "type": "array",
-            "description": "The radii of the ellipsoid in meters along the X, Y, and Z axes in local space.",
+            "description": "The radii of the ellipsoid along the X, Y, and Z axes in meters.",
             "items": {
                 "type": "number",
                 "minimum": 0
@@ -20,9 +20,9 @@
             "minItems": 3,
             "maxItems": 3
         },
-        "bounds": {
-            "$ref": "ellipsoid.bounds.schema.json",
-            "description": "The optional bounds of the ellipsoid."
+        "slice": {
+            "$ref": "ellipsoid.slice.schema.json",
+            "description": "The optionally-defined slice of the ellipsoid."
         }
     },
     "required": [

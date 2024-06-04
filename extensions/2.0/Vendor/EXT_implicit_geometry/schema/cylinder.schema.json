@@ -12,17 +12,17 @@
     "properties": {
         "radius": {
             "type": "number",
-            "description": "The radius of the cylinder in local space.",
+            "description": "The radius of the cylinder in meters.",
             "minimum": 0
         },
         "height": {
             "type": "number",
-            "description": "The height of the cylinder in local space.",
+            "description": "The height of the cylinder in meters.",
             "minimum": 0
         },
-        "bounds": {
-            "$ref": "cylinder.bounds.schema.json",
-            "description": "The optional bounds of the cylinder."
+        "slice": {
+            "$ref": "cylinder.slice.schema.json",
+            "description": "The optionally-defined slice of the cylinder."
         }
     },
     "required": [

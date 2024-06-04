@@ -54,10 +54,7 @@ The `box` property represents an axis-aligned box that is centered at the origin
 <table>
   <tr>
     <th>
-      Example
-    </th>
-    <th>
-      Visual
+    Example
     </th>
   </tr>
   <tr>
@@ -75,7 +72,7 @@ The `box` property represents an axis-aligned box that is centered at the origin
     ]
     </pre></td>
     <td>
-    <img width="600px" src="figures/non-uniform-box.png"/>
+    <img src="figures/box.png"/>
     </td>
   </tr>
 </table>
@@ -87,10 +84,7 @@ The `cylinder` property represents a cylinder that is aligned with the `y`-axis 
 <table>
   <tr>
     <th>
-      Example
-    </th>
-    <th>
-      Visual
+    Example
     </th>
   </tr>
   <tr>
@@ -109,7 +103,7 @@ The `cylinder` property represents a cylinder that is aligned with the `y`-axis 
     ]
     </pre></td>
     <td>
-    **TODO** visual example
+    <img src="figures/cylinder.png"/>
     </td>
   </tr>
 </table>
@@ -121,10 +115,7 @@ The `sphere` property represents a sphere that is centered at the origin. The `r
 <table>
   <tr>
     <th>
-      Example
-    </th>
-    <th>
-      Visual
+    Example
     </th>
   </tr>
   <tr>
@@ -142,7 +133,7 @@ The `sphere` property represents a sphere that is centered at the origin. The `r
     ]
     </pre></td>
     <td>
-    **TODO** visual example
+    <img src="figures/sphere.png"/>
     </td>
   </tr>
 </table>
@@ -156,10 +147,7 @@ The `ellipsoid` property represents an ellipsoid that is centered at the origin.
 <table>
   <tr>
     <th>
-      Example
-    </th>
-    <th>
-      Visual
+    Example
     </th>
   </tr>
   <tr>
@@ -168,7 +156,7 @@ The `ellipsoid` property represents an ellipsoid that is centered at the origin.
         {
           "extensions": {
             "EXT_implicit_geometry": {
-              "ellpisoid": {
+              "ellipsoid": {
                 "radii": [2, 3, 4]
               }
             }
@@ -185,9 +173,40 @@ The `ellipsoid` property represents an ellipsoid that is centered at the origin.
 
 ### Region
 
-The `region` property represents a region above the surface of an ellipsoid. Though the ellipsoid itself is centered at the origin, the region may be distant from the origin due to its properties.
+The `region` property represents a region extruded from the surface of a ellipsoid. The ellipsoid itself is not part of the geometry; it is merely used as reference from which the actual region is defined.
 
-The `semiMajorAxis` property indicates the radii of the ellipsoid in meters along the `x`, `y`, and `z` axes.
+The reference ellipsoid is centered at the origin. The `semiMajorAxisRadius` indicates the radii of the ellipsoid in meters along the `x` and `z` axes. The `semiMinorAxisRadius` indicates the radius of the ellipsoid in meters along the `y` axis.
+
+The `heightFromSurface` property indicates the height of the region from the ellipsoid's surface, in meters. In other words, the region begins atop ellipsoid's surface, and is then extruded outwards to the specified height.
+
+<table>
+  <tr>
+    <th>
+    Example
+    </th>
+  </tr>
+  <tr>
+    <td><pre>
+      "primitives": [
+        {
+          "extensions": {
+            "EXT_implicit_geometry": {
+              "region": {
+                "semiMajorAxisRadius": 4,
+                "semiMinorAxisRadius": 2,
+                "heightFromSurface": 0.5 
+              }
+            }
+          }
+        }
+      ]
+    </pre></td>
+    <td>
+    **TODO** visual example
+    </td>
+  </tr>
+</table>
+```
 
 ## Optional vs. Required
 This extension is required, meaning it should be placed in both the `extensionsUsed` list and `extensionsRequired` list.

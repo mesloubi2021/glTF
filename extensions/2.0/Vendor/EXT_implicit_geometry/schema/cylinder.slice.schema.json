@@ -1,9 +1,9 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "cylinder.bounds.schema.json",
-    "title": "Cylinder Bounds",
+    "$id": "cylinder.slice.schema.json",
+    "title": "Cylinder Slice",
     "type": "object",
-    "description": "A set of bounds for an implicit cylinder surface. Defines the subsection of the cylinder that the implicit volume actually occupies.",
+    "description": "A slice of an implicit cylinder. Defines the subsection of the cylinder that the implicit volume actually occupies.",
     "allOf": [
         {
             "$ref": "glTFProperty.schema.json"
@@ -12,42 +12,42 @@
     "properties": {
         "minRadius": {
             "type": "number",
-            "description": "The minimum radial bound of the cylinder.",
+            "description": "The start of the slice along the radius of the cylinder.",
             "minimum": 0,
             "maximum": 1,
             "default": 0
         },
         "maxRadius": {
             "type": "number",
-            "description": "The maximum radial bound of the cylinder.",
+            "description": "The end of the slice along the radius of the cylinder.",
             "minimum": 0,
             "maximum": 1,
             "default": 1
         },
         "minHeight": {
             "type": "number",
-            "description": "The minimum height bound of the cylinder.",
+            "description": "The start of the slice along the height of the cylinder.",
             "minimum": 0,
             "maximum": 1,
             "default": 0
         },
         "maxHeight": {
             "type": "number",
-            "description": "The maximum height bound of the cylinder.",
+            "description": "The end of the slice along the height of the cylinder.",
             "minimum": 0,
             "maximum": 1,
             "default": 1
         },
         "minAngle": {
             "type": "number",
-            "description": "The maximum angular bound of the cylinder in radians. Values must be in the range [-pi, pi].",
+            "description": "The start of the slice along the angle of the cylinder. Values must be in the range [-pi, pi].",
             "minimum": -3.14159265359,
             "maximum": 3.14159265359,
             "default": -3.14159265359
         },
         "maxAngle": {
             "type": "number",
-            "description": "The maximum angular bound of the cylinder in radians. Values must be in the range [-pi, pi].",
+            "description": "The end of the slice along the angle of the cylinder. Values must be in the range [-pi, pi].",
             "minimum": -3.14159265359,
             "maximum": 3.14159265359,
             "default": 3.14159265359

@@ -12,16 +12,12 @@
     "properties": {
         "size": {
             "type": "array",
-            "description": "The size of the box in three dimensions.",
+            "description": "The size of the box in meters.",
             "items": {
                 "type": "number"
             },
             "minItems": 3,
             "maxItems": 3
-        },
-        "bounds": {
-            "$ref": "box.bounds.schema.json",
-            "description": "The optional bounds of the box."
         }
     },
     "required": [

@@ -12,21 +12,21 @@
     "properties": {
         "semiMajorAxisRadius": {
             "type": "number",
-            "description": "The radius of the reference ellipsoid along its semi-major axis in meters.",
+            "description": "The radius along the semi-major axis of the reference ellipsoid in meters.",
             "minimum": 0
         },
         "semiMinorAxisRadius": {
             "type": "number",
-            "description": "The radius of the reference ellipsoid along its semi-minor axis in meters.",
+            "description": "The radius along the semi-minor axis of the reference ellipsoid in meters.",
             "minimum": 0
         },
         "heightFromSurface": {
             "type": "number",
             "description": "The height of this region from the surface of the reference ellipsoid in meters.",
         },
-        "bounds": {
-            "$ref": "region.bounds.schema.json",
-            "description": "The optional bounds of the region."
+        "slice": {
+            "$ref": "region.slice.schema.json",
+            "description": "The optionally-defined slice of the region."
         }
     },
     "required": [

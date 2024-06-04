@@ -15,9 +15,9 @@
             "description": "The radius of the sphere in local space.",
             "minimum": 0
         },
-        "bounds": {
-            "$ref": "sphere.bounds.schema.json",
-            "description": "The optional bounds of the sphere."
+        "slice": {
+            "$ref": "sphere.slice.schema.json",
+            "description": "The optionally-defined slice of the sphere."
         }
     },
     "required": [
