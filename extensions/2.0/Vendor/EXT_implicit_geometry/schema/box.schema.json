@@ -3,7 +3,7 @@
     "$id": "box.schema.json",
     "title": "Box",
     "type": "object",
-    "description": "An implicit box surface centered at the local space origin.",
+    "description": "An implicit box centered at the local space origin.",
     "allOf": [
         {
             "$ref": "glTFProperty.schema.json"
@@ -20,12 +20,8 @@
             "maxItems": 3
         },
         "bounds": {
-            "allOf": [
-                {
-                    "$ref": "box.bounds.schema.json",
-                    "description": "The optional bounds of the box."
-                }
-            ],
+            "$ref": "box.bounds.schema.json",
+            "description": "The optional bounds of the box."
         }
     },
     "required": [
