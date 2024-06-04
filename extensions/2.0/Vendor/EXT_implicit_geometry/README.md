@@ -14,24 +14,6 @@ Written against the glTF 2.0 specification.
 
 This extension allows mesh primitives to represent renderable implicit surfaces. Typically, a glTF mesh primitive requires `attributes` that supply mesh data, and uses `mode` to indicate the mesh topology. With `EXT_implicit_geometry`, the primitive may omit these properties and instead use the extension to infer the implicit 3D volume.
 
-The following example illustrates how a primitive with this extension may represent an implicit box.
-
-```
-{
-  "primitives": [
-    {
-      "extensions": {
-        "EXT_implicit_geometry": {
-          "box": {
-            "size": [2, 2, 2]
-          }
-        }
-      }
-    }
-  ]
-}
-```
-
 Primitives with this extension may still be affected by node transforms to position, orient, and scale the shape as needed.
 
 ## Supported Geometry

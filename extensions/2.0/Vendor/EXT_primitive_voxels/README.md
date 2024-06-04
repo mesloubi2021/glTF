@@ -21,56 +21,66 @@ Written against the glTF 2.0 specification.
 
 This extension allows mesh primitives to represent volumetric (voxel) data via custom attributes. Primitives that use this extension must set their `mode` to the constant `0x80000000` (`2147483648`), which is used to indicate voxels.
 
-Typically, glTF mesh primitives use the `POSITION` attribute to store positional mesh data. However, `POSITION` is neither required nor used by this extension. Instead, `EXT_primitive_voxels` describe the positions and geometry of voxels using its own properties, and the attributes refer to what kind of data they represent. Primitives with this extension can still be affected by node transforms to position, orient, and scale the voxel grid as needed.
+Typically, glTF mesh primitives use the `POSITION` attribute to store positional mesh data. However, `POSITION` is neither required nor used by this extension. Instead, `EXT_primitive_voxels` relies on the [`EXT_implicit_geometry` extension](../EXT_implicit_geometry/) to describe the shape of the voxel grid.  
 
 ```
 "primitives": [
   {
-    "attributes": {
-      "_TEMPERATURE": 0
-    },
     "mode": 2147483648,
     "extensions": {
+      "EXT_implicit_geometry": {
+        "box": {
+          "size": [2, 2, 2]
+        }
+      },
       "EXT_primitive_voxels": {
-        // geometric properties here
+          "dimensions": [8, 8, 8],
+          "padding": {
+            "before": [1, 1, 1],
+            "after": [1, 1, 1]
+          },
+          "attributes": {
+            "_TEMPERATURE": 0
+          },
       }
     }
   }
 ]
 ```
 
-Although voxels are commonly associated with cubic geometry on a box-based grid, this extension allows voxels to be based on other types of grid geometry, including cylinders and ellipsoids, visualized below.
+Although voxels are commonly associated with cubic geometry on a box-based grid, this extension allows voxels to be based on other types of grid geometry from `EXT_implicit_geometry`. This includes cylinders and regions, visualized below.
 
-|Box|Cylinder|Ellipsoid|
+|Box|Cylinder|Region|
 | ------------- | ------------- | ------------- |
 |![Box Voxel Grid](figures/box.png)|![Cylindrical Voxel Grid](figures/cylinder.png)|![Ellipsoid Voxel Grid](figures/sphere.png)|
 
-Each of these grids is defined by the respectively named properties within the extension:
-- [`box`](#box-grid)
-- [`cylinder`](#cylindrical-grid)
-- [`ellipsoid`](#ellipsoidal-grid)
+Within this geometry, voxels exist inside a bounding volume that conforms to the geometry of the grid. The `dimensions` property refers to the number of subdivisions _within_ this bounding volume. Each value of `dimensions` must be a positive integer.
 
-Only **one** of these may be defined at a time. Within this geometry, voxels exist inside a bounding volume that conforms to the geometry of the grid, as described by the relevant property.
-
-The `dimensions` property refers to the number of subdivisions _within_ this bounding volume. Each value of `dimensions` must be a positive integer.
-
-The relationship between `dimensions` and the other aforementioned properties is explained in detail below.
+The relationship between `dimensions` and the grid geometry is explained in detail below.
 
 ### Box Grid
 
-A **box** grid is a Cartesian grid defined by `x`, `y`, and `z` axes with equally-sized boxes. A voxel primitive that is based on a box grid may define the `box` property like so:
+A **box** grid is a Cartesian grid defined by `x`, `y`, and `z` axes with equally-sized boxes. A voxel primitive that is based on a box grid may be defined like so:
 
 ```
-"EXT_primitive_voxels": {
-  "dimensions": [8, 8, 8],
-  "box": {
-    "min": [0.25, 0.5, 0.5],
-    "max": [0.375, 0.625, 0.625]
+{
+"extensions": {
+  "EXT_implicit_geometry": {
+    "box": {
+      "size": [2, 2, 2]
+      }
+    },
+    "EXT_primitive_voxels": {
+      "dimensions": [8, 8, 8],
+      "attributes": {
+        "_TEMPERATURE": 0
+      },
+    }
   }
 }
 ```
 
-The `min` and `max` properties refer to the minimum and maximum positions that form the corners of the grid. These positions are given in the primitive's local space. The `dimensions` correspond to the subdivisions of the box along the `x`, `y`, and `z` axes respectively.
+The `dimensions` correspond to the subdivisions of the box along the `x`, `y`, and `z` axes respectively.
 
 ![Uniform box grid](figures/uniform-box.png)
 <p align="center"><i>A box grid spanning from -1 to 1 in all three axes, subdivided into two cells along each axis. The origin is in the center of the box.</i></p>
@@ -86,28 +96,28 @@ A **cylinder** grid is subdivided along the radius, height, and angle ranges of 
 
 ![Cylinder subdivisions](figures/cylinder-subdivisions.png)
 
-The cylinder is aligned with the `y`-axis in the primitive's local space. As such, the `height` range of the cylinder is specified in values along that local `y`-axis. Subdivisions along the `radius` are concentric, centered around the `y`-axis and extending outwards. The `angle` is defined in `pi`
+The cylinder is aligned with the `y`-axis in the primitive's local space. As such, the `height` is subdivided along that local `y`-axis. Subdivisions along the `radius` are concentric, centered around the `y`-axis and extending outwards. The `angle` is subdivided around the circumference of the cylinder.
 
 A voxel primitive that is based on a cylinder grid may define the `cylinder` property like so:
 
 ```
-"EXT_primitive_voxels": {
-  "dimensions": [4, 4, 4],
-  "cylinder": {
-    "radius": [0.5, 1.25],
-    "height": [-1.0, 1.0],
-    "angle": [-1.57079632679, 1.57079632679] // [-pi/2, pi/2]
+{
+"extensions": {
+  "EXT_implicit_geometry": {
+    "cylinder": {
+      "radius": 2,
+      "height": 3
+      }
+    },
+    "EXT_primitive_voxels": {
+      "dimensions": [8, 8, 8],
+      "attributes": {
+        "_TEMPERATURE": 0
+      },
+    }
   }
 }
 ```
-
-For instance, between `(0, -1, -pi)` and `(1, 1, pi)`
-
-| Axis | Coordinate | Positive Direction |
-| ---- | ---------- | ------------------ |
-| 0	| radius | From center (increasing radius) |
-| 1 |	height | From bottom to top (increasing height) |
-| 2	| angle	| From -pi to pi clockwise (see figure below) |
 
 [TODO](image)
 
