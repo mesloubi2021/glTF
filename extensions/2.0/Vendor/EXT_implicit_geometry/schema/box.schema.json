@@ -14,7 +14,8 @@
             "type": "array",
             "description": "The size of the box in meters.",
             "items": {
-                "type": "number"
+                "type": "number",
+                "minimum": 0
             },
             "minItems": 3,
             "maxItems": 3

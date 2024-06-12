@@ -10,6 +10,10 @@
         }
     ],
     "properties": {
+        "shape": {
+            "type": "number",
+            "description": "The index of the shape in `EXT_implicit_geometry` that the voxel grid adheres to."
+        },
         "dimensions": {
             "type": "array",
             "description": "Dimensions of the voxel grid. The values are interpreted with respect to the shape of the grid indicated by `EXT_implicit_geometry`.",
