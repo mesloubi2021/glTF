@@ -30,7 +30,7 @@
             "items": {
                 "type": "number",
                 "minimum": -3.14159265359,
-                "maximum": 3.14159265359,
+                "maximum": 3.14159265359
             },
             "minItems": 2,
             "maxItems": 2,
@@ -39,13 +39,13 @@
                 -1.57079632679
             ]
         },
-        "minAngle": {
+        "maxAngle": {
             "type": "array",
             "description": "The end of the slice along the angles of the reference ellipsoid, in radians. The first element corresponds to the azimuthal angle (a.k.a longitude) and must be in the range [-pi, pi]. The second element corresponds to the polar angle (a.k.a. latitude) and must be in the range [-pi/2, pi/2].",
             "items": {
                 "type": "number",
                 "minimum": -3.14159265359,
-                "maximum": 3.14159265359,
+                "maximum": 3.14159265359
             },
             "minItems": 2,
             "maxItems": 2,
@@ -53,6 +53,6 @@
                 3.14159265359,
                 1.57079632679
             ]
-        },
+        }
     }
 }
