@@ -1,9 +1,9 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "mesh.primitive.EXT_implicit_geometry.schema.json",
-    "title": "EXT_primitive_voxels glTF Mesh Primitive extension",
+    "$id": "geometry.schema.json",
+    "title": "Geometry in EXT_implicit_geometry",
     "type": "object",
-    "description": "`EXT_implicit_geometry` extension for a primitive in a glTF model to represent implicit 3D geometry",
+    "description": "A definition of implicit 3D geometry.",
     "allOf": [
         {
             "$ref": "glTFProperty.schema.json"
@@ -11,20 +11,20 @@
     ],
     "properties": {
         "box": {
-            "$ref": "box.schema.json"
+            "$ref": "geometry.box.schema.json"
         },
         "cylinder": {
-            "$ref": "cylinder.schema.json"
+            "$ref": "geometry.cylinder.schema.json"
         },
         "sphere": {
-            "$ref": "sphere.schema.json"
+            "$ref": "geometry.sphere.schema.json"
         },
         "ellipsoid": {
-            "$ref": "ellipsoid.schema.json"
+            "$ref": "geometry.ellipsoid.schema.json"
         },
         "region": {
-            "$ref": "region.schema.json"
-        },
+            "$ref": "geometry.region.schema.json"
+        }
     },
     "oneOf": [
         {

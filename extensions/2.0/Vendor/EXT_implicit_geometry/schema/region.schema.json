@@ -22,7 +22,7 @@
         },
         "heightFromSurface": {
             "type": "number",
-            "description": "The height of this region from the surface of the reference ellipsoid in meters.",
+            "description": "The height of this region from the surface of the reference ellipsoid in meters."
         },
         "slice": {
             "$ref": "region.slice.schema.json",

@@ -1,9 +1,9 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "ellipsoid.bounds.schema.json",
-    "title": "Ellipsoid Bounds",
+    "$id": "ellipsoid.slice.schema.json",
+    "title": "Ellipsoid Slice",
     "type": "object",
-    "description": "A set of bounds for an implicit ellipsoid surface. Defines the subsection of the ellipsoid that the implicit volume actually occupies.",
+    "description": "A slice of an implicit ellipsoid. Defines the subsection of the ellipsoid that the implicit volume actually occupies.",
     "allOf": [
         {
             "$ref": "glTFProperty.schema.json"
@@ -12,41 +12,41 @@
     "properties": {
         "minRadius": {
             "type": "number",
-            "description": "The minimum radial bound of the ellipsoid.",
+            "description": "The start of the slice along the radius of the ellipsoid.",
             "minimum": 0,
             "maximum": 1,
             "default": 0
         },
         "maxRadius": {
             "type": "number",
-            "description": "The maximum radial bound of the ellipsoid.",
+            "description": "The end of the slice along the radius of the ellipsoid.",
             "minimum": 0,
             "maximum": 1,
             "default": 1
         },
         "minAngle": {
             "type": "array",
-            "description": "The minimum angular bounds of the ellipsoid in radians. The first element corresponds to the azimuthal angle (a.k.a longitude) and must be in the range [-pi, pi]. The second element corresponds to the polar angle (a.k.a. latitude) and must be in the range [-pi/2, pi/2].", 
+            "description": "The start of the slice across the angles of the sphere, given in radians. The first element corresponds to the azimuthal angle (a.k.a longitude) and must be in the range [-pi, pi]. The second element corresponds to the polar angle (a.k.a. latitude) and must be in the range [-pi/2, pi/2].", 
             "items": {
                 "type": "number",
                 "minimum": -3.14159265359,
-                "maximum": 3.14159265359,
+                "maximum": 3.14159265359
             },
             "minItems": 2,
             "maxItems": 2,
             "default": [-3.14159265359, -1.57079632679]
         },
-        "minAngle": {
+        "maxAngle": {
             "type": "array",
-            "description": "The maximum angular bounds of the ellipsoid in radians. The first element corresponds to the azimuthal angle (a.k.a longitude) and must be in the range [-pi, pi]. The second element corresponds to the polar angle (a.k.a. latitude) and must be in the range [-pi/2, pi/2].", 
+            "description": "The end of the slice across the angles of the sphere, given in radians. The first element corresponds to the azimuthal angle (a.k.a longitude) and must be in the range [-pi, pi]. The second element corresponds to the polar angle (a.k.a. latitude) and must be in the range [-pi/2, pi/2].", 
             "items": {
                 "type": "number",
                 "minimum": -3.14159265359,
-                "maximum": 3.14159265359,
+                "maximum": 3.14159265359
             },
             "minItems": 2,
             "maxItems": 2,
             "default": [3.14159265359, 1.57079632679]
-        },
+        }
     }
 }

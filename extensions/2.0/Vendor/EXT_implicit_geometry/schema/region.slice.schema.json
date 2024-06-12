@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "region.bounds.schema.json",
-    "title": "Region Bounds",
+    "$id": "region.slice.schema.json",
+    "title": "Region Slice",
     "type": "object",
     "description": "A slice of an implicit region relative to an ellipsoid. Defines the subsection of the region that the implicit volume actually occupies.",
     "allOf": [

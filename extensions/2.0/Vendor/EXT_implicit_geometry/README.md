@@ -12,9 +12,7 @@ Written against the glTF 2.0 specification.
 
 ## Overview
 
-This extension allows mesh primitives to represent renderable implicit surfaces. Typically, a glTF mesh primitive requires `attributes` that supply mesh data, and uses `mode` to indicate the mesh topology. With `EXT_implicit_geometry`, the primitive may omit these properties and instead use the extension to infer the implicit 3D volume.
-
-Primitives with this extension may still be affected by node transforms to position, orient, and scale the shape as needed.
+This extension allows glTF assets to define implicit geometry surfaces at the root level. This extension does not define any particular behavior for these shapes, but other extensions may build upon it for use in various functions.
 
 ## Supported Geometry
 
@@ -25,9 +23,9 @@ Currently, this extension supports the following implicit geometries:
 - [`ellipsoid`](#ellipsoid)
 - [`region`](#region)
 
-Only **one** shape may be defined at a time.
+The extension may also be extended itself to permit other geometry types. Only **one** shape may be defined at a time.
 
-By default, the implicit 3D volume is assumed to fill the entire shape specified in the extension. However, each shape allows an optional `slice` property to define the subsection of the shape in which the 3D volume is actually rendered. For instance, while the extension may define an implicit sphere, its `slice` can limit the volume to be only half of the full sphere.
+By default, the implicit 3D volume is assumed to fill the entire shape specified in the extension. However, shapes may allow an optional `slice` property to define the subsection of the shape in which the 3D volume is actually rendered. For instance, while the extension may define an implicit sphere, its `slice` can limit the volume to be only half of the full sphere.
 
 ### Box
 
@@ -41,14 +39,16 @@ The `box` property represents an axis-aligned box that is centered at the origin
   </tr>
   <tr>
     <td><pre>
-    "primitives": [
+    "extensions": [
       {
-        "extensions": {
-          "EXT_implicit_geometry": {
-            "box": {
-              "size": [1, 0.5, 2],
+        "EXT_implicit_geometry": {
+          "geometries": [
+            {
+              "box": {
+                "size": [1, 0.5, 2],
+              }
             }
-          }
+          ]
         }
       }
     ]
@@ -71,15 +71,17 @@ The `cylinder` property represents a cylinder that is aligned with the `y`-axis 
   </tr>
   <tr>
     <td><pre>
-    "primitives": [
+    "extensions": [
       {
-        "extensions": {
-          "EXT_implicit_geometry": {
-            "cylinder": {
-              "radius": 2,
-              "height": 3
+        "EXT_implicit_geometry": {
+          "geometries": [
+            {
+              "cylinder": {
+                "radius": 2,
+                "height": 3
+              }
             }
-          }
+          ]
         }
       }
     ]
@@ -102,14 +104,16 @@ The `sphere` property represents a sphere that is centered at the origin. The `r
   </tr>
   <tr>
     <td><pre>
-    "primitives": [
+    "extensions": [
       {
-        "extensions": {
-          "EXT_implicit_geometry": {
-            "sphere": {
-              "radius": 2,
+        "EXT_implicit_geometry": {
+          "geometries": [
+            {
+              "sphere": {
+                "radius": 2
+              }
             }
-          }
+          ]
         }
       }
     ]
@@ -134,17 +138,19 @@ The `ellipsoid` property represents an ellipsoid that is centered at the origin.
   </tr>
   <tr>
     <td><pre>
-      "primitives": [
-        {
-          "extensions": {
-            "EXT_implicit_geometry": {
+    "extensions": [
+      {
+        "EXT_implicit_geometry": {
+          "geometries": [
+            {
               "ellipsoid": {
                 "radii": [2, 3, 4]
               }
             }
-          }
+          ]
         }
-      ]
+      }
+    ]
     </pre></td>
     <td>
     **TODO** visual example
@@ -169,19 +175,21 @@ The `heightFromSurface` property indicates the height of the region from the ell
   </tr>
   <tr>
     <td><pre>
-      "primitives": [
-        {
-          "extensions": {
-            "EXT_implicit_geometry": {
+    "extensions": [
+      {
+        "EXT_implicit_geometry": {
+          "geometries": [
+            {
               "region": {
                 "semiMajorAxisRadius": 4,
                 "semiMinorAxisRadius": 2,
                 "heightFromSurface": 0.5 
               }
             }
-          }
+          ]
         }
-      ]
+      }
+    ]
     </pre></td>
     <td>
     **TODO** visual example

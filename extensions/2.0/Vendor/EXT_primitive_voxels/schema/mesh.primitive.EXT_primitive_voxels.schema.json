@@ -3,7 +3,7 @@
     "$id": "mesh.primitive.EXT_primitive_voxels.schema.json",
     "title": "EXT_primitive_voxels glTF Mesh Primitive extension",
     "type": "object",
-    "description": "`EXT_primitive_voxels` extension for a primitive in a glTF model, to specify voxel grid geometry for volumetric data",
+    "description": "`EXT_primitive_voxels` extension for a primitive in a glTF model to indicate voxel-based volumetric data",
     "allOf": [
         {
             "$ref": "glTFProperty.schema.json"
@@ -12,7 +12,7 @@
     "properties": {
         "dimensions": {
             "type": "array",
-            "description": "Dimensions of the voxel grid. x/y/z for a box, r/z/theta for a cylinder, lon/lat/height for an ellipsoid.",
+            "description": "Dimensions of the voxel grid. The values are interpreted with respect to the shape of the grid indicated by `EXT_implicit_geometry`.",
             "items": {
                 "type": "integer",
                 "minimum": 1
@@ -21,6 +21,7 @@
             "maxItems": 3
         },
         "padding": {
+            "description": "The optional padding of the voxels.",
             "$ref": "padding.schema.json"
         }
     },

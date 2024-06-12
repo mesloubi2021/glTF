@@ -26,22 +26,18 @@ Typically, glTF mesh primitives use the `POSITION` attribute to store positional
 ```
 "primitives": [
   {
+    "attributes": {
+      "_TEMPERATURE": 0
+    },
     "mode": 2147483648,
     "extensions": {
-      "EXT_implicit_geometry": {
-        "box": {
-          "size": [2, 2, 2]
-        }
-      },
       "EXT_primitive_voxels": {
+          "shape": 0,
           "dimensions": [8, 8, 8],
           "padding": {
             "before": [1, 1, 1],
             "after": [1, 1, 1]
-          },
-          "attributes": {
-            "_TEMPERATURE": 0
-          },
+          }
       }
     }
   }
@@ -60,27 +56,7 @@ The relationship between `dimensions` and the grid geometry is explained in deta
 
 ### Box Grid
 
-A **box** grid is a Cartesian grid defined by `x`, `y`, and `z` axes with equally-sized boxes. A voxel primitive that is based on a box grid may be defined like so:
-
-```
-{
-"extensions": {
-  "EXT_implicit_geometry": {
-    "box": {
-      "size": [2, 2, 2]
-      }
-    },
-    "EXT_primitive_voxels": {
-      "dimensions": [8, 8, 8],
-      "attributes": {
-        "_TEMPERATURE": 0
-      },
-    }
-  }
-}
-```
-
-The `dimensions` correspond to the subdivisions of the box along the `x`, `y`, and `z` axes respectively.
+A **box** grid is a Cartesian grid defined by `x`, `y`, and `z` axes with equally-sized boxes. The `dimensions` correspond to the subdivisions of the box along the `x`, `y`, and `z` axes respectively.
 
 ![Uniform box grid](figures/uniform-box.png)
 <p align="center"><i>A box grid spanning from -1 to 1 in all three axes, subdivided into two cells along each axis. The origin is in the center of the box.</i></p>
@@ -97,27 +73,6 @@ A **cylinder** grid is subdivided along the radius, height, and angle ranges of 
 ![Cylinder subdivisions](figures/cylinder-subdivisions.png)
 
 The cylinder is aligned with the `y`-axis in the primitive's local space. As such, the `height` is subdivided along that local `y`-axis. Subdivisions along the `radius` are concentric, centered around the `y`-axis and extending outwards. The `angle` is subdivided around the circumference of the cylinder.
-
-A voxel primitive that is based on a cylinder grid may define the `cylinder` property like so:
-
-```
-{
-"extensions": {
-  "EXT_implicit_geometry": {
-    "cylinder": {
-      "radius": 2,
-      "height": 3
-      }
-    },
-    "EXT_primitive_voxels": {
-      "dimensions": [8, 8, 8],
-      "attributes": {
-        "_TEMPERATURE": 0
-      },
-    }
-  }
-}
-```
 
 [TODO](image)
 
@@ -178,10 +133,40 @@ The padding data must be supplied with the rest of the voxel data - this means i
 
 This extension may be paired with the `EXT_structural_metadata` extension.
 
+```
 {
   "extensions": {
+    "EXT_implicit_geometry": {
+      geometries: [
+        {
+          "box":{
+            "size": [2, 2, 2]
+          }
+        }
+      ]
+    },
     "EXT_structural_metadata": {
-    
+      "schema": {
+        "classes": {
+          "voxels": {
+            "properties": {
+              "temperature": {
+                // ...
+              }
+            }
+          }
+        }
+      }
+      propertyAttributes: [
+        {
+          "class": "voxels",
+          "properties": {
+            "temperature":{
+              "attribute": "_TEMPERATURE"
+            }
+          }
+        }
+      ]
     }
   },
   "meshes": [
@@ -191,18 +176,16 @@ This extension may be paired with the `EXT_structural_metadata` extension.
           "attributes": {
             "_TEMPERATURE": 0
           },
-          "mode": 2147483648,
           "extensions": {
             "EXT_primitive_voxels": {
               "dimensions": [8, 8, 8],
-              "bounds": {
-                "min": [0.25, 0.5, 0.5],
-                "max": [0.375, 0.625, 0.625]
-              },
               "padding": {
                 "before": [1, 1, 1],
                 "after": [1, 1, 1]
               }
+            },
+            EXT_structural_metadata: {
+              propertyAttributes: [0]
             }
           }
         }
@@ -210,6 +193,7 @@ This extension may be paired with the `EXT_structural_metadata` extension.
     }
   ]
 }
+```
 
 ## Optional vs. Required
 This extension is required, meaning it should be placed in both the `extensionsUsed` list and `extensionsRequired` list.
