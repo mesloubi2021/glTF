@@ -11,19 +11,19 @@
     ],
     "properties": {
         "box": {
-            "$ref": "geometry.box.schema.json"
+            "$ref": "box.schema.json"
         },
         "cylinder": {
-            "$ref": "geometry.cylinder.schema.json"
+            "$ref": "cylinder.schema.json"
         },
         "sphere": {
-            "$ref": "geometry.sphere.schema.json"
+            "$ref": "sphere.schema.json"
         },
         "ellipsoid": {
-            "$ref": "geometry.ellipsoid.schema.json"
+            "$ref": "ellipsoid.schema.json"
         },
         "region": {
-            "$ref": "geometry.region.schema.json"
+            "$ref": "region.schema.json"
         }
     },
     "oneOf": [
