@@ -11,7 +11,7 @@
     ],
     "properties": {
         "shape": {
-            "type": "number",
+            "type": "integer",
             "description": "The index of the shape in `EXT_implicit_geometry` that the voxel grid adheres to."
         },
         "dimensions": {
@@ -30,6 +30,7 @@
         }
     },
     "required": [
+        "shape",
         "dimensions"
     ]
 }
