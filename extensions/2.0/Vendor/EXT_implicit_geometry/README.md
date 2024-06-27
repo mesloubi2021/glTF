@@ -45,7 +45,7 @@ The `box` property represents an axis-aligned box that is centered at the origin
           "geometries": [
             {
               "box": {
-                "size": [1, 0.5, 2],
+                "size": [1, 0.5, 2]
               }
             }
           ]
@@ -157,7 +157,6 @@ The `ellipsoid` property represents an ellipsoid that is centered at the origin.
     </td>
   </tr>
 </table>
-```
 
 ### Region
 
@@ -196,7 +195,6 @@ The `heightFromSurface` property indicates the height of the region from the ell
     </td>
   </tr>
 </table>
-```
 
 ## Optional vs. Required
 This extension is required, meaning it should be placed in both the `extensionsUsed` list and `extensionsRequired` list.
