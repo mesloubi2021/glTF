@@ -1087,6 +1087,20 @@ If any input value is _NaN_, the output value is also _NaN_.
 
 If the vector stem:[b] is not unit, rotation results may be undefined.
 
+===== Quaternion Rotate 3D
+
+[cols="1h,1,2"]
+|===
+| Type | `math/rotate3dq` | 3D rotation by quaternion
+.3+| Input value sockets
+| `float3 a` | Vector to rotate
+| `float4 b` | Quaternion to rotate vector by
+| Output value sockets
+| `float3 value` | Vector stem:[a] rotated by the quaternion stem:[b]
+|===
+
+If the quaternion stem:[b] is not unit, rotation results may be undefined.
+
 ===== Transform
 
 [cols="1h,1,2"]
@@ -1267,6 +1281,32 @@ If the vector stem:[b] is not unit, rotation results may be undefined.
 | `float 14` | Third row, fourth column element
 | `float 15` | Fourth row, fourth column element
 |===
+
+==== Quaternion Nodes
+
+===== Multiplication
+
+[cols="1h,1,2"]
+|===
+| Type | `math/quatmul` | Quaternion multiplication operation
+.2+| Input value sockets
+| `float4 a` | First quaternion
+| `float4 b` | Second quaternion
+| Output value sockets
+| `float4 value` | Quaternion product
+|===
+
+===== Conjugation
+
+[cols="1h,1,2"]
+|===
+| Type | `math/quatconj` | Quaternion conjugation
+.2+| Input value sockets
+| `float4 a` | Quaternion to conjugate
+| Output value sockets
+| `float4 value` | Quaternion conjugate
+|===
+
 
 ==== Integer Arithmetic Nodes
 
