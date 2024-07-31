@@ -1,0 +1,39 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "propertyAttribute.property.schema.json",
+    "title": "Property Attribute Property in EXT_structural_metadata",
+    "type": "object",
+    "description": "An attribute containing property values.",
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "attribute": {
+            "type": "string",
+            "description": "The name of the attribute containing property values."
+        },
+        "offset": {
+            "allOf": [
+                {
+                    "$ref": "definitions.schema.json#/definitions/numericValue"
+                }
+            ],
+            "description": "An offset to apply to property values. Only applicable to `SCALAR`, `VECN`, and `MATN` types. Overrides the class property's `offset` if both are defined."
+        },
+        "scale": {
+            "allOf": [
+                {
+                    "$ref": "definitions.schema.json#/definitions/numericValue"
+                }
+            ],
+            "description": "A scale to apply to property values. Only applicable to `SCALAR`, `VECN`, and `MATN` types. Overrides the class property's `scale` if both are defined."
+        },
+        "extensions": {},
+        "extras": {}
+    },
+    "required": [
+        "attribute"
+    ]
+}
