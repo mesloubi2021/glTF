@@ -13,10 +13,12 @@ Khronos extensions use the reserved `KHR` prefix. Once ratified by the Khronos G
 
 The following extensions have been ratified by the Khronos Group:
 
+* [KHR_animation_pointer](2.0/Khronos/KHR_animation_pointer/README.md)
 * [KHR_draco_mesh_compression](2.0/Khronos/KHR_draco_mesh_compression/README.md)
 * [KHR_lights_punctual](2.0/Khronos/KHR_lights_punctual/README.md)
 * [KHR_materials_anisotropy](2.0/Khronos/KHR_materials_anisotropy/README.md)
 * [KHR_materials_clearcoat](2.0/Khronos/KHR_materials_clearcoat/README.md)
+* [KHR_materials_dispersion](2.0/Khronos/KHR_materials_dispersion/README.md)
 * [KHR_materials_emissive_strength](2.0/Khronos/KHR_materials_emissive_strength/README.md)
 * [KHR_materials_ior](2.0/Khronos/KHR_materials_ior/README.md)
 * [KHR_materials_iridescence](2.0/Khronos/KHR_materials_iridescence/README.md)
@@ -40,6 +42,7 @@ When an extension is implemented by more than one vendor, its name can use the r
 
 * [EXT_lights_ies](2.0/Vendor/EXT_lights_ies/README.md)
 * [EXT_lights_image_based](2.0/Vendor/EXT_lights_image_based/README.md)
+* [EXT_mesh_manifold](2.0/Vendor/EXT_mesh_manifold/README.md)
 
 ### Vendor Extensions for glTF 2.0
 
@@ -52,11 +55,13 @@ The list of vendor prefixes is maintained in [Prefixes.md](Prefixes.md).  Any ve
 Vendor extensions are not covered by the Khronos IP framework.
 
 * [ADOBE_materials_clearcoat_specular](2.0/Vendor/ADOBE_materials_clearcoat_specular/README.md)
+* [ADOBE_materials_clearcoat_tint](2.0/Vendor/ADOBE_materials_clearcoat_tint/README.md)
 * [ADOBE_materials_thin_transparency](2.0/Vendor/ADOBE_materials_thin_transparency/README.md)
 * [AGI_articulations](2.0/Vendor/AGI_articulations/README.md)
 * [AGI_stk_metadata](2.0/Vendor/AGI_stk_metadata/README.md)
 * [CESIUM_primitive_outline](2.0/Vendor/CESIUM_primitive_outline/README.md)
 * [FB_geometry_metadata](2.0/Vendor/FB_geometry_metadata/README.md)
+* [GRIFFEL_bim_data](2.0/Vendor/GRIFFEL_bim_data/README.md)
 * [MPEG_accessor_timed](2.0/Vendor/MPEG_accessor_timed/README.md)
 * [MPEG_animation_timing](2.0/Vendor/MPEG_animation_timing/README.md)
 * [MPEG_audio_spatial](2.0/Vendor/MPEG_audio_spatial/README.md)
@@ -96,10 +101,9 @@ extensions, Khronos extensions, or inclusion in a future version of the glTF spe
 
 | Extension | Status |
 |-----------|--------|
-| [KHR_animation_pointer](https://github.com/KhronosGroup/glTF/pull/2147) | Ready for testing. |
 | [KHR_audio](https://github.com/KhronosGroup/glTF/pull/2137) | Ready for testing. |
 | [KHR_materials_diffuse_transmission](https://github.com/KhronosGroup/glTF/pull/1825) | Ready for testing. |
-| [KHR_materials_sss](https://github.com/KhronosGroup/glTF/pull/1928) | In development. |
+| [KHR_materials_subsurface](https://github.com/KhronosGroup/glTF/pull/1928) | In development. |
 
 # About glTF Extensions
 
