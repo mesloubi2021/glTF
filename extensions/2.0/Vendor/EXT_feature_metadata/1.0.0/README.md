@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 # EXT_feature_metadata
 
-**Version 1.0.0** [TODO: date]
+**Version 1.0.0**, February 24, 2020
 
 <!-- omit in toc -->
 ## Contributors
@@ -23,7 +23,7 @@ Draft
 
 Written against the glTF 2.0 specification.
 
-Adds new functionality to the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing/README.md).
+Adds new functionality to the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing).
 
 <!-- omit in toc -->
 ## Optional vs. Required
@@ -56,7 +56,7 @@ This extension allows batching features for efficient streaming to a client for 
 
 Feature IDs enable individual features to be identified and updated at runtime. For example, a selected feature could be shown/hidden, or highlighted a different color. Feature IDs may be assigned on a per-vertex, per-texel, or per-instance basis.
 
-Feature IDs may be used to access metadata, such as passing a building's ID to get its address. Feature metadata is stored in a compact binary tabular format described in the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/README.md).
+Feature IDs may be used to access metadata, such as passing a building's ID to get its address. Feature metadata is stored in a compact binary tabular format described in the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0).
 
 ![Building Example](figures/feature-table-buildings.png)
 
@@ -72,7 +72,7 @@ Features in a glTF primitive are identified in three ways:
 
 * Per-vertex using a vertex attribute
 * Per-texel using a glTF texture
-* Per-instance using an instance attribute with the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing/README.md)
+* Per-instance using an instance attribute with the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing)
 
 <img src="figures/metadata-access.png"  alt="Metadata Access" width="600">
 
@@ -205,7 +205,7 @@ Often per-texel feature IDs provide finer granularity than per-vertex feature ID
 
 ### Feature ID Instance Attributes
 
-Feature IDs may also be assigned to individual instances when using the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing/README.md). This works the same way as assigning feature IDs to vertices. Feature IDs may be stored in accessors or generated implicitly.
+Feature IDs may also be assigned to individual instances when using the [`EXT_mesh_gpu_instancing` extension](../../EXT_mesh_gpu_instancing). This works the same way as assigning feature IDs to vertices. Feature IDs may be stored in accessors or generated implicitly.
 
 ```jsonc
 {
@@ -247,13 +247,13 @@ A **feature** is a specific instantiation of class containing **property values*
 
 **Statistics** provide aggregate information about the metadata. For example, statistics may include the min/max values of a numeric property for mapping property values to color ramps or the number of enum occurrences for creating histograms.
 
-By default properties do not have any inherent meaning. A property may be assigned a **semantic**, an identifier that describes how the property should be interpreted. The full list of built-in semantics can be found in the [Cesium Metadata Semantics Reference](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/Semantics/README.md). Model authors may define their own application or domain-specific semantics separately.
+By default properties do not have any inherent meaning. A property may be assigned a **semantic**, an identifier that describes how the property should be interpreted. The full list of built-in semantics can be found in the [Cesium Metadata Semantic Reference](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/Semantics). Model authors may define their own application- or domain-specific semantics separately.
 
-This extension references the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/README.md), which describes the metadata format in full detail.
+This extension implements the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0), which describes the metadata format in full detail.
 
 ### Schemas
 
-A schema defines a set of classes and enums used in a model. Classes serve as templates for features - they provide a list of properties and the type information for those properties. Enums define the allowable values for enum properties. Schemas are defined in full detail in the [Schemas](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0#schemas) section of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/README.md).
+A schema defines a set of classes and enums used in a model. Classes serve as templates for features - they provide a list of properties and the type information for those properties. Enums define the allowable values for enum properties. Schemas are defined in full detail in the [Schemas](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0#schemas) section of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0).
 
 A schema may be embedded in the extension directly or referenced externally with the `schemaUri` property. Multiple glTF models may refer to the same external schema to avoid duplication.
 
@@ -312,7 +312,7 @@ The schema and feature tables are defined in the root extension object in the gl
 }
 ```
 
-`class` is the ID of the class in the schema. `count` is the number of features in the feature table, as well as the length of each property array. Property arrays are stored in glTF buffer views and use the binary encoding defined in the [Table Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0#table-format) section of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/README.md).
+`class` is the ID of the class in the schema. `count` is the number of features in the feature table, as well as the length of each property array. Property arrays are stored in glTF buffer views and use the binary encoding defined in the [Table Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0#table-format) section of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0).
 
 Each buffer view `byteOffset` must be aligned to a multiple of 8 bytes. If the buffer view's buffer is the GLB-stored `BIN` chunk the byte offset is measured relative to the beginning of the GLB. Otherwise it is measured relative to the beginning of the buffer.
 
@@ -320,7 +320,7 @@ Each buffer view `byteOffset` must be aligned to a multiple of 8 bytes. If the b
 
 Feature textures (not to be confused with [Feature ID Textures](#feature-id-texture)) use textures rather than parallel arrays to store values. Feature textures are accessed directly by texture coordinates, rather than feature IDs. Feature textures are especially useful when texture mapping high frequency data to less detailed 3D surfaces.
 
-Feature textures use the [Raster Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0#raster-format) of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/blob/3d-tiles-next/specification/Metadata/README.md) with a few additional constraints:
+Feature textures use the [Raster Format](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0#raster-format) of the [Cesium 3D Metadata Specification](https://github.com/CesiumGS/3d-tiles/tree/3d-tiles-next/specification/Metadata/1.0.0) with a few additional constraints:
 
 * A scalar property cannot be encoded into multiple channels. For example, it is not possible to encode a `UINT32` property in an `RGBA8` texture.
 * Components of fixed-length array properties must be separate channels within the same texture.
@@ -424,6 +424,23 @@ Model authors may define their own additional statistics, like `mode` below.
   "extensions": {
     "3DTILES_metadata": {
       "schema": {
+        "classes": {
+          "building": {
+            "properties": {
+              "height": {
+                "type": "FLOAT32"
+              },
+              "owners": {
+                "type": "ARRAY",
+                "componentType": "STRING"
+              },
+              "buildingType": {
+                "type": "ENUM",
+                "enumType": "buildingType"
+              }
+            }
+          }
+        },
         "enums": {
           "buildingType": {
             "valueType": "UINT8",
@@ -445,23 +462,6 @@ Model authors may define their own additional statistics, like `mode` below.
                 "value": 3
               }
             ]
-          }
-        },
-        "classes": {
-          "building": {
-            "properties": {
-              "height": {
-                "type": "FLOAT32"
-              },
-              "owners": {
-                "type": "ARRAY",
-                "componentType": "STRING"
-              },
-              "buildingType": {
-                "type": "ENUM",
-                "enumType": "buildingType"
-              }
-            }
           }
         }
       },
@@ -1120,7 +1120,7 @@ An array of binary property values.
 
 |   |Type|Description|Required|
 |---|---|---|---|
-|**bufferView**|`integer`|The index of the buffer view containing property values. The data type of property values is determined by the property definition: When `type` is `BOOLEAN` values are packed into a bitfield. When `type` is `STRING` values are stored as byte sequences and decoded as UTF-8 strings. When `type` is a numeric type values are stored as the provided `type`. When `type` is `ENUM` values are stored as the enum's `valueType`. When `type` is `ARRAY` elements are packed tightly together and the data type is based on the `componentType` following the same rules as above. Note that `arrayOffsetBufferView` is required for variable-size arrays and `stringOffsetBufferView` is required for strings (for variable-length arrays of strings, both are required). The buffer view `byteOffset` must be aligned to a multiple of 8 bytes. If the buffer view's `buffer` is the GLB-stored `BIN` chunk the byte offset is measured relative to the beginning of the GLB. Otherwise it is measured relative to the beginning of the buffer.| &#10003; Yes|
+|**bufferView**|`integer`|The index of the buffer view containing property values. The data type of property values is determined by the property definition: When `type` is `BOOLEAN` values are packed into a bitfield. When `type` is `STRING` values are stored as byte sequences and decoded as UTF-8 strings. When `type` is a numeric type values are stored as the provided `type`. When `type` is `ENUM` values are stored as the enum's `valueType`. When `type` is `ARRAY` elements are packed tightly together and the data type is based on the `componentType` following the same rules as above. `arrayOffsetBufferView` is required for variable-size arrays and `stringOffsetBufferView` is required for strings (for variable-length arrays of strings, both are required). The buffer view `byteOffset` must be aligned to a multiple of 8 bytes. If the buffer view's `buffer` is the GLB-stored `BIN` chunk the byte offset is measured relative to the beginning of the GLB. Otherwise it is measured relative to the beginning of the buffer.| &#10003; Yes|
 |**offsetType**|`string`|The type of values in `arrayOffsetBufferView` and `stringOffsetBufferView`.|No, default: `"UINT32"`|
 |**arrayOffsetBufferView**|`integer`|The index of the buffer view containing offsets for variable-length arrays. The number of offsets is equal to the feature table `count` plus one. The offsets represent the start positions of each array, with the last offset representing the position after the last array. The array length is computed using the difference between the current offset and the subsequent offset. If `componentType` is `STRING` the offsets index into the string offsets array (stored in `stringOffsetBufferView`), otherwise they index into the property array (stored in `bufferView`). The data type of these offsets is determined by `offsetType`. The buffer view `byteOffset` must be aligned to a multiple of 8 bytes in the same manner as the main `bufferView`|No|
 |**stringOffsetBufferView**|`integer`|The index of the buffer view containing offsets for strings. The number of offsets is equal to the number of string components plus one. The offsets represent the byte offsets of each string in the main `bufferView`, with the last offset representing the byte offset after the last string. The string byte length is computed using the difference between the current offset and the subsequent offset. The data type of these offsets is determined by `offsetType`. The buffer view `byteOffset` must be aligned to a multiple of 8 bytes in the same manner as the main `bufferView`.|No|
@@ -1132,7 +1132,7 @@ Additional properties are allowed.
 <!-- omit in toc -->
 #### featureTable.property.bufferView
 
-The index of the buffer view containing property values. The data type of property values is determined by the property definition: When `type` is `BOOLEAN` values are packed into a bitfield. When `type` is `STRING` values are stored as byte sequences and decoded as UTF-8 strings. When `type` is a numeric type values are stored as the provided `type`. When `type` is `ENUM` values are stored as the enum's `valueType`. When `type` is `ARRAY` elements are packed tightly together and the data type is based on the `componentType` following the same rules as above. Note that `arrayOffsetBufferView` is required for variable-size arrays and `stringOffsetBufferView` is required for strings (for variable-length arrays of strings, both are required). The buffer view `byteOffset` must be aligned to a multiple of 8 bytes. If the buffer view's `buffer` is the GLB-stored `BIN` chunk the byte offset is measured relative to the beginning of the GLB. Otherwise it is measured relative to the beginning of the buffer.
+The index of the buffer view containing property values. The data type of property values is determined by the property definition: When `type` is `BOOLEAN` values are packed into a bitfield. When `type` is `STRING` values are stored as byte sequences and decoded as UTF-8 strings. When `type` is a numeric type values are stored as the provided `type`. When `type` is `ENUM` values are stored as the enum's `valueType`. When `type` is `ARRAY` elements are packed tightly together and the data type is based on the `componentType` following the same rules as above. `arrayOffsetBufferView` is required for variable-size arrays and `stringOffsetBufferView` is required for strings (for variable-length arrays of strings, both are required). The buffer view `byteOffset` must be aligned to a multiple of 8 bytes. If the buffer view's `buffer` is the GLB-stored `BIN` chunk the byte offset is measured relative to the beginning of the GLB. Otherwise it is measured relative to the beginning of the buffer.
 
 * **Type**: `integer`
 * **Required**:  &#10003; Yes
