@@ -1,0 +1,115 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "operator",
+    "type": "object",
+    "description": "Operator definition.",
+    "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
+    "properties": {
+        "operand": {
+            "default": "IDENTITY",
+            "description": "ToDo: Add all operands.",
+            "anyOf": [
+                {
+                    "const": "IDENTITY"
+                },
+                {
+                    "const": "NOT"
+                },
+                {
+                    "const": "AND"
+                },
+                {
+                    "const": "OR"
+                },
+                {
+                    "const": "+"
+                },
+                {
+                    "const": "-"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "type": {
+            "default": "number",
+            "description": "Allowed types.",
+            "anyOf": [
+                {
+                    "const": "number"
+                },
+                {
+                    "const": "integer"
+                },
+                {
+                    "const": "boolean"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "constValues": {
+            "type": "array",
+            "description": "The constant and initial values of this operand.",
+            "items": {
+                "oneOf": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "boolean"
+                    }
+                ]
+            },
+            "minItems": 1
+        },
+        "inputOperators": {
+            "type": "array",
+            "description": "The indices of this operator's input operators. If not present, this operand is using the default values.",
+            "items": {
+                "$ref": "glTFid.schema.json"
+            },
+            "minItems": 1
+        },
+        "inputPointers": {
+            "type": "array",
+            "description": "The JSON pointer referencing valid glTF properties. If not present, this operand is using the default values.",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1
+        },
+        "outputValues": {
+            "type": "array",
+            "description": "The output values of this operand. If present, the implementation **MUST** allow to access these values with a JSON pointer.",
+            "items": {
+                "oneOf": [
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "integer"
+                    },
+                    {
+                        "type": "boolean"
+                    }
+                ]
+            },
+            "minItems": 1
+        },
+
+        "name": { },
+        "extensions": { },
+        "extras": { }
+    },
+    "required": [
+        "operand",
+        "type",
+        "defaultValues"
+    ]
+}
