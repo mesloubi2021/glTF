@@ -1,0 +1,72 @@
+{
+    "$id": "extras.animationController.layers.transitions.schema.json",
+    "title": "Animation Transitions",
+    "type": "object",
+    "description": "Animation Transitions, that define how animation states change one to another.",
+    "allOf": [{ "$ref": "glTFChildOfRootProperty.schema.json" }],
+    "properties": {
+        "from": {
+            "allOf": [{ "$ref": "glTFid.schema.json" }],
+            "description": "The index of the animation state it will be applied frfom."
+        },
+        "to": {
+            "allOf": [{ "$ref": "glTFid.schema.json" }],
+            "description": "The index of the animation state it will be applied frfom."
+        },
+        "conditions": {
+            "type": "array",
+            "items": {
+                "allOf": [{
+                        "param": "",
+                        "type": "number"
+                    },
+                    {
+                        "cond": "",
+                        "anyOf": [{
+                                "const": "if"
+                            },
+                            {
+                                "const": "ifnot"
+                            },
+                            {
+                                "const": "greater"
+                            },
+                            {
+                                "const": "equals"
+                            },
+                            {
+                                "const": "notequal"
+                            },
+                            {
+                                "const": "less"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    {
+                        "value": {
+                            "anyOf": [{
+                                    "const": "number"
+                                },
+                                {
+                                    "const": "boolean"
+                                }
+                            ]
+                        }
+                    }
+                ]
+
+            },
+            "description": "The parameters that will be edited by the end user."
+        },
+        "params": {
+            "allOf": [{ "$ref": "extras.animationController.layers.transitions.params.schema.json" }],
+            "description": "Optional additional parameters of the transition."
+        },
+        "extensions": {},
+        "extras": {}
+    },
+    "required": ["from", "to"]
+}
