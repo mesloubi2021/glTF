@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>glTF Standard to PBR Conversion (BabylonJS)</title>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+
+    <script src="https://preview.babylonjs.com/babylon.max.js"></script>
+    <script src="js/dat.gui.min.js"></script>
+    <script src="js/babylon.colorExtensions.js"></script>
+    <script src="js/babylon.pbrUtilities.js"></script>
+</head>
+
+<body>
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+        var Options = function () {
+            var MetallicRoughness = function () {
+                this.baseColor = "#7f7f7f";
+                this.opacity = 1;
+                this.metallic = 0;
+                this.roughness = 0.5;
+            }
+
+            var SpecularGlossiness = function () {
+                this.diffuse = "#7f7f7f";
+                this.opacity = 1;
+                this.specular = "#0a0a0a";
+                this.glossiness = 0.5;
+            }
+
+            var Standard = function () {
+                this.diffuse = "#7f7f7f";
+                this.opacity = 1;
+                this.specular = "#0a0a0a";
+                this.specularPower = 125;
+            }
+
+            var Factors = function () {
+                this.p = 1;
+                this.maxspecpower = 1024;
+            }
+
+            this.autoUpdate = true;
+            this.metallicRoughness = new MetallicRoughness();
+            this.specularGlossiness = new SpecularGlossiness();
+            this.standard = new Standard();
+            this.factors = new Factors();
+        }
+
+        var options = new Options();
+        var gui = new dat.GUI();
+
+        gui.add(options, 'autoUpdate');
+
+        var metallicRoughnessFolder = gui.addFolder("Metallic-Roughness");
+        gui.addColor(options.metallicRoughness, 'baseColor').onChange(onMetallicRoughnessChange);
+        gui.add(options.metallicRoughness, 'opacity', 0, 1, 0.001).onChange(onMetallicRoughnessChange);
+        gui.add(options.metallicRoughness, 'metallic', 0, 1, 0.001).onChange(onMetallicRoughnessChange);
+        gui.add(options.metallicRoughness, 'roughness', 0, 1, 0.001).onChange(onMetallicRoughnessChange);
+        metallicRoughnessFolder.open();
+
+        var specularGlossinessFolder = gui.addFolder("Specular-Glossiness");
+        gui.addColor(options.specularGlossiness, 'diffuse').onChange(onSpecularGlossinessChange);
+        gui.add(options.specularGlossiness, 'opacity', 0, 1, 0.001).onChange(onSpecularGlossinessChange);
+        gui.addColor(options.specularGlossiness, 'specular', 0, 1, 0.001).onChange(onSpecularGlossinessChange);
+        gui.add(options.specularGlossiness, 'glossiness', 0, 1, 0.001).onChange(onSpecularGlossinessChange);
+        specularGlossinessFolder.open();
+
+
+        var standardMaterialFolder = gui.addFolder("Standard-Material");
+        gui.addColor(options.standard, 'diffuse').onChange(onStandardChange);
+        gui.add(options.standard, 'opacity', 0, 1, 0.001).onChange(onStandardChange);
+        gui.addColor(options.standard, 'specular', 0, 1, 0.001).onChange(onStandardChange);
+        gui.add(options.standard, 'specularPower', 0, 1024, 0.001).onChange(onStandardChange);
+        standardMaterialFolder.open();
+
+        var factorsFolder = gui.addFolder("Factors");
+        gui.add(options.factors, 'p', 0.1, 4, 0.001).onChange(onStandardChange);
+        gui.add(options.factors, 'maxspecpower', 0.0, 1024, 0.001).onChange(onStandardChange);
+        factorsFolder.open();
+
+        var canvas = document.getElementById("renderCanvas");
+        var engine = new BABYLON.Engine(canvas, true);
+        var scene = new BABYLON.Scene(engine);
+
+        var camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 1, BABYLON.Vector3.Zero(), scene);
+        camera.setPosition(new BABYLON.Vector3(0, 0, -20));
+        camera.attachControl(canvas);
+
+        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+
+        // Default intensity is 1. Let's dim the light a small amount
+        //light.intensity = 0.7;
+
+       // scene.environmentTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("images/countrySpecularHDR.dds", scene);
+       // scene.createDefaultSkybox(null, true);
+
+        const sphereDiameter = 4;
+        const sphereSegments = 64;
+
+
+        var standardMaterial = new BABYLON.StandardMaterial("Standard-Material", scene);
+        standardMaterial.useScalarInLinearSpace = true;
+        var standardMaterialSphere = BABYLON.Mesh.CreateSphere(standardMaterial.name, sphereSegments, sphereDiameter, scene);
+        standardMaterialSphere.position.x = -sphereDiameter * 3;
+        standardMaterialSphere.material = standardMaterial;
+        var standardMaterialLabel = createLabel(standardMaterial.name);
+        standardMaterialLabel.parent = standardMaterialSphere;
+        standardMaterialLabel.position.y = -3;
+
+
+        var metallicRoughnessMaterial = new BABYLON.PBRMaterial("Metallic-Roughness", scene);
+        metallicRoughnessMaterial.usePhysicalLightFalloff = false;
+        metallicRoughnessMaterial.useScalarInLinearSpace = true;
+        var metallicRoughnessSphere = BABYLON.Mesh.CreateSphere(metallicRoughnessMaterial.name, sphereSegments, sphereDiameter, scene);
+        metallicRoughnessSphere.position.x = sphereDiameter;
+        metallicRoughnessSphere.material = metallicRoughnessMaterial;
+        var metallicRoughnessLabel = createLabel(metallicRoughnessMaterial.name);
+        metallicRoughnessLabel.parent = metallicRoughnessSphere;
+        metallicRoughnessLabel.position.y = -3;
+
+        var specularGlossinessMaterial = new BABYLON.PBRMaterial("Specular-Glossiness", scene);
+        specularGlossinessMaterial.usePhysicalLightFalloff = false;
+        specularGlossinessMaterial.useScalarInLinearSpace = true;
+        var specularGlossinessSphere = BABYLON.Mesh.CreateSphere(specularGlossinessMaterial.name, sphereSegments, sphereDiameter, scene);
+        specularGlossinessSphere.position.x = -sphereDiameter;
+        specularGlossinessSphere.material = specularGlossinessMaterial;
+        var specularGlossinessLabel = createLabel(specularGlossinessMaterial.name);
+        specularGlossinessLabel.parent = specularGlossinessSphere;
+        specularGlossinessLabel.position.y = -3;
+
+        onMetallicRoughnessChange();
+
+        engine.runRenderLoop(function () {
+            scene.render();
+        });
+
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+
+        function onMetallicRoughnessChange() {
+            updateMetallicRoughnessMaterial();
+
+            if (options.autoUpdate) {
+                updateSpecularGlossinessFromMetallicRoughness();
+                updateSpecularGlossinessMaterial();
+
+                updateStandardFromMetallicRoughness();
+                updateStandardMaterial();
+
+                updateGUI();
+            }
+        }
+
+        function onSpecularGlossinessChange() {
+            updateSpecularGlossinessMaterial();
+
+            if (options.autoUpdate) {
+                updateMetallicRoughnessFromSpecularGlossines();
+                updateMetallicRoughnessMaterial();
+
+                updateStandardFromSpecularGlossiness();
+                updateStandardMaterial();
+
+                updateGUI();
+            }
+        }
+
+        function onStandardChange() {
+            console.log("onStandardChange");
+            updateStandardMaterial();
+
+            if (options.autoUpdate) {
+                updateMetallicRoughnessFromStandard();
+                updateMetallicRoughnessMaterial();
+
+                updateSpecularGlossinessFromStandard();
+                updateSpecularGlossinessMaterial();
+
+                updateGUI();
+            }
+
+        }
+
+        function updateGUI() {
+            for (var i in gui.__controllers) {
+                gui.__controllers[i].updateDisplay();
+            }
+        }
+
+        function updateSpecularGlossinessFromStandard() {
+            var standardMaterial = {
+                diffuse: BABYLON.Color3.FromHexString(options.standard.diffuse),
+                opacity: options.standard.opacity,
+                specular: BABYLON.Color3.FromHexString(options.standard.specular),
+                specularPower: options.standard.specularPower
+            }
+
+            var specularGlossiness = BABYLON.PbrUtilities.ConvertStandardToSpecularGlossiness(standardMaterial, options.factors.maxspecpower, options.factors.p);
+
+            options.specularGlossiness.diffuse = specularGlossiness.diffuse.toHexString(); //standardMaterial.diffuse.toHexString();
+            options.specularGlossiness.opacity = specularGlossiness.opacity; //standardMaterial.opacity;
+            options.specularGlossiness.specular = specularGlossiness.specular.toHexString(); // standardMaterial.specular.toHexString();
+            options.specularGlossiness.glossiness = specularGlossiness.glossiness; // standardMaterial.specularPower / 256;
+
+        }
+
+        function updateSpecularGlossinessFromMetallicRoughness() {
+            var metallicRoughness = {
+                baseColor: BABYLON.Color3.FromHexString(options.metallicRoughness.baseColor),
+                opacity: options.metallicRoughness.opacity,
+                metallic: options.metallicRoughness.metallic,
+                roughness: options.metallicRoughness.roughness
+            };
+
+            var specularGlossiness = BABYLON.PbrUtilities.ConvertToSpecularGlossiness(metallicRoughness);
+
+            options.specularGlossiness.diffuse = specularGlossiness.diffuse.toHexString();
+            options.specularGlossiness.opacity = specularGlossiness.opacity;
+            options.specularGlossiness.specular = specularGlossiness.specular.toHexString();
+            options.specularGlossiness.glossiness = specularGlossiness.glossiness;
+        }
+
+        function updateStandardFromMetallicRoughness() {
+            var metallicRoughness = {
+                baseColor: BABYLON.Color3.FromHexString(options.metallicRoughness.baseColor),
+                opacity: options.metallicRoughness.opacity,
+                metallic: options.metallicRoughness.metallic,
+                roughness: options.metallicRoughness.roughness
+            };
+
+            var specularGlossiness = BABYLON.PbrUtilities.ConvertToSpecularGlossiness(metallicRoughness);
+
+            options.standard.diffuse = options.specularGlossiness.diffuse;
+            options.standard.opacity = options.specularGlossiness.opacity;
+            options.standard.specular = options.specularGlossiness.specular;
+            options.standard.specularPower = options.specularGlossiness.glossiness * 255;
+        }
+
+        function updateStandardFromSpecularGlossiness() {
+            var specularGlossiness = {
+                diffuse: BABYLON.Color3.FromHexString(options.specularGlossiness.diffuse),
+                opacity: options.specularGlossiness.opacity,
+                specular: BABYLON.Color3.FromHexString(options.specularGlossiness.specular),
+                glossiness: options.specularGlossiness.glossiness
+            };
+
+            //standard
+            options.standard.diffuse = options.specularGlossiness.diffuse;
+            options.standard.opacity = options.specularGlossiness.opacity;
+            options.standard.specular = options.specularGlossiness.specular;
+            options.standard.specularPower = options.specularGlossiness.glossiness * 1024;
+
+        }
+
+        function updateMetallicRoughnessFromSpecularGlossines() {
+            var specularGlossiness = {
+                diffuse: BABYLON.Color3.FromHexString(options.specularGlossiness.diffuse),
+                opacity: options.specularGlossiness.opacity,
+                specular: BABYLON.Color3.FromHexString(options.specularGlossiness.specular),
+                glossiness: options.specularGlossiness.glossiness
+            };
+
+
+            // metal roughness
+            var metallicRoughness = BABYLON.PbrUtilities.ConvertToMetallicRoughness(specularGlossiness);
+
+            options.metallicRoughness.baseColor = metallicRoughness.baseColor.toHexString();
+            options.metallicRoughness.opacity = metallicRoughness.opacity;
+            options.metallicRoughness.metallic = metallicRoughness.metallic;
+            options.metallicRoughness.roughness = metallicRoughness.roughness;
+        }
+
+        function updateMetallicRoughnessFromStandard() {
+            var standard = {
+                diffuse: BABYLON.Color3.FromHexString(options.standard.diffuse),
+                opacity: options.standard.opacity,
+                specular: BABYLON.Color3.FromHexString(options.standard.specular),
+                specularPower: options.standard.specularPower
+            };
+
+            var specGloss = BABYLON.PbrUtilities.ConvertStandardToSpecularGlossiness(standard, options.factors.maxspecpower, options.factors.p);
+
+            var metallicRoughness = BABYLON.PbrUtilities.ConvertToMetallicRoughness(specGloss);
+
+            options.metallicRoughness.baseColor = metallicRoughness.baseColor.toHexString();
+            options.metallicRoughness.opacity = metallicRoughness.opacity;
+            options.metallicRoughness.metallic = metallicRoughness.metallic;
+            options.metallicRoughness.roughness = metallicRoughness.roughness;
+        }
+
+        function updateMetallicRoughnessMaterial() {
+            metallicRoughnessMaterial.albedoColor = BABYLON.Color3.FromHexString(options.metallicRoughness.baseColor);
+            metallicRoughnessMaterial.alpha = options.metallicRoughness.opacity;
+            metallicRoughnessMaterial.metallic = options.metallicRoughness.metallic;
+            metallicRoughnessMaterial.roughness = options.metallicRoughness.roughness;
+        }
+
+        function updateSpecularGlossinessMaterial() {
+            specularGlossinessMaterial.albedoColor = BABYLON.Color3.FromHexString(options.specularGlossiness.diffuse);
+            specularGlossinessMaterial.alpha = options.specularGlossiness.opacity;
+            specularGlossinessMaterial.reflectivityColor = BABYLON.Color3.FromHexString(options.specularGlossiness.specular);
+            specularGlossinessMaterial.microSurface = options.specularGlossiness.glossiness;
+        }
+
+        function updateStandardMaterial() {
+            standardMaterial.diffuseColor = BABYLON.Color3.FromHexString(options.standard.diffuse);
+            standardMaterial.alpha = options.standard.opacity;
+            standardMaterial.specularColor = BABYLON.Color3.FromHexString(options.standard.specular);
+            standardMaterial.specularPower = options.standard.specularPower;
+        }
+
+        function createLabel(text) {
+            var dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", 512, scene, true);
+            dynamicTexture.hasAlpha = true;
+            dynamicTexture.drawText(text, null, null, "36px Arial", "black", "transparent", true);
+            var plane = BABYLON.Mesh.CreatePlane("TextPlane", 10, scene);
+            plane.material = new BABYLON.StandardMaterial("TextPlaneMaterial", scene);
+            plane.material.backFaceCulling = false;
+            plane.material.specularColor = BABYLON.Color3.Black();
+            plane.material.diffuseTexture = dynamicTexture;
+            plane.material.useAlphaFromDiffuseTexture = true;
+            return plane;
+        }
+    </script>
+</body>
+
+</html>
