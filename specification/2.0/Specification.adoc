@@ -2781,9 +2781,11 @@ To suggest changes, open a Pull Request to edit the https://github.com/KhronosGr
 ====
 endif::[]
 
+[%collapsible]
+====
 // Generated with wetzel
 include::PropertiesReference.adoc[]
-
+====
 
 [[acknowledgments]]
 = Acknowledgments (Informative)
@@ -2858,8 +2860,11 @@ To suggest changes, open a Pull Request to edit the https://github.com/KhronosGr
 ====
 endif::[]
 
+[%collapsible]
+====
 // Generated with wetzel
 include::JsonSchemaReference.adoc[]
+====
 
 [appendix]
 [[appendix-b-brdf-implementation]]
