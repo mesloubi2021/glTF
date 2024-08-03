@@ -1,3 +1,9 @@
+---
+layout: default
+title: Extensions
+nav_order: 1
+has_children: true
+---
 <!--
 Copyright 2015-2021 The Khronos Group Inc.
 SPDX-License-Identifier: CC-BY-4.0
