@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "MAXAR_state glTF extension",
+  "type": "object",
+  "description": "glTF extension for specifying alternate state representations.",
+  "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+  "properties": {
+      "ids": {
+          "type": "array",
+          "items": {
+              "type": "string"
+          },
+          "description": "Array containing the names of nodes which represent alternate states of this node.",
+          "minItems": 1
+      },
+      "extensions": { },
+      "extras": { }
+  }
+}
