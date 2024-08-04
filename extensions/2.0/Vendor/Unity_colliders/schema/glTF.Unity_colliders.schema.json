@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "Unity_colliders glTF extension",
+    "type": "object",
+    "description": "glTF Extension that defines metadata for adding Unity colliders to a model.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "colliders": {
+            "type": "array",
+            "description": "An array of colliders.",
+            "items": {
+                "$ref": "collider.schema.json"
+            },
+            "minItems": 1
+        },
+        "extensions": { },
+        "extras": { }
+    }
+}
