@@ -43,6 +43,10 @@ Features are identified within a 3D asset by **Feature IDs**. A mesh primitive m
 
 Each feature ID set is defined as a set of values that are associated with the conceptual parts of the model. The definition of the feature ID set may include a `nullFeatureId`, which is a value that indicates that a certain part is not considered to be an identifiable object. The definition also includes a `featureCount` value, which is the number of unique features that are identified.
 
+> **Implementation note:** The `featureCount` is a _global_ number of unique features. The actual feature IDs that appear in one model will often only be a subset of a global set of possible IDs. So the `featureCount` will often be larger than the number of unique IDs that appear in one given model.
+>
+> The `nullFeatureId` does not contribute to the `featureCount`. When the `nullFeatureId` is defined, then there may be up to `featureCount+1` unique feature ID values in one model, if one of these values is the `nullFeatureId`.
+
 The feature ID set may also include a `label`, an alphanumeric string used to identify feature ID sets across different glTF primitives. Labels must match the regular expression `^[a-zA-Z_][a-zA-Z0-9_]*$`.
 
 Feature IDs can be associated with parts of a model in one of three ways:
