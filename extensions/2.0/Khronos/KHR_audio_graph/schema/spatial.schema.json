@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "KHR_audio_emitter Spatial Properties",
+    "type": "object",
+    "description": "This represents an spatial properties .",
+    "allOf": [{ "$ref": "glTFProperty.schema.json" }],
+    "properties": {
+      "position": {
+        "type": "array",
+        "items": [
+          {"type": "number"},
+          {"type": "number"},
+          {"type": "number"}
+        ],
+        "description": "𝑥, y, z - coordinate position of the audio source in a 3D Cartesian system"
+      },
+      "orientation": {
+        "type": "array",
+        "items": [
+          {"type": "number"},
+          {"type": "number"},
+          {"type": "number"}
+        ],
+        "description": "𝑥, y, z - component of the vector of the direction the audio emitter is pointing in 3D Cartesian coordinate space."
+      },
+      "spatializationModel": {
+        "type": "integer",
+        "description": "Determines which spatialization model will be used to position the audio in 3D space (0 = equal power, 1 = HRTF, 2 = Custom).",
+        "enum": [, 1, 2]
+      },
+      "attenuation": {
+        "type": "object",
+        "description": "Attenuation properties.",
+        "$ref": "#/definitions/AttenuationProperties"
+      },
+      "shape": {
+        "type": "string",
+        "description": "Shape in which emitter emits audio: cone, omnidirectional, custom).",
+        "enum": ["cone", "omnidirectional", "custom"]
+      }
+    },
+    "required": ["position", "orientation", "spatializationModel"],
+    "definitions": {
+      "AttenuationProperties": {
+        "type": "object",
+        "description": "See 5.3 Attenuation properties."
+      }
+    }
+  }

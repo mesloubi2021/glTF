@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "KHR_audio_emitter Emitter Node",
+    "type": "object",
+    "description": "This represents an encoding properties .",
+    "allOf": [{ "$ref": "glTFProperty.schema.json" }],
+    "properties": {
+      "type": {
+        "type": "integer",
+        "description": "Emitter type (global, spatial).",
+        "enum": ["global", "spatial"]
+      },
+      "gain": {
+        "type": "number",
+        "description": "Gain applied to the signal by the emitter."
+      },
+      "spatialProperties": {
+        "type": "object",
+        "description": "See 5.2 Spatial properties.",
+        "$ref": "#/definitions/SpatialProperties"
+      }
+    },
+    "required": ["type", "gain"],
+    "definitions": {
+      "SpatialProperties": {
+        "type": "object",
+        "description": "See 5.2 Spatial properties."
+      }
+    }
+  }

@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema",
-    "title": "KHR_audio_emitter Audio Source",
+    "title": "KHR_audio_emitter Audio Source Properties",
     "type": "object",
     "description": "Audio sources reference audio data and define playback properties for it. An audio source node has no inputs and exactly one output, which has the same number of channels as indicated in encoding properties.",
     "allOf": [{ "$ref": "glTFProperty.schema.json" }],
