@@ -1,25 +1,3 @@
-<!-----
-
-
-
-Conversion time: 1.967 seconds.
-
-
-Using this Markdown file:
-
-1. Paste this output into your source file.
-2. See the notes and action items below regarding this conversion run.
-3. Check the rendered output (headings, lists, code blocks, tables) for proper
-   formatting and use a linkchecker before you publish this page.
-
-Conversion notes:
-
-* Docs to Markdown version 1.0β36
-* Fri Jun 14 2024 17:25:52 GMT-0700 (PDT)
-* Source doc: KHR Audio Graph Design
-* Tables are currently converted to HTML tables.
------>
-
 
 
 ## KHR Audio Graph Design
@@ -34,18 +12,59 @@ Conversion notes:
 * Chintan Shah, Meta
 * Alexey Medvedev, Meta
 
+Copyright 2024 The Khronos Group Inc.
+See [Appendix](#appendix-full-khronos-copyright-statement) for full Khronos Copyright Statement.
 
-## Context
+## Status
 
-During the recent Khronos 3D formats working group meeting held on 5/29, we reviewed the [proposal to define the KHR audio glTF specification using an audio graph framework](https://docs.google.com/presentation/d/1IrrQaE-jHyzOtFRabjtLAzeP5UOirFOEj8FRADAceqk/edit?usp=sharing). The purpose of this document is to delve deeper into that proposal, offering a comprehensive design of the KHR audio graph. This includes a detailed description of each node object within the graph along with functionality, the specific properties associated with it, and how it interacts with other nodes in the graph. The document is structured to facilitate clear understanding and to solicit feedback on the proposed design. Based on the feedback we will update and finalize the design before it is formally schematized into KHR core audio spec, extensions, animations, and interactivity.
+Draft
+
+## Dependencies
+
+Written against the glTF 2.0 spec.
+
+## Overview
+
+This extension provides a standardized way to represent an audio graph consisting of multiple interconnected audio node objects to create the final audio output. It’s designed for managing audio routing, mixing, and processing which can be mapped to glTF assets.
 
 
-## 1. Introduction
+### Motivation
 
-This document provides a detailed design for managing audio routing, mixing, and processing in various applications for desktop, mobile, and wearable devices. The core idea involves an audio graph consisting of multiple interconnected audio node objects to create the final audio output. This design seeks to incorporate the audio capabilities found in modern web, game, and XR engines as well as processing, mixing, and filtering functions available in audio production softwares. Although this system is designed with diverse use cases in mind, it might not cover every specialized feature found in state-of-the-art audio tools. In such instances, users are encouraged to develop custom extensions. Nevertheless, the proposed system will support many complex audio applications by default and has been designed to facilitate future expansion with more sophisticated features.
+The core idea involves an audio graph consisting of multiple interconnected audio node objects to create the final audio output. This design seeks to incorporate the audio capabilities found in modern web, game, and XR engines as well as processing, mixing, and filtering functions available in audio production softwares. Although this system is designed with diverse use cases in mind, it might not cover every specialized feature found in state-of-the-art audio tools. In such instances, users are encouraged to develop custom extensions. Nevertheless, the proposed system will support many complex audio applications by default and has been designed to facilitate future expansion with more sophisticated features.
 
 
-## 2. Features
+## Graph based audio processing
+
+**Audio nodes** are the building blocks of an audio graph for rendering audio to the audio hardware. Graph based audio routing allows arbitrary connections between different audio node objects. An audio graph can be represented by **audio sources**, the **audio destination/sink**, and intermediate processing nodes. Each node can have **inputs** and/or **outputs**. A source node has no inputs and a single output. A destination or sink node has one input and no outputs. In the simplest case, a single source can be routed directly to the output.
+
+One or more intermediate processing nodes such as filters can be placed between the source and destination nodes. Most processing nodes will have one input and one output. Each type of audio node differs in the details of how it processes or synthesizes audio. But, in general, an audio node will process its inputs (if it has any), and generate audio for its outputs (if it has any). An output may connect to one or more audio node inputs, thus fan-out is supported. An input (except source and sink) may be connected to one or more audio node outputs, thus fan-in is supported. Each input and output has one or more channels. The exact number of channels depends on the details of the specific audio node.
+
+
+## Extension Declaration
+
+Usage of the procedural structure is indicated by adding the `KHR_texture_procedurals` extension identifier to the `extensionsUsed` array.
+
+```json
+{
+    "extensionsUsed": [
+        "KHR_audio_graph"
+    ]
+}
+```
+
+Usage of a given extension is defined in the `extensions` object as follows:
+```json
+{
+    "extensions": {
+        "KHR_audio_graph": {
+            "audio_nodes": []
+        }
+    }
+}
+```
+
+
+## Features
 
 The core specification should support these primary features:
 
@@ -62,7 +81,7 @@ The core specification should support these primary features:
 * Animation control and dynamic update of node properties.
 
 
-## 3. Graph based audio processing
+## Graph based audio processing
 
 Audio nodes are the building blocks of an audio graph for rendering audio to the audio hardware. Graph based audio routing allows arbitrary connections between different audio node objects. An audio graph can be represented by audio sources, the audio destination/sink, and intermediate processing nodes. Each node can have inputs and/or outputs. A source node has no inputs and a single output. A destination or sink node has one input and no outputs. In the simplest case, a single source can be routed directly to the output.
 

@@ -1,0 +1,82 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "KHR_audio_emitter Audio Source",
+    "type": "object",
+    "description": "Audio sources reference audio data and define playback properties for it. An audio source node has no inputs and exactly one output, which has the same number of channels as indicated in encoding properties.",
+    "allOf": [{ "$ref": "glTFProperty.schema.json" }],
+    "properties": {
+        "data": {
+            "description": "The index of the audio data or oscillator assigned to this clip.",
+            "allOf": [
+                {
+                    "$ref": "glTFid.schema.json"
+                }
+            ]
+        },
+        "priority": {
+            "description": "Determines the priority of this audio source among all the ones that coexist in the scene (0 = most important, 256 = least important, default = 128).",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 256,
+            "default": 128
+        },
+        "state": {
+            "description": "Playback state: (paused, playing, stopped).",
+            "type": "string",
+            "default": false
+        },
+        "autoPlay": {
+            "description": "Whether or not to play the specified audio when the glTF is loaded.",
+            "type": "boolean",
+            "default": false
+        },
+        "loop": {
+            "description": "Playback in a loop (false = no-loop, true = loop). If set to true, then once playback reaches the time specified by “loop end position” (or the end of the asset, whichever is first), the source node will continue playback again from a position specified by the “loop start position” property.",
+            "type": "boolean",
+            "default": false
+        },
+        "position": {
+            "description": "Play position in ms.",
+            "type": "number",
+            "minimum": 0.0,
+            "default": 0.0
+        },
+        "gain": {
+            "description": "Gain value applied to the audio.",
+            "type": "number",
+            "minimum": 0.0,
+            "default": 1.0
+        },
+        "playbackSpeed": {
+            "description": "Rate of playback. A value of 1.0 would playback the audio at the standard rate. A value of 2.0 would play back the asset at double the speed.",
+            "type": "number",
+            "default": 1.0
+        },
+        "loopStartPosition": {
+            "description": "The starting position in ms when looping.",
+            "type": "number",
+            "default": 0.0
+        },
+        "loopEndPosition": {
+            "description": "The ending position (ms) of the loop.",
+            "type": "number",
+            "default": 0.0
+        },
+        "duration": {
+            "description": "Length of the underlying audio data in ms.",
+            "type": "number",
+            "default": 0.0
+        },
+        "encodingProperties": {
+            "description": "Encoding properties.",
+            "allOf": [
+                {
+                    "$ref": "glTFid.schema.json"
+                }
+            ]
+        },
+        "name": {},
+        "extensions": {},
+        "extras": {}
+    }
+}
