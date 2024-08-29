@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "KHR_audio_graph Ausio Mixer Node",
+    "type": "object",
+    "description": "Use the Audio mixer node to combine the output from multiple audio sources. Number of channels should be the same across all inputs.",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Name of the node"
+        },
+        "input": {
+            "type": "array",
+            "description": "The indices of input nodes.",
+            "items": {
+                "$ref": "glTFid.schema.json"
+            },
+            "uniqueItems": true,
+            "minItems": 1
+        },
+        "output": {
+            "allOf": [
+                {
+                    "$ref": "glTFid.schema.json"
+                }
+            ],
+            "description": "Input value for the node"
+        },
+        "type": {
+            "type": "integer",
+            "description": "Emitter type (global, spatial).",
+            "enum": [
+                "global",
+                "spatial"
+            ]
+        },
+    },
+    "required": [
+        "input",
+        "output"
+    ]
+}

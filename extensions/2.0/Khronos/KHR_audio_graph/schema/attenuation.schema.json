@@ -1,27 +1,41 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema",
-    "title": "KHR_audio_emitter Attenuation Properties",
+    "title": "KHR_audio_graph Attenuation Properties",
     "type": "object",
     "description": "This represents an attenuation properties .",
-    "allOf": [{ "$ref": "glTFProperty.schema.json" }],
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
     "properties": {
-      "distanceModel": {
-        "type": "integer",
-        "description": "Specifies the distance model for the audio emitter: linear, inverse, exponential, custom).",
-        "enum": ["linear", "inverse", "exponential", "custom"]
-      },
-      "minDistance": {
-        "type": "number",
-        "description": "A reference distance for reducing volume as the emitter moves further from the listener."
-      },
-      "maxDistance": {
-        "type": "number",
-        "description": "The maximum distance between the emitter and listener, beyond which the audio cannot be heard."
-      },
-      "rolloffFactor": {
-        "type": "number",
-        "description": "Describes how quickly the volume is reduced as the emitter moves away from the listener. Also referred to as falloff factor."
-      }
+        "distanceModel": {
+            "type": "string",
+            "description": "Specifies the distance model for the audio emitter: linear, inverse, exponential, custom).",
+            "enum": [
+                "linear",
+                "inverse",
+                "exponential",
+                "custom"
+            ]
+        },
+        "minDistance": {
+            "type": "number",
+            "description": "A reference distance for reducing volume as the emitter moves further from the listener."
+        },
+        "maxDistance": {
+            "type": "number",
+            "description": "The maximum distance between the emitter and listener, beyond which the audio cannot be heard."
+        },
+        "rolloffFactor": {
+            "type": "number",
+            "description": "Describes how quickly the volume is reduced as the emitter moves away from the listener. Also referred to as falloff factor."
+        }
     },
-    "required": ["distanceModel", "minDistance", "maxDistance", "rolloffFactor"]
-  }
+    "required": [
+        "distanceModel",
+        "minDistance",
+        "maxDistance",
+        "rolloffFactor"
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "KHR_audio_graph Gain Node",
+    "type": "object",
+    "description": "The gain property specifies the amount of amplification to apply, with the actual gain transitioning from its current value to the new one over a specified duration, while the interpolation property determines the curve used for this transition (linear or custom), and the duration property controls the length of time spent interpolating between the old and new gain values.",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Name of the node"
+        },
+        "input": {
+            "allOf": [
+                {
+                    "$ref": "glTFid.schema.json"
+                }
+            ],
+            "description": "Input value for the node"
+        },
+        "output": {
+            "allOf": [
+                {
+                    "$ref": "glTFid.schema.json"
+                }
+            ],
+            "description": "Output value for the node"
+        },
+        "gain": {
+            "type": "number",
+            "description": "The gain to apply. Once set, the actual gain applied will transition from it’s current setting to the new one set over 'duration' milliseconds."
+        },
+        "interpolation": {
+            "type": "integer",
+            "description": "The curve to apply when changing gains (0 = linear, 1 = custom).",
+            "enum": [
+                0,
+                1
+            ]
+        },
+        "duration": {
+            "type": "integer",
+            "description": "When changing gain, this parameter controls how long to spend interpolating from the previously set gain value to the one that is specified."
+        }
+    },
+    "required": [
+        "gain",
+        "interpolation",
+        "duration"
+    ]
+}
