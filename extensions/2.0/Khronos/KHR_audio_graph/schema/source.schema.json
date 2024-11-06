@@ -11,9 +11,12 @@
     "properties": {
         "data": {
             "description": "The index of the audio data or oscillator assigned to this clip.",
-            "allOf": [
+            "oneOf": [
                 {
-                    "$ref": "glTFid.schema.json"
+                    "$ref": "audiodata.KHR_audio_graph.schema.json"
+                },
+                {
+                    "$ref": "oscillator.KHR_audio_graph.schema.json"
                 }
             ]
         },
@@ -65,19 +68,6 @@
             "description": "The ending position (ms) of the loop.",
             "type": "number",
             "default": 0.0
-        },
-        "duration": {
-            "description": "Length of the underlying audio data in ms.",
-            "type": "number",
-            "default": 0.0
-        },
-        "encodingProperties": {
-            "description": "Encoding properties.",
-            "allOf": [
-                {
-                    "$ref": "glTFid.schema.json"
-                }
-            ]
         },
         "name": {
             "type": "string",

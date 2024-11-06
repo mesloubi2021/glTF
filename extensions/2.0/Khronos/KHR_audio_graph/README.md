@@ -233,30 +233,6 @@ See 4.3 Oscillator data.
    <td>
    </td>
   </tr>
-  <tr>
-   <td>duration
-   </td>
-   <td>number
-   </td>
-   <td>Length of the underlying audio data in ms.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>encoding properties
-   </td>
-   <td>object
-   </td>
-   <td>See 4.4 Encoding properties.
-   </td>
-   <td>
-   </td>
-   <td>Could be a part of audio data property  instead.
-   </td>
-  </tr>
 </table>
 
 
@@ -292,51 +268,15 @@ Audio data objects define where audio data is located and what format the data i
    </td>
   </tr>
   <tr>
-   <td>number of channels
+   <td>encoding properties
    </td>
-   <td>integer
+   <td>object
    </td>
-   <td>The number of channels for a buffer view for a raw data
-   </td>
-   <td>
+   <td>See 4.4 Encoding properties.
    </td>
    <td>
    </td>
-  </tr>
-  <tr>
-   <td>length
-   </td>
-   <td>integer
-   </td>
-   <td>The length of each channel in buffer view for a raw data
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>sample rate
-   </td>
-   <td>double
-   </td>
-   <td>The sample-rate, in Hz, for a raw data
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>duration
-   </td>
-   <td>double
-   </td>
-   <td>Duration of the PCM audio data in seconds for a raw data
-   </td>
-   <td>
-   </td>
-   <td>
+   <td>Could be a part of audio data property  instead.
    </td>
   </tr>
   <tr>
@@ -421,6 +361,18 @@ This represents an audio source generating a periodic waveform. It can be set to
    <td>Applies to square waveform.
    </td>
   </tr>
+  <tr>
+   <td>encoding properties
+   </td>
+   <td>object
+   </td>
+   <td>See 4.4 Encoding properties.
+   </td>
+   <td>
+   </td>
+   <td>Could be a part of audio data property  instead.
+   </td>
+  </tr>
 </table>
 
 
@@ -483,6 +435,18 @@ This represents an audio source generating a periodic waveform. It can be set to
    <td>integer
    </td>
    <td>Number of audio channels.
+   </td>
+   <td>
+   </td>
+   <td>
+   </td>
+  </tr>
+<tr>
+   <td>duration
+   </td>
+   <td>number
+   </td>
+   <td>Length of the underlying audio data in ms.
    </td>
    <td>
    </td>
