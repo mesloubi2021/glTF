@@ -17,6 +17,23 @@
             ],
             "description": "The index of the buffer view that contains the audio data. The buffer represents an audio asset residing in memory, created from decoding an audio file, or from raw data."
         },
+        "numberOfChannels": {
+            "type": "integer",
+            "description": "The number of channels for a buffer view for a raw data."
+        },
+        "length": {
+            "type": "integer",
+            "description": "The length of each channel in buffer view for a raw data."
+        },
+        "sampleRate": {
+            "type": "integer",
+            "description": "The sample-rate, in Hz, for a raw data."
+        },
+        "duration": {
+            "type": "integer",
+            "description": "Duration of the PCM audio data in seconds for a raw data."
+        },
+
         "mimeType": {
             "type": "string",
             "description": "The audio's MIME type. Required if buffer view is defined."

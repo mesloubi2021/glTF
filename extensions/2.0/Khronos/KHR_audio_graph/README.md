@@ -292,6 +292,54 @@ Audio data objects define where audio data is located and what format the data i
    </td>
   </tr>
   <tr>
+   <td>number of channels
+   </td>
+   <td>integer
+   </td>
+   <td>The number of channels for a buffer view for a raw data
+   </td>
+   <td>
+   </td>
+   <td>
+   </td>
+  </tr>
+  <tr>
+   <td>length
+   </td>
+   <td>integer
+   </td>
+   <td>The length of each channel in buffer view for a raw data
+   </td>
+   <td>
+   </td>
+   <td>
+   </td>
+  </tr>
+  <tr>
+   <td>sample rate
+   </td>
+   <td>double
+   </td>
+   <td>The sample-rate, in Hz, for a raw data
+   </td>
+   <td>
+   </td>
+   <td>
+   </td>
+  </tr>
+  <tr>
+   <td>duration
+   </td>
+   <td>double
+   </td>
+   <td>Duration of the PCM audio data in seconds for a raw data
+   </td>
+   <td>
+   </td>
+   <td>
+   </td>
+  </tr>
+  <tr>
    <td>mime type
    </td>
    <td>string

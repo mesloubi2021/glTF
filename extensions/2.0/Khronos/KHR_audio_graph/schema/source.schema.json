@@ -83,14 +83,6 @@
             "type": "string",
             "description": "Name of the node"
         },
-        "output": {
-            "allOf": [
-                {
-                    "$ref": "glTFid.schema.json"
-                }
-            ],
-            "description": "Output value for the node"
-        },
         "extensions": {},
         "extras": {}
     }
