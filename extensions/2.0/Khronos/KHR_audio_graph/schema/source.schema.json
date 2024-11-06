@@ -42,8 +42,20 @@
             "type": "boolean",
             "default": false
         },
-        "position": {
-            "description": "Play position in ms.",
+        "offset": {
+            "description": "If 0 is passed in for this value, then playback will start from the beginning of the buffer. Offset sould not be  negative. If offset is greater than loopEnd, playbackRate is positive or zero, and loop is true, playback will begin at loopEnd. If offset is greater than loopStart, playbackSpeed is negative, and loop is true, playback will begin at loopStart. offset is silently clamped to [0, duration], when startTime is reached, where duration is the value of the duration attribute of the AudioData or Oscillator set to the buffer attribute of this node.",
+            "type": "number",
+            "minimum": 0.0,
+            "default": 0.0
+        },
+        "duration": {
+            "description": "Length of the underlying audio data in ms.",
+            "type": "number",
+            "minimum": 0.0,
+            "default": 0.0
+        },
+        "when": {
+            "description": "The when parameter describes at what time (in seconds) the sound should start playing.",
             "type": "number",
             "minimum": 0.0,
             "default": 0.0

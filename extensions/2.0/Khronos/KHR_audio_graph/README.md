@@ -174,11 +174,11 @@ See 4.3 Oscillator data.
    </td>
   </tr>
   <tr>
-   <td>position
+   <td>offset
    </td>
    <td>number
    </td>
-   <td>Play position in ms.
+   <td>If 0 is passed in for this value, then playback will start from the beginning of the buffer. Offset sould not be  negative. If offset is greater than loopEnd, playbackRate is positive or zero, and loop is true, playback will begin at loopEnd. If offset is greater than loopStart, playbackSpeed is negative, and loop is true, playback will begin at loopStart. offset is silently clamped to [0, duration], when startTime is reached, where duration is the value of the duration attribute of the AudioData or Oscillator set to the buffer attribute of this node.
    </td>
    <td>
    </td>
@@ -233,6 +233,31 @@ See 4.3 Oscillator data.
    <td>
    </td>
   </tr>
+ <tr>
+   <td>duration
+   </td>
+   <td>number
+   </td>
+   <td>Length of the underlying audio data in ms.
+   </td>
+   <td>
+   </td>
+   <td>
+   </td>
+  </tr>
+<tr>
+   <td>when
+   </td>
+   <td>number
+   </td>
+   <td>The when parameter describes at what time (in seconds) the sound should start playing.
+   </td>
+   <td>
+   </td>
+   <td>
+   </td>
+  </tr>
+
 </table>
 
 
