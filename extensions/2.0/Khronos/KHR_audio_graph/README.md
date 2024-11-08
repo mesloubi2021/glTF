@@ -171,6 +171,8 @@ Using a spatial emitter, an audio stream can be spatialized or positioned in spa
 |**emitterType**|'string'|Emitter type (global, spatial).|Yes|
 |**gain**|'number'|Gain applied to the signal by the emitter.|No|
 |**spatialProperties**|'KHR_audio_graph.spatial.schema.json'|See 5.2 Spatial properties.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 5.2 Spatial properties
@@ -179,145 +181,24 @@ Using a spatial emitter, an audio stream can be spatialized or positioned in spa
 |---|---|---|---|
 |**spatializationModel**|'string'|Determines which spatialization model will be used to position the audio in 3D space (equal power, HRTF, Custom).equalpower: Represents the equal-power panning algorithm, generally regarded as simple and efficient. equalpower is the default value. HRTF: Renders a stereo output of higher quality than equalpower — it uses a convolution with measured impulse responses from human subjects. Custom: User-defined panning algorithm.|Yes|
 |**attenuation**|'object'|See 5.3 Attenuation properties.|Yes|
-|**shape**|'object'|See 5.4 Shape properties|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 5.3 Attenuation properties
 
 |   |Type|Description|Required|
 |---|---|---|---|
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>distance model
-   </td>
-   <td>string
-   </td>
-   <td>Specifies the distance model for the audio emitter  linear, inverse, exponential, custom).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>ref distance
-   </td>
-   <td>number
-   </td>
-   <td>A reference distance for reducing volume as the emitter moves further from the listener.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>max distance
-   </td>
-   <td>number
-   </td>
-   <td>The maximum distance between the emitter and listener, beyond which the audio cannot be heard.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>rolloff factor
-   </td>
-   <td>number
-   </td>
-   <td>Describes how quickly the volume is reduced as the emitter moves away from the listener.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
-
-
-### 5.4 Shape properties
-
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>type
-   </td>
-   <td>string
-   </td>
-   <td>Shape in which emitter emits audio (cone, omnidirectional, custom).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>cone inner angle
-   </td>
-   <td>number
-   </td>
-   <td>The angular diameter of a cone inside of which there will be no angular volume reduction.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>cone outer angle
-   </td>
-   <td>number
-   </td>
-   <td>A parameter for directional audio sources that is an angle, in degrees, outside of which the volume will be reduced to a constant value of coneOuterGain.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>cone outer gain
-   </td>
-   <td>number
-   </td>
-   <td>A parameter for directional audio sources that is the gain outside of the cone outer angle.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|**distanceModel**|'string'|Specifies the distance model for the audio emitter  linear, inverse, exponential, custom.|Yes|
+|**refDistance**|'number'|A reference distance for reducing volume as the emitter moves further from the listener.|Yes|
+|**maxDistance**|'number'|The maximum distance between the emitter and listener, beyond which the audio cannot be heard.|Yes|
+|**rolloffFactor**|'number'|Describes how quickly the volume is reduced as the emitter moves away from the listener.|Yes|
+|**shape**|`string`|Shape in which emitter emits audio (cone, omnidirectional, custom).|No|
+|**coneInnerAngle**|`object`|The angular diameter of a cone inside of which there will be no angular volume reduction.|No|
+|**coneOuterAngle**|`object`|A parameter for directional audio sources that is an angle, in degrees, outside of which the volume will be reduced to a constant value of coneOuterGain.|No|
+|**coneOuterGain**|`object`|A parameter for directional audio sources that is the gain outside of the cone outer angle.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 5.5 Audio listener node (0 input / 0 output)

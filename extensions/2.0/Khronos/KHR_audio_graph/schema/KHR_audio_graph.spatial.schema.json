@@ -24,11 +24,6 @@
             "description": "Attenuation properties.",
             "$ref": "KHR_audio_graph.attenuation.schema.json"
         },
-        "shape": {
-            "type": "object",
-            "description": "Shape in which emitter emits audio: cone, omnidirectional, custom).",
-            "$ref": "KHR_audio_graph.shape.schema.json"
-        },
         "extensions": {},
         "extras": {}
     },

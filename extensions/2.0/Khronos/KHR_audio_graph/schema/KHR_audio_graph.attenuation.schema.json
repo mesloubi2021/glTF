@@ -19,7 +19,7 @@
                 "custom"
             ]
         },
-        "minDistance": {
+        "refDistance": {
             "type": "number",
             "description": "A reference distance for reducing volume as the emitter moves further from the listener."
         },
@@ -31,12 +31,33 @@
             "type": "number",
             "description": "Describes how quickly the volume is reduced as the emitter moves away from the listener. Also referred to as falloff factor."
         },
+        "shape": {
+            "type": "string",
+            "description": "Shape in which emitter emits audio: cone, omnidirectional, custom).",
+            "enum": [
+                "cone",
+                "omnidirectional",
+                "custom"
+            ]
+        },
+        "coneInnerAngle": {
+            "type": "number",
+            "description": "The angular diameter of a cone inside of which there will be no angular volume reduction."
+        },
+        "coneOuterAngle": {
+            "type": "number",
+            "description": "A parameter for directional audio sources that is an angle, in degrees, outside of which the volume will be reduced to a constant value of coneOuterGain."
+        },
+        "coneOuterGain": {
+            "type": "number",
+            "description": "A parameter for directional audio sources that is the gain outside of the cone outer angle."
+        },
         "extensions": {},
         "extras": {}
     },
     "required": [
         "distanceModel",
-        "minDistance",
+        "refDistance",
         "maxDistance",
         "rolloffFactor"
     ]

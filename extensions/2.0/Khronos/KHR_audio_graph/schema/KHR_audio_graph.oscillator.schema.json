@@ -11,7 +11,7 @@
     "properties": {
         "type": {
             "type": "integer",
-            "description": "Specifies the waveform type (0 = saw, 1 = square, 2 = triangle, 3 = sine, 4 = white noise, 5 = custom).",
+            "description": "Specifies the waveform type (0 = sawtooth, 1 = square, 2 = triangle, 3 = sine, 4 = white noise, 5 = custom).",
             "minimum": 0,
             "maximum": 5
         },

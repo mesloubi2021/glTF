@@ -29,7 +29,9 @@
             "type": "object",
             "description": "See 5.2 Spatial properties.",
             "$ref": "KHR_audio_graph.spatial.schema.json"
-        }
+        },
+        "extensions": {},
+        "extras": {}
     },
     "required": [
         "emitterType",
