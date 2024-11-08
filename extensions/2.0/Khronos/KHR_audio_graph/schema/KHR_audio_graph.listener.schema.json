@@ -5,14 +5,10 @@
     "type": "object",
     "description": "Describes the position and other physical characteristics of a listener from which the audio output of spatial emitter nodes is heard when spatial audio processing is used. For most applications it makes the most sense to attach the listener node to the main camera..",
     "properties": {
-        "node": {
-            "type": "object",
-            "description": "The index of glTF node.",
-            "items": {
-                "$ref": "glTFid.schema.json"
-            }
+        "id": {
+            "description": "A unique identifier of the audio listener in the scene.",
+            "type": "integer"
         },
-        "name": {},
         "extensions": {},
         "extras": {}
     }

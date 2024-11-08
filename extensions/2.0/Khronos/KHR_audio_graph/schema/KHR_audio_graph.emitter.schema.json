@@ -9,17 +9,9 @@
         }
     ],
     "properties": {
-        "name": {
-            "type": "string",
-            "description": "Name of the node"
-        },
-        "input": {
-            "allOf": [
-                {
-                    "$ref": "glTFid.schema.json"
-                }
-            ],
-            "description": "Input value for the node"
+        "id": {
+            "description": "A unique identifier of the emitter in the scene.",
+            "type": "integer"
         },
         "emitterType": {
             "type": "string",
@@ -36,11 +28,11 @@
         "spatialProperties": {
             "type": "object",
             "description": "See 5.2 Spatial properties.",
-            "$ref": "#/definitions/SpatialProperties"
+            "$ref": "KHR_audio_graph.spatial.schema.json"
         }
     },
     "required": [
-        "type",
+        "emitterType",
         "gain"
     ],
     "definitions": {

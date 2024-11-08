@@ -30,11 +30,8 @@
             "type": "integer",
             "description": "Number of audio channels."
         },
-        "properties": {
-            "type": "object",
-            "description": "Additional properties.",
-            "additionalProperties": true
-        },
+        "extensions": {},
+        "extras": {}
     },
     "required": [
         "bitsPerSample",

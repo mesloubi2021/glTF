@@ -30,7 +30,9 @@
         "rolloffFactor": {
             "type": "number",
             "description": "Describes how quickly the volume is reduced as the emitter moves away from the listener. Also referred to as falloff factor."
-        }
+        },
+        "extensions": {},
+        "extras": {}
     },
     "required": [
         "distanceModel",

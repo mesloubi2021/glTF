@@ -9,6 +9,15 @@
         }
     ],
     "properties": {
+        "shape": {
+            "type": "string",
+            "description": "Shape in which emitter emits audio: cone, omnidirectional, custom).",
+            "enum": [
+                "cone",
+                "omnidirectional",
+                "custom"
+            ]
+        },
         "coneInnerAngle": {
             "type": "number",
             "description": "The angular diameter of a cone inside of which there will be no angular volume reduction."
