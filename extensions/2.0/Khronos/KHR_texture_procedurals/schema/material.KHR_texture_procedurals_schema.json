@@ -21,7 +21,7 @@
     {
       "_doc:" : "Supported type definition strings",
       "type" : "string",       
-      "enum": ["float", "integer", "boolean", "string", "filename", "color3", "color4", "vector2", "vector3", "vector4", "matrix33", "matrix44", "multioutout" ]
+      "enum": ["float", "integer", "boolean", "string", "filename", "color3", "color4", "vector2", "vector3", "vector4", "matrix33", "matrix44", "multioutput" ]
     },
     
     "value":
@@ -31,7 +31,7 @@
         { 
           "type": "array", 
           "minItems": 2,
-          "maxItems": 4,
+          "maxItems": 16,
           "items": { "type": "number" } 
         },
         { "type": "string" },
@@ -323,7 +323,8 @@
     },
     "extensionsUsed": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": { "type": "string" },
+      "contains": { "enum": ["KHR_texture_procedurals"] }
     },
     "extensions": {
       "type": "object",
@@ -331,7 +332,6 @@
         "KHR_texture_procedurals": {
           "type": "object",
           "properties": {
-            "mimetype": { "type": "string" },
 
             "procedurals": {
               "_doc": "A list of procedural texture graphs",
@@ -345,7 +345,7 @@
               "items": { "$ref": "#/definitions/definition_item" }
             }
           },
-          "required": ["mimetype", "procedurals"]
+          "required": ["procedurals"]
         }
       },
       "required": ["KHR_texture_procedurals"]
