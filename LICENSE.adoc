@@ -1,12 +1,12 @@
-// Copyright 2020-2021 The Khronos Group Inc.
+// Copyright .
 // SPDX-License-Identifier: CC-BY-4.0
 
-= LICENSE file for the KhronosGroup/glTF project
+= LICENSE file for the glTF project
 
 Files in this repository fall under one of these licenses:
 
-  * SPDX license identifier: "`Apache-2.0`"
-  ** Apache License 2.0.
+  * SPDX license identifier: "`MIT`"
+  
   ** For scripts and build tooling.
 
   * SPDX license identifier: "`CC-BY-4.0`"
@@ -29,9 +29,3 @@ Files in this repository fall under one of these licenses:
   ** Only for vendor extensions to glTF. We are working on determining full
      details of these licenses in each case.
 
-Full license text of these licenses is available at:
-
-  * Apache-2.0: https://opensource.org/licenses/Apache-2.0
-  * CC-BY-4.0: https://creativecommons.org/licenses/by/4.0/legalcode
-  * LicenseRef-KhronosSpecCopyright: link:LICENSES/LicenseRef-KhronosSpecCopyright.txt
-  * LicenseRef-TBD: link:LICENSES/LicenseRef-TBD.txt
