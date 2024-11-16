@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "KHR_audio_graph node extension",
+    "type": "object",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "emitter": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The id of the emitter referenced by this node."
+        },
+        "listener": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The id of the listener referenced by this node."
+        },
+        "extensions": { },
+        "extras": { }
+    }
+}

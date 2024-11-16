@@ -1,25 +1,3 @@
-<!-----
-
-
-
-Conversion time: 1.967 seconds.
-
-
-Using this Markdown file:
-
-1. Paste this output into your source file.
-2. See the notes and action items below regarding this conversion run.
-3. Check the rendered output (headings, lists, code blocks, tables) for proper
-   formatting and use a linkchecker before you publish this page.
-
-Conversion notes:
-
-* Docs to Markdown version 1.0β36
-* Fri Jun 14 2024 17:25:52 GMT-0700 (PDT)
-* Source doc: KHR Audio Graph Design
-* Tables are currently converted to HTML tables.
------>
-
 
 
 ## KHR Audio Graph Design
@@ -34,18 +12,59 @@ Conversion notes:
 * Chintan Shah, Meta
 * Alexey Medvedev, Meta
 
+Copyright 2024 The Khronos Group Inc.
+See [Appendix](#appendix-full-khronos-copyright-statement) for full Khronos Copyright Statement.
 
-## Context
+## Status
 
-During the recent Khronos 3D formats working group meeting held on 5/29, we reviewed the [proposal to define the KHR audio glTF specification using an audio graph framework](https://docs.google.com/presentation/d/1IrrQaE-jHyzOtFRabjtLAzeP5UOirFOEj8FRADAceqk/edit?usp=sharing). The purpose of this document is to delve deeper into that proposal, offering a comprehensive design of the KHR audio graph. This includes a detailed description of each node object within the graph along with functionality, the specific properties associated with it, and how it interacts with other nodes in the graph. The document is structured to facilitate clear understanding and to solicit feedback on the proposed design. Based on the feedback we will update and finalize the design before it is formally schematized into KHR core audio spec, extensions, animations, and interactivity.
+Draft
+
+## Dependencies
+
+Written against the glTF 2.0 spec.
+
+## Overview
+
+This extension provides a standardized way to represent an audio graph consisting of multiple interconnected audio node objects to create the final audio output. It’s designed for managing audio routing, mixing, and processing which can be mapped to glTF assets.
 
 
-## 1. Introduction
+### Motivation
 
-This document provides a detailed design for managing audio routing, mixing, and processing in various applications for desktop, mobile, and wearable devices. The core idea involves an audio graph consisting of multiple interconnected audio node objects to create the final audio output. This design seeks to incorporate the audio capabilities found in modern web, game, and XR engines as well as processing, mixing, and filtering functions available in audio production softwares. Although this system is designed with diverse use cases in mind, it might not cover every specialized feature found in state-of-the-art audio tools. In such instances, users are encouraged to develop custom extensions. Nevertheless, the proposed system will support many complex audio applications by default and has been designed to facilitate future expansion with more sophisticated features.
+The core idea involves an audio graph consisting of multiple interconnected audio node objects to create the final audio output. This design seeks to incorporate the audio capabilities found in modern web, game, and XR engines as well as processing, mixing, and filtering functions available in audio production softwares. Although this system is designed with diverse use cases in mind, it might not cover every specialized feature found in state-of-the-art audio tools. In such instances, users are encouraged to develop custom extensions. Nevertheless, the proposed system will support many complex audio applications by default and has been designed to facilitate future expansion with more sophisticated features.
 
 
-## 2. Features
+## Graph based audio processing
+
+**Audio nodes** are the building blocks of an audio graph for rendering audio to the audio hardware. Graph based audio routing allows arbitrary connections between different audio node objects. An audio graph can be represented by **audio sources**, the **audio destination/sink**, and intermediate processing nodes. Each node can have **inputs** and/or **outputs**. A source node has no inputs and a single output. A destination or sink node has one input and no outputs. In the simplest case, a single source can be routed directly to the output.
+
+One or more intermediate processing nodes such as filters can be placed between the source and destination nodes. Most processing nodes will have one input and one output. Each type of audio node differs in the details of how it processes or synthesizes audio. But, in general, an audio node will process its inputs (if it has any), and generate audio for its outputs (if it has any). An output may connect to one or more audio node inputs, thus fan-out is supported. An input (except source and sink) may be connected to one or more audio node outputs, thus fan-in is supported. Each input and output has one or more channels. The exact number of channels depends on the details of the specific audio node.
+
+
+## Extension Declaration
+
+Usage of the procedural structure is indicated by adding the `KHR_texture_procedurals` extension identifier to the `extensionsUsed` array.
+
+```json
+{
+    "extensionsUsed": [
+        "KHR_audio_graph"
+    ]
+}
+```
+
+Usage of a given extension is defined in the `extensions` object as follows:
+```json
+{
+    "extensions": {
+        "KHR_audio_graph": {
+            "audio_nodes": []
+        }
+    }
+}
+```
+
+
+## Features
 
 The core specification should support these primary features:
 
@@ -62,7 +81,7 @@ The core specification should support these primary features:
 * Animation control and dynamic update of node properties.
 
 
-## 3. Graph based audio processing
+## Graph based audio processing
 
 Audio nodes are the building blocks of an audio graph for rendering audio to the audio hardware. Graph based audio routing allows arbitrary connections between different audio node objects. An audio graph can be represented by audio sources, the audio destination/sink, and intermediate processing nodes. Each node can have inputs and/or outputs. A source node has no inputs and a single output. A destination or sink node has one input and no outputs. In the simplest case, a single source can be routed directly to the output.
 
@@ -77,365 +96,64 @@ One or more intermediate processing nodes such as filters can be placed between 
 Audio sources reference audio data and define playback properties for it. An audio source node has no inputs and exactly one output, which has the same number of channels as indicated in encoding properties.
 
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>data
-   </td>
-   <td>object
-   </td>
-   <td>audio or oscillator
-<p>
-See 4.2 Audio data.
-<p>
-See 4.3 Oscillator data.
-   </td>
-   <td>
-   </td>
-   <td>Only selective source node properties apply with oscillator data.
-   </td>
-  </tr>
-  <tr>
-   <td>priority
-   </td>
-   <td>integer
-   </td>
-   <td>Determines the priority of this audio source among all the ones that coexist in the scene (0 = most important, 256 = least important, default = 128).
-   </td>
-   <td>
-   </td>
-   <td>Need to  persist and propagate priority with downstream processing.
-   </td>
-  </tr>
-  <tr>
-   <td>state
-   </td>
-   <td>string
-   </td>
-   <td>Playback state (paused, playing, stopped).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>auto play
-   </td>
-   <td>boolean
-   </td>
-   <td>Play on load.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>loop
-   </td>
-   <td>boolean
-   </td>
-   <td>Playback in a loop (false = no-loop, true = loop). If set to true, then once playback reaches the time specified by “loop end position” (or the end of the asset, whichever is first), the source node will continue playback again from a position specified by the “loop start position” property.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>position
-   </td>
-   <td>number
-   </td>
-   <td>Play position in ms.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>gain
-   </td>
-   <td>number
-   </td>
-   <td>Gain value applied to the audio.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>playback speed
-   </td>
-   <td>number
-   </td>
-   <td>Rate of playback. A value of 1.0 would playback the audio at the standard rate. A value of 2.0 would play back the asset at double the speed.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>loop start position
-   </td>
-   <td>number
-   </td>
-   <td>The starting position in ms when looping.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>loop end position
-   </td>
-   <td>number
-   </td>
-   <td>The ending position (ms) of the loop.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>duration
-   </td>
-   <td>number
-   </td>
-   <td>Length of the underlying audio data in ms.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>encoding properties
-   </td>
-   <td>object
-   </td>
-   <td>See 4.4 Encoding properties.
-   </td>
-   <td>
-   </td>
-   <td>Could be a part of audio data property  instead.
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the audio source in the scene.|Yes|
+|**data**|'object'|Audio or oscillator. See 4.2 AudioData. See 4.3 Oscillator data. Only selective source node properties apply with oscillator data.|Yes|
+|**priority**|'integer'|Determines the priority of this audio source among all the ones that coexist in the scene (0 = most important, 256 = least important, default = 128). Need to  persist and propagate priority with downstream processing.|No|
+|**gain**|'number'|Gain value applied to the audio.|No|
+|**state**|'string'|Playback state (paused, playing, stopped).|No|
+|**autoPlay**|'boolean'|Play on load.|No|
+|**loop**|'boolean'|Playback in a loop (false = no-loop, true = loop). If set to true, then once playback reaches the time specified by “loop end position” (or the end of the asset, whichever is first), the source node will continue playback again from a position specified by the “loop start position” property.|No|
+|**loopStart**|'number'|The starting position in ms when looping.|No|
+|**loopEnd**|'number'|The ending position (ms) of the loop.|No|
+|**playbackSpeed**|'number'|Rate of playback. A value of 1.0 would playback the audio at the standard rate. A value of 2.0 would play back the asset at double the speed.|No|
+|**duration**|'number'|Length of the underlying audio data in ms.|No|
+|**offset**|'number'|If 0 is passed in for this value, then playback will start from the beginning of the buffer. Offset sould not be  negative. If offset is greater than loopEnd, playbackRate is positive or zero, and loop is true, playback will begin at loopEnd. If offset is greater than loopStart, playbackSpeed is negative, and loop is true, playback will begin at loopStart. offset is silently clamped to [0, duration], when startTime is reached, where duration is the value of the duration attribute of the AudioData or Oscillator set to the buffer attribute of this node.|No|
+|**when**|'number'|The when parameter describes at what time (in seconds) the sound should start playing.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 4.2 Audio data
 
 Audio data objects define where audio data is located and what format the data is in. The data is either accessed via a bufferView or uri.
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>buffer view
-   </td>
-   <td>integer
-   </td>
-   <td>The index of the buffer view that contains the audio data. The buffer represents an audio asset residing in memory, created from decoding an audio file, or from raw data.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>mime type
-   </td>
-   <td>string
-   </td>
-   <td>The audio's MIME type. Required if buffer view is defined.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>uri
-   </td>
-   <td>string
-   </td>
-   <td>The uri of the audio file. Relative paths are relative to the .gltf file.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**bufferView**|'integer'|The index of the buffer view that contains the audio data. The buffer represents an audio asset residing in memory, created from decoding an audio file, or from raw data.|Yes|
+|**encodingProperties**|'KHR_audio_graph.encoding.schema.json'|Encoding properties. See 4.4 Encoding properties.|Yes|
+|**mimeType**|'string'|The audio's MIME type. Required if buffer view is defined.|Yes|
+|**uri**|'string'|The uri of the audio file. Relative paths are relative to the .gltf file.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 4.3 Oscillator data
 
 This represents an audio source generating a periodic waveform. It can be set to a few commonly used waveforms. Oscillators are common foundational building blocks in audio synthesis.
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>type
-   </td>
-   <td>string
-   </td>
-   <td>Specifies the waveform type (saw, square, triangle, sine, custom).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>frequency
-   </td>
-   <td>number
-   </td>
-   <td>The Oscillator frequency, from 0-20kHz. The default value is 440 Hz.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>pulse width
-   </td>
-   <td>number
-   </td>
-   <td>The amount of pulse width modulation applied when the “square” waveform is selected. A 0.5 value will produce a pure square wave, and increasing or decreasing the value will add harmonics which change the timbre of the sound.
-   </td>
-   <td>
-   </td>
-   <td>Applies to square waveform.
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**type**|'string'|Specifies the waveform type (saw, square, triangle, sine, custom).|Yes|
+|**frequency**|'number'|The Oscillator frequency, from 0-20kHz. The default value is 440 Hz.|Yes|
+|**pulseWidth**|'number'|The amount of pulse width modulation applied when the “square” waveform is selected. A 0.5 value will produce a pure square wave, and increasing or decreasing the value will add harmonics which change the timbre of the sound.|Yes|
+|**encodingProperties**|'KHR_audio_graph.encoding.schema.json'|Encoding properties. See 4.4 Encoding properties.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 4.4 Encoding properties
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>bits per sample
-   </td>
-   <td>integer
-   </td>
-   <td>Number of bits per audio sample.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>samples
-   </td>
-   <td>integer
-   </td>
-   <td>Number of samples.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>sample rate
-   </td>
-   <td>number
-   </td>
-   <td>Audio sampling rate (Hz).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>channels
-   </td>
-   <td>integer
-   </td>
-   <td>Number of audio channels.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>properties
-   </td>
-   <td>object
-   </td>
-   <td>Additional user-defined properties.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**bitsPerSample**|'integer'|Number of bits per audio sample.|Yes|
+|**duration**|'number'|Length of the underlying audio data in ms.|Yes|
+|**samples**|'integer'|Number of samples.|Yes|
+|**sampleRate**|'number'Audio sampling rate (Hz).|Yes|
+|**channels**|'integer'|Number of audio channels.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ## 5. Audio sink/destination
@@ -447,256 +165,40 @@ Audio emitter of type “Global” is non-spatialized, whereas a “Spatial” e
 
 Using a spatial emitter, an audio stream can be spatialized or positioned in space relative to a listener node. A scene has a single listener node. Both spatial emitters and listeners have a position in 3D space. Spatial emitters have an orientation representing in which direction the sound is projecting. Additionally, they have a sound cone representing how directional the sound is. For example, the sound could be omnidirectional, in which case it would be heard anywhere regardless of its orientation, or it can be more directional and heard only if it is facing the listener.
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>type
-   </td>
-   <td>string
-   </td>
-   <td>Emitter type (global, spatial).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>gain
-   </td>
-   <td>number
-   </td>
-   <td>gain applied to the signal by the emitter.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>spatial properties
-   </td>
-   <td>object
-   </td>
-   <td>See 5.2 Spatial properties.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the audio source in the scene.|Yes|
+|**emitterType**|'string'|Emitter type (global, spatial).|Yes|
+|**gain**|'number'|Gain applied to the signal by the emitter.|No|
+|**spatialProperties**|'KHR_audio_graph.spatial.schema.json'|See 5.2 Spatial properties.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 5.2 Spatial properties
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>spatialization model
-   </td>
-   <td>string
-   </td>
-   <td>Determines which spatialization model will be used to position the audio in 3D space (equal power, HRTF, Custom).
-<p>
-equalpower: Represents the equal-power panning algorithm, generally regarded as simple and efficient. equalpower is the default value.
-<p>
-HRTF: Renders a stereo output of higher quality than equalpower — it uses a convolution with measured impulse responses from human subjects.
-<p>
-Custom: User-defined panning algorithm.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>attenuation
-   </td>
-   <td>object
-   </td>
-   <td>See 5.3 Attenuation properties.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>shape
-   </td>
-   <td>object
-   </td>
-   <td>See 5.4 Shape properties
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**spatializationModel**|'string'|Determines which spatialization model will be used to position the audio in 3D space (equal power, HRTF, Custom).equalpower: Represents the equal-power panning algorithm, generally regarded as simple and efficient. equalpower is the default value. HRTF: Renders a stereo output of higher quality than equalpower — it uses a convolution with measured impulse responses from human subjects. Custom: User-defined panning algorithm.|Yes|
+|**attenuation**|'object'|See 5.3 Attenuation properties.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 5.3 Attenuation properties
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>distance model
-   </td>
-   <td>string
-   </td>
-   <td>Specifies the distance model for the audio emitter  linear, inverse, exponential, custom).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>ref distance
-   </td>
-   <td>number
-   </td>
-   <td>A reference distance for reducing volume as the emitter moves further from the listener.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>max distance
-   </td>
-   <td>number
-   </td>
-   <td>The maximum distance between the emitter and listener, beyond which the audio cannot be heard.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>rolloff factor
-   </td>
-   <td>number
-   </td>
-   <td>Describes how quickly the volume is reduced as the emitter moves away from the listener.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
-
-
-### 5.4 Shape properties
-
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>type
-   </td>
-   <td>string
-   </td>
-   <td>Shape in which emitter emits audio (cone, omnidirectional, custom).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>cone inner angle
-   </td>
-   <td>number
-   </td>
-   <td>The angular diameter of a cone inside of which there will be no angular volume reduction.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>cone outer angle
-   </td>
-   <td>number
-   </td>
-   <td>A parameter for directional audio sources that is an angle, in degrees, outside of which the volume will be reduced to a constant value of coneOuterGain.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>cone outer gain
-   </td>
-   <td>number
-   </td>
-   <td>A parameter for directional audio sources that is the gain outside of the cone outer angle.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**distanceModel**|'string'|Specifies the distance model for the audio emitter  linear, inverse, exponential, custom.|Yes|
+|**refDistance**|'number'|A reference distance for reducing volume as the emitter moves further from the listener.|Yes|
+|**maxDistance**|'number'|The maximum distance between the emitter and listener, beyond which the audio cannot be heard.|Yes|
+|**rolloffFactor**|'number'|Describes how quickly the volume is reduced as the emitter moves away from the listener.|Yes|
+|**shape**|`string`|Shape in which emitter emits audio (cone, omnidirectional, custom).|No|
+|**coneInnerAngle**|`object`|The angular diameter of a cone inside of which there will be no angular volume reduction.|No|
+|**coneOuterAngle**|`object`|A parameter for directional audio sources that is an angle, in degrees, outside of which the volume will be reduced to a constant value of coneOuterGain.|No|
+|**coneOuterGain**|`object`|A parameter for directional audio sources that is the gain outside of the cone outer angle.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 5.5 Audio listener node (0 input / 0 output)

@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "KHR_audio_graph Spatial Properties",
+    "type": "object",
+    "description": "This represents an spatial properties .",
+    "allOf": [
+        {
+            "$ref": "glTFProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "spatializationModel": {
+            "type": "string",
+            "description": "Determines which spatialization model will be used to position the audio in 3D space (0 = equal power, 1 = HRTF, 2 = Custom).",
+            "enum": [
+                "equalpower",
+                "HRTF",
+                "custom"
+            ]
+
+        },
+        "attenuation": {
+            "type": "object",
+            "description": "Attenuation properties.",
+            "$ref": "KHR_audio_graph.attenuation.schema.json"
+        },
+        "extensions": {},
+        "extras": {}
+    },
+    "required": [
+        "spatializationModel"
+    ]
+}

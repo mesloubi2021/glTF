@@ -1,0 +1,68 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "KHR_audio_graph Filter Node",
+    "type": "object",
+    "description": "Use the Audio Mixer node to combine the output from multiple audio sources. A filter node always has exactly one input and one output.",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Name of the node"
+        },
+        "input": {
+            "allOf": [
+                {
+                    "$ref": "glTFid.schema.json"
+                }
+            ],
+            "description": "Input value for the node"
+        },
+        "output": {
+            "allOf": [
+                {
+                    "$ref": "glTFid.schema.json"
+                }
+            ],
+            "description": "Output value for the node"
+        },
+        "filterTypetype": {
+            "type": "string",
+            "description": "Defining the kind of filtering algorithm the node is implementing",
+            "enum": [
+                "lowpass",
+                "highpass",
+                "bandpass",
+                "lowshelf",
+                "highshelf",
+                "peaking",
+                "notch",
+                "allpass",
+                "custom"
+            ]
+        },
+        "frequency": {
+            "type": "number",
+            "description": "Frequency in the current filtering algorithm measured in Hz."
+        },
+        "qualityFactor": {
+            "type": "number",
+            "description": "The lower the Quality, the broader the bandwidth of frequencies cut or boosted. Value range: 0 to 100.",
+            "minimum": 0,
+            "maximum": 100
+        },
+        "gain": {
+            "type": "number",
+            "description": "Gain applied to the signal by the filter."
+        },
+        "bypass": {
+            "type": "boolean",
+            "description": "Disables this processor while still allowing unprocessed audio signals to pass."
+        }
+    },
+    "required": [
+        "type",
+        "frequency",
+        "qualityFactor",
+        "gain",
+        "bypass"
+    ]
+}
