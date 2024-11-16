@@ -1,3 +1,8 @@
+---
+layout: default
+title: KHR_materials_clearcoat
+parent: Extensions
+---
 <!--
 Copyright 2018-2020 The Khronos Group Inc.
 SPDX-License-Identifier: LicenseRef-KhronosSpecCopyright

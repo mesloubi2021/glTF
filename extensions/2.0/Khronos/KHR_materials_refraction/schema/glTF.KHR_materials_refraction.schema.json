@@ -1,0 +1,11 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "KHR_materials_refraction glTF extension",
+    "type": "object",
+    "description": "glTF extension combining transmissive and refractive materials.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "extensions": { },
+        "extras": { }
+    }
+}

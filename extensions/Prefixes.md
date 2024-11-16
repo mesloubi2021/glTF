@@ -1,3 +1,10 @@
+---
+layout: default
+title: Prefixes
+parent: Extensions
+nav_order: 1
+has_children: false
+---
 <!--
 Copyright 2015-2021 The Khronos Group Inc.
 SPDX-License-Identifier: CC-BY-4.0

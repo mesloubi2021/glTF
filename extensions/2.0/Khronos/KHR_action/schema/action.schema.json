@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "action",
+    "type": "object",
+    "description": "Action definition.",
+    "allOf": [ { "$ref": "glTFChildOfRootProperty.schema.json" } ],
+    "properties": {
+        "type": {
+            "description": "Allowed types.",
+            "anyOf": [
+                {
+                    "const": "ToPointer"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "logic": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The index of the logic triggering this action and the retrieving the output value from."
+        },
+        "pointer": {
+            "type": "string",
+            "description": "JSON pointer of the value to change and write to."
+        }
+    },
+    "required": [
+        "type",
+        "logic",
+        "pointer"
+    ]
+}

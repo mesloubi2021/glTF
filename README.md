@@ -1,3 +1,13 @@
+## What is here
+
+This fork contains a (work-in-progress) pair of extensions to add data suitable for rigid body simulations to glTF.
+
+Current work is being performed in the [KHR_rigid_bodies branch](https://github.com/eoineoineoin/glTF/tree/KHR_rigid_bodies)
+
+If you're a Havok customer who is currently using an extension called MSFT\_rigid\_bodies, you'll be interested in the [hk_users](https://github.com/eoineoineoin/glTF/tree/hk_users) branch.
+
+
+
 <!--
 Copyright 2014-2021 The Khronos Group Inc.
 SPDX-License-Identifier: CC-BY-4.0

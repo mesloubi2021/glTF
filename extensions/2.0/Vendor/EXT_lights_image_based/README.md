@@ -30,7 +30,7 @@ The EXT_lights_image_based extension defines an array of image-based lights at t
 ```javascript
 "extensions": {
     "EXT_lights_image_based" : {
-        "lights": [
+        "ibls": [
             {
                 "intensity": 1.0,
                 "rotation": [0, 0, 0, 1],
@@ -50,7 +50,7 @@ The EXT_lights_image_based extension defines an array of image-based lights at t
 
 ## Prefiltered Specular Radiance Cubemaps
 
-The cubemap used for specular radiance is defined along with its prefiltered mipmaps with each face of the cube defined as separate images. The images must all be square, have power-of-two dimensions and conform to the usual requirements for mip images. That is, each mip level below the source image will correspond to halving the width and height resolution. The various mip levels evenly map to roughness values from 0 to 1 in the PBR material and should be generated with a principled multi-scatter GGX normal distribution. The data in the maps represents illuminance in lux (lm/m^2).
+The cubemap used for specular radiance is defined along with its prefiltered mipmaps with each face of the cube defined as separate images. The images must all be square, have power-of-two dimensions and conform to the usual requirements for mip images. That is, each mip level below the source image will correspond to halving the width and height resolution. The various mip levels evenly map to roughness values from 0 to 1 in the PBR material and should be generated with a principled multi-scatter GGX normal distribution. The data in the maps represents luminance in nits (lm/sr/m^2).
 
 The entire mip chain of images should not be provided. Instead, the lowest-resolution mip should have sufficient size to represent the maximally-blurred radiance map (say, 16x16) corresponding to roughness=1. The `specularImageSize` value defines the largest dimension of mip 0 and, taken together with the number of defined mips, should give the loading runtime the information it needs to generate the remainder of the mip chain and sample the appropriate mip level in the shader.
 
@@ -74,9 +74,11 @@ https://en.wikipedia.org/wiki/Cube_mapping
 
 ## Irradiance Coefficients
 
-This extension uses spherical harmonic coefficients to define irradiance used for diffuse lighting. Coefficients are calculated for the first 3 SH bands (l=2) and take the form of a 9x3 array.
-[Realtime Image Based Lighting using Spherical Harmonics](https://metashapes.com/blog/realtime-image-based-lighting-using-spherical-harmonics/)
-[An Efficient Representation for Irradiance Environment Maps](http://graphics.stanford.edu/papers/envmap/)
+This extension uses spherical harmonic coefficients to define irradiance used for diffuse lighting. Coefficients are calculated for the first 3 SH bands (l=2) and take the form of a 9x3 array.  
+
+[Using irradiance coefficients in your shader](https://google.github.io/filament/Filament.md.html#lighting/imagebasedlights/distantlightprobes)  
+[Realtime Image Based Lighting using Spherical Harmonics](https://metashapes.com/blog/realtime-image-based-lighting-using-spherical-harmonics/)  
+[An Efficient Representation for Irradiance Environment Maps](http://graphics.stanford.edu/papers/envmap/)  
 
 ## HDR Images
 
@@ -101,30 +103,92 @@ This extension expects 4-channel PNG's to contain RGBD data. However, this shoul
 
 ## Adding Light Instances to Scenes
 
-Each scene can have a single IBL light attached to it by defining the `extensions.EXT_lights_image_based` property and, within that, an index into the `lights` array using the `light` property.
+Each scene can have a single IBL light attached to it by defining the `extensions.EXT_lights_image_based` property and, within that, an index into the `ibls` array using the `ibl` property.
 
 ```javascript
 "scenes" : [
     {
         "extensions" : {
             "EXT_lights_image_based" : {
-                "light" : 0
+                "ibl" : 0
             }
         }
     }
 ]
 ```
+### ibl
 
-### Image-Based Light Properties
+Image based light information for specular and diffuse contribution.  
 
-| Property | Description | Required |
-|:-----------------------|:------------------------------------------| :--------------------------|
-| `name` | Name of the light. | No |
-| `rotation` | Quaternion that represents the rotation of the IBL environment. | No, Default: `[0.0, 0.0, 0.0, 1.0]` |
-| `intensity` | Brightness multiplier for environment. | No, Default: `1.0` |
-| `irradianceCoefficients` | Declares spherical harmonic coefficients for irradiance up to l=2. This is a 9x3 array. | :white_check_mark: Yes |
-| `specularImages` | Declares an array of the first N mips of the prefiltered cubemap. Each mip is, in turn, defined with an array of 6 images, one for each cube face. i.e. this is an Nx6 array. | :white_check_mark: Yes |
-| `specularImageSize` | The dimension (in pixels) of the first specular mip. This is needed to determine, pre-load, the total number of mips needed. | :white_check_mark: Yes |
+
+### Properties
+
+|   |Type|Description|Required|
+|---|----|-----------|--------|
+| `name` | `string` | Name of the light. | No |
+| `rotation` | `number [4]`| Quaternion that represents the rotation of the IBL environment. | No, Default: `[0.0, 0.0, 0.0, 1.0]` |
+| `intensity` | `number` |Brightness multiplier for environment. | No, Default: `1.0` |
+| `irradianceCoefficients` | `vec3 [9]`| Declares spherical harmonic coefficients for irradiance up to l=2. This is a 9x3 array. | :white_check_mark: Yes |
+| `specularImages` | `image [][6]` | Declares an array of the first N mips of the prefiltered cubemap. Each mip is, in turn, defined with an array of 6 images, one for each cube face. i.e. this is an Nx6 array. | :white_check_mark: Yes |
+| `specularImageSize` | `integer` | The dimension (in pixels) of the first specular mip. This is needed to determine, pre-load, the total number of mips needed. | :white_check_mark: Yes |
+
+
+#### ibl.name
+
+The name of the light.  
+
+* **Type**: `string`
+* **Required**: No
+
+#### ibl.rotation
+
+The IBL environment unit quaternion rotation in the order (x, y, z, w), where w is the scalar.
+
+* **Type**: `number` `[4]`
+   * Each element in the array must be greater than or equal to `-1` and less than or equal to `1`.
+* **Required**: No, default: `[0,0,0,1]`
+
+#### ibl.intensity
+
+The IBL environment unit quaternion rotation in the order (x, y, z, w), where w is the scalar.
+
+* **Type**: `number` `[4]`
+   * Each element in the array must be greater than or equal to `-1` and less than or equal to `1`.
+* **Required**: No, default: `[0,0,0,1]`
+
+#### ibl.intensity
+
+A scalar multiplier controlling the brightness of the applied lights.  
+A value of `0.0` means that no light will be added to the environment, this is the same as disabling the IBL.  
+This value shall be applied to diffuse and specular light contribution, scaling both the `specularImages` and `irradianceCoefficients`.  
+
+* **Type**: `number`
+* **Required**: No, default: `1`
+* **Minimum**: ` >= 0`
+
+#### ibl.irradianceCoefficients
+
+Diffuse light contribution stored as spherical harmonics coefficients. This is the irradiance l=2.  
+The values are stored as an array of 9 vec3 - where each vec3 consists of RGB irradiance coefficients.  
+
+* **Type**: `vec3 [9]`
+* **Required**: Yes
+
+#### ibl.specularImages
+
+An array of cubemap specular images, with optional number of mip levels.  
+The first 6 images shall correspond to mipmap level 0, this is the unfiltered base level that can be used to create filtered cubemaps for increasing roughness.  
+
+* **Type**: `image [][6]`
+* **Required**: Yes
+
+#### ibl.specularImageSize
+
+The dimension (in pixels) of the first specular mip. This is needed to determine, pre-load, the total number of mips needed.
+
+* **Type**: `integer`
+* **Required**: Yes
+
 
 ## License
 

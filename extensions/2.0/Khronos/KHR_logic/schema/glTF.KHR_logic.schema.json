@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "KHR_logic glTF extension",
+    "type": "object",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "logics": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "$ref": "logic.schema.json"
+            },
+            "minItems": 1
+        },
+        "operators": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "$ref": "operator.schema.json"
+            },
+            "minItems": 1
+        },
+        "extensions": { },
+        "extras": { }
+    },
+    "required": [
+        "logics",
+        "operators"
+    ]
+}

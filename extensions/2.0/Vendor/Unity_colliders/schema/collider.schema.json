@@ -1,0 +1,27 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "Unity_colliders Collider",
+    "type": "object",
+    "description": "A model collider definition.",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "boxCollider": {
+            "allOf": [ { "$ref": "collider.boxCollider.schema.json" } ],
+            "description": "A set of parameter values that are used to define a box collider."
+        },
+        "sphereCollider": {
+            "allOf": [ { "$ref": "collider.sphereCollider.schema.json" } ],
+            "description": "A set of parameter values that are used to define a sphere collider."
+        },
+        "capsuleCollider": {
+            "allOf": [ { "$ref": "collider.capsuleCollider.schema.json" } ],
+            "description": "A set of parameter values that are used to define a capsule collider."
+        },
+        "meshCollider": {
+            "allOf": [ { "$ref": "collider.meshCollider.schema.json" } ],
+            "description": "A set of parameter values that are used to define a mesh collider."
+        },
+        "extensions": { },
+        "extras": { }
+    }
+}

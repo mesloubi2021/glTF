@@ -1,0 +1,66 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "clip",
+    "type": "object",
+    "description": "An animation clip.",
+    "allOf": [
+        {
+            "$ref": "glTFChildOfRootProperty.schema.json"
+        }
+    ],
+    "properties": {
+        "animations": {
+            "type": "array",
+            "description": "Indices of animations.",
+            "items": {
+                "$ref": "glTFid.schema.json"
+            },
+            "uniqueItems": true,
+            "minItems": 1
+        },
+        "start": {
+            "type": "number",
+            "minimum": 0.0,
+            "default": 0.0,
+            "description": "The lower time bound of an animation clip.",
+            "gltf_detailedDescription": ""
+        },
+        "end": {
+            "type": "number",
+            "description": "The upper time bound of an animation clip.",
+            "gltf_detailedDescription": "When defined, `end` **MUST** be greater or equal than `start`. If `end` is undefined, client implementations **SHOULD** use an infinite floating number value."
+        },
+        "offset": {
+            "type": "number",
+            "minimum": 0.0,
+            "default": 0.0,
+            "description": "The initial time offset.",
+            "gltf_detailedDescription": "If defined, the animation starts at an offset time point which is relative to the animation's starting time point. This only affects the beginning of the animation, not subsequent repetitions. The offset **MUST** be smaller or equal to the animation clip's duration. "
+        },
+        "speed": {
+            "type": "number",
+            "default": 1.0,
+            "description": "A signed speed to modify animation frequency.",
+            "gltf_detailedDescription": "This value allows to run an animation forward (`speed` > 0.0) or backward (`speed` < 0.0). It allows to increase (abs(`speed`) > 1.0) or decrease (abs(`speed`) < 1.0) the speed of the animation. `speed` = 0.0 stops the animation clip."
+        },
+        "repetitions": {
+            "type": "integer",
+            "minimum": -1,
+            "default": -1,
+            "description": "The number of times the animation is looped.",
+            "gltf_detailedDescription": "Not defined or -1 means infinite loops. 0 means the animation is not played at all. 1 means the animation is played once. A value of n > 1 means the animation is repeated n times."
+        },
+        "reverse": {
+            "type": "boolean",
+            "default": false,
+            "description": "Specifies whether the animation should reverse when repeated.",
+            "gltf_detailedDescription": "If true, the animation's time direction will be reversed on each repetition. Otherwise, the animation is repeated identically."
+        },
+        "name": {},
+        "extensions": {},
+        "extras": {}
+    },
+    "required": [
+        "animations"
+    ]
+}

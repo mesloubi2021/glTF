@@ -1,0 +1,29 @@
+{
+    "$id": "extras.animationClip.keyframeTrack.schema.json",
+    "title": "Animation Keyframe Track",
+    "type": "object",
+    "description": "An animation Keyframe Track combines property names with time and values, also defines the weight and tangent of the curve",
+    "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
+    "properties": {
+        "TIME": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The index of an accessor, containing time values."
+        },
+        "VALUE": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The index of an accessor, containing the value in the array time."
+        },
+        "WEIGHT": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description":  "The index of an accessor, containing the weight of the curve point in the array time position."
+        },
+        "TANGENT": {
+            "allOf": [ { "$ref": "glTFid.schema.json" } ],
+            "description": "The index of an accessor, containing the tangent of the curve point in the array time position."
+        },
+        "trackName": { },
+        "extensions": { },
+        "extras": { }
+    },
+    "required": [ "trackName", "TIME", "VALUE" ]
+}

@@ -13,7 +13,6 @@ The Khronos{regtitle} 3D Formats Working Group
 :toc2:
 :toclevels: 10
 :sectnumlevels: 10
-:max-width: 100%
 :numbered:
 :source-highlighter: coderay
 :title-logo-image: image:../figures/glTF_RGB_June16.svg[Logo,pdfwidth=4in,align=right]
@@ -920,7 +919,7 @@ The following example defines two buffer views: the first holds the indices for 
 }
 ----
 
-When a buffer view is used for vertex attribute data, it **MAY** have a `byteStride` property. This property defines the stride in bytes between each vertex. Buffer views with other types of data **MUST NOT** not define `byteStride` (unless such layout is explicitly enabled by an extension).
+When a buffer view is used for vertex attribute data, it **MAY** have a `byteStride` property. This property defines the stride in bytes between each vertex. Buffer views with other types of data **MUST NOT** define `byteStride` (unless such layout is explicitly enabled by an extension).
 
 Buffers and buffer views do not contain type information. They simply define the raw data for retrieval from the file. Objects within the glTF asset (meshes, skins, animations) access buffers or buffer views via *accessors*.
 
@@ -1133,7 +1132,7 @@ Each accessor **MUST** fit its `bufferView`, i.e.,
 accessor.byteOffset + EFFECTIVE_BYTE_STRIDE * (accessor.count - 1) + SIZE_OF_COMPONENT * NUMBER_OF_COMPONENTS
 ----
 
-**MUST** be less than or equal to `bufferView.length`.
+**MUST** be less than or equal to `bufferView.byteLength`.
 
 For performance and compatibility reasons, each element of a vertex attribute **MUST** be aligned to 4-byte boundaries inside a `bufferView` (i.e., `accessor.byteOffset` and `bufferView.byteStride` **MUST** be multiples of 4).
 
@@ -1294,7 +1293,7 @@ Valid accessor type and component type for each attribute semantic property are 
                 VEC4            | _float_ +
                                   _unsigned byte_ normalized +
                                   _unsigned short_ normalized | RGB or RGBA vertex color linear multiplier
-| `JOINTS_n`  | VEC4            | _unsigned byte_
+| `JOINTS_n`  | VEC4            | _unsigned byte_ +
                                   _unsigned short_            | See <<skinned-mesh-attributes,Skinned Mesh Attributes>>
 | `WEIGHTS_n` | VEC4            | _float_ +
                                   _unsigned byte_ normalized +
@@ -2559,7 +2558,7 @@ Samplers within a given animation **MAY** have different inputs.
                                     _unsigned short_ normalized | Weights of morph targets
 |====
 
-Implementations **MUST** use following equations to decode real floating-point value `f` from a normalized integer `c` and vise-versa:
+Implementations **MUST** use the following equations to decode real floating-point value `f` from a normalized integer `c` and vice versa:
 
 [options="header"]
 |====
@@ -2782,9 +2781,11 @@ To suggest changes, open a Pull Request to edit the https://github.com/KhronosGr
 ====
 endif::[]
 
+[%collapsible]
+====
 // Generated with wetzel
 include::PropertiesReference.adoc[]
-
+====
 
 [[acknowledgments]]
 = Acknowledgments (Informative)
@@ -2859,8 +2860,11 @@ To suggest changes, open a Pull Request to edit the https://github.com/KhronosGr
 ====
 endif::[]
 
+[%collapsible]
+====
 // Generated with wetzel
 include::JsonSchemaReference.adoc[]
+====
 
 [appendix]
 [[appendix-b-brdf-implementation]]
