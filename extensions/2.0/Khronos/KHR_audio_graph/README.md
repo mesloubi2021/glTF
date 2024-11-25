@@ -169,7 +169,7 @@ Using a spatial emitter, an audio stream can be spatialized or positioned in spa
 |---|---|---|---|
 |**id**|'integer'|A unique identifier of the audio source in the scene.|Yes|
 |**emitterType**|'string'|Emitter type (global, spatial).|Yes|
-|**gain**|'number'|Gain applied to the signal by the emitter.|No|
+|**gain**|'number'|Gain applied to the signal by the emitter. It's a linear value in the range [0, 1]. |No|
 |**spatialProperties**|'KHR_audio_graph.spatial.schema.json'|See 5.2 Spatial properties.|No|
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
@@ -196,7 +196,7 @@ Using a spatial emitter, an audio stream can be spatialized or positioned in spa
 |**shape**|`string`|Shape in which emitter emits audio (cone, omnidirectional, custom).|No|
 |**coneInnerAngle**|`object`|The angular diameter of a cone inside of which there will be no angular volume reduction.|No|
 |**coneOuterAngle**|`object`|A parameter for directional audio sources that is an angle, in degrees, outside of which the volume will be reduced to a constant value of coneOuterGain.|No|
-|**coneOuterGain**|`object`|A parameter for directional audio sources that is the gain outside of the cone outer angle.|No|
+|**coneOuterGain**|`object`|A parameter for directional audio sources that is the gain outside of the cone outer angle. It's a linear value in the range [0, 1].|No|
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
