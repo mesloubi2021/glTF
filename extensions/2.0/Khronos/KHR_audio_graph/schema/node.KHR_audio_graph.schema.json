@@ -4,9 +4,15 @@
     "type": "object",
     "allOf": [ { "$ref": "glTFProperty.schema.json" } ],
     "properties": {
-        "emitter": {
-            "allOf": [ { "$ref": "glTFid.schema.json" } ],
-            "description": "The id of the emitter referenced by this node."
+        "emitters": {
+            "type": "array",
+            "items": {
+                "$ref": "KHR_audio_graph.emitter.schema.json"
+            },
+            "description": "An array of emitters referenced by this node.",
+            "gltf_detailedDescription": "An array of audio sources.",
+            "minItems": 1
+
         },
         "listener": {
             "allOf": [ { "$ref": "glTFid.schema.json" } ],
