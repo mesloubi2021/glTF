@@ -211,58 +211,14 @@ Describes the position and other physical characteristics of a listener from whi
 
 ### 6.1 Gain node (1 input / 1 output)
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>gain
-   </td>
-   <td>number
-   </td>
-   <td>The gain to apply. Once set, the actual gain applied will transition from it’s current setting to the new one set over “duration” milliseconds.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>interpolation
-   </td>
-   <td>string
-   </td>
-   <td>The curve to apply when changing gains (linear, custom).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>duration
-   </td>
-   <td>number
-   </td>
-   <td>When changing gain, this parameter controls how long to spend interpolating from the previously set gain value to the one that is specified.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**gain**|'number'|The gain to apply. In's a linear value in the range [0..1]. Should be nultiplied to previous node (emitter, source) gain. Once set, the actual gain applied will transition from it’s current setting to the new one set over 'duration' milliseconds. |Yes|
+|**interpolation**|'string'|The curve to apply when changing gains (linear, custom).|No|
+|**duration**|'number'|When changing gain, this parameter controls how long to spend interpolating in ms from the previously set gain value to the one that is specified.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.2 Delay node (1 input / 1 output)
