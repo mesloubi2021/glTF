@@ -4,38 +4,9 @@
   "type": "object",
   "description": "Node for accessing the individual channels of an audio stream in the routing graph. It has a single input, and a number of outputs which equals the number of channels in the input audio stream. For example, if a stereo input is connected to this node then the number of active outputs will be two (one from the left channel and one from the right). ",
   "properties": {
-    "name": {
-      "type": "string",
-      "description": "Name of the node"
-    },
-    "input": {
-      "allOf": [
-        {
-          "$ref": "glTFid.schema.json"
-        }
-      ],
-      "description": "Input value for the node"
-    },
-    "output": {
-      "type": "array",
-      "description": "The indices of output nodes.",
-      "items": {
-        "$ref": "glTFid.schema.json"
-      },
-      "uniqueItems": true,
-      "minItems": 1
-    },
-    "type": {
-      "type": "integer",
-      "description": "Emitter type (global, spatial).",
-      "enum": [
-        "global",
-        "spatial"
-      ]
-    },
-    "inputChannels": {
-      "type": "number",
-      "description": "Number of channels in input audio."
+    "id": {
+      "description": "A unique identifier of the splitter node in the scene.",
+      "type": "integer"
     },
     "channelInterpretation": {
       "type": "string",
@@ -44,11 +15,11 @@
         "speakers",
         "discrete"
       ]
-    }
+    },
+    "extensions": {},
+    "extras": {}
   },
   "required": [
-    "input",
-    "output",
-    "pitch"
+    "id"
   ]
 }

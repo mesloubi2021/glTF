@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "KHR_audio_graph Channel mixer Node",
+    "type": "object",
+    "description": "Up-mixing refers to the process of taking a stream with a smaller number of channels and converting it to a stream with a larger number of channels. Down-mixing refers to the process of taking a stream with a larger number of channels and converting it to a stream with a smaller number of channels. Channel mixer node should ideally use these mixing rules. ",
+    "properties": {
+        "id": {
+          "description": "A unique identifier of the channel mixer node in the scene.",
+          "type": "integer"
+        },
+        "outputChannels": {
+            "type": "integer",
+            "description": "Number of channels in output audio."
+        },
+        "channelInterpretation": {
+          "type": "string",
+          "description": "Channel ordering for speaker channel interpretation are captured here. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs. ",
+          "enum": [
+            "speakers",
+            "discrete"
+          ]
+        },
+        "extensions": {},
+        "extras": {}
+      },
+      "required": [
+        "id",
+        "outputChannels"
+      ]
+}

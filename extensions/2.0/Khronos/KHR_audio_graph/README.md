@@ -226,33 +226,12 @@ Describes the position and other physical characteristics of a listener from whi
 The node that causes a delay between the arrival of an input data and its propagation to the output. A delay node always has exactly one input and one output, both with the same amount of channels.
 
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>delay time
-   </td>
-   <td>number
-   </td>
-   <td>representing the amount of delay to apply, specified in ms.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**delayTime**|'number'|Representing the amount of delay to apply, specified in ms.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.3 Pitch shifter node (1 input / 1 output)
@@ -260,81 +239,24 @@ The node that causes a delay between the arrival of an input data and its propag
 Use the node to make the pitch of an audio deeper or higher.
 
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>semitone adjustment
-   </td>
-   <td>number
-   </td>
-   <td>Pitch shift in musical semitones. A value of -12 halves the pitch, while 12 doubles the pitch. A value of 0 will not change the pitch of the audio source.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**pitch**|'number'|Pitch shift in musical semitones. A value of -12 halves the pitch, while 12 doubles the pitch. A value of 0 will not change the pitch of the audio source.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.4 Channel splitter node (1 input / N outputs)
 
 Node for accessing the individual channels of an audio stream in the routing graph. It has a single input, and a number of outputs which equals the number of channels in the input audio stream. For example, if a stereo input is connected to this node then the number of active outputs will be two (one from the left channel and one from the right).
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>input channels
-   </td>
-   <td>integer
-   </td>
-   <td>Number of channels in input audio.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>channel interpretation
-   </td>
-   <td>string
-   </td>
-   <td>speakers, discrete
-<p>
-Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.5 Channel merger node (N inputs / 1 output)
@@ -342,53 +264,26 @@ Channel ordering for speaker channel interpretation are captured <a href="https:
 Node for combining channels from multiple audio streams into a single audio stream. It has a variable number of inputs, and a single output whose audio stream has a number of channels equal to the number of inputs. To merge multiple inputs into one stream, each input should be a single channel audio stream.
 
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>output channels
-   </td>
-   <td>integer
-   </td>
-   <td>Number of channels in output audio.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>channel interpretation
-   </td>
-   <td>string
-   </td>
-   <td>speakers, discrete
-<p>
-Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. When the number of channels do not match any of the basic speaker layouts, use discrete as it maps inputs to channels.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.6 Channel mixer node (1 input / 1 output)
 
 Up-mixing refers to the process of taking a stream with a smaller number of channels and converting it to a stream with a larger number of channels. Down-mixing refers to the process of taking a stream with a larger number of channels and converting it to a stream with a smaller number of channels. Channel mixer node should ideally use these [mixing rules](https://webaudio.github.io/web-audio-api/#mixing-rules).
 
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**outputChannels**|'number'|Number of channels in output audio.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 <table>
   <tr>
@@ -449,7 +344,11 @@ Speakers use up-mix / down-mix equations. In cases where the number of channels 
 
 Use the Audio mixer node to combine the output from multiple audio sources. Number of channels should be the same across all inputs.
 
-[no properties for this node]
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.8 Filter node (1 input / 1 output)

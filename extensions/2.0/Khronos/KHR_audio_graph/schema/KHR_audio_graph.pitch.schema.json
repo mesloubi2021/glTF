@@ -4,32 +4,18 @@
   "type": "object",
   "description": "Use the node to make the pitch of an audio deeper or higher.",
   "properties": {
-    "name": {
-      "type": "string",
-      "description": "Name of the node"
-    },
-    "input": {
-      "allOf": [
-        {
-          "$ref": "glTFid.schema.json"
-        }
-      ],
-      "description": "Input value for the node"
-    },
-    "output": {
-      "allOf": [
-        {
-          "$ref": "glTFid.schema.json"
-        }
-      ],
-      "description": "Output value for the node"
+    "id": {
+      "description": "A unique identifier of the pitch node in the scene.",
+      "type": "integer"
     },
     "pitch": {
       "type": "number",
       "description": "Pitch shift in musical semitones. A value of -12 halves the pitch, while 12 doubles the pitch. A value of 0 will not change the pitch of the audio source."
-    }
+    },
+    "extensions": {},
+    "extras": {}
   },
   "required": [
-    "pitch"
+    "id"
   ]
 }

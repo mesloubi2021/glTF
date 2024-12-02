@@ -28,6 +28,7 @@
         "extras": {}
     },
     "required": [
+        "id",
         "gain",
         "interpolation",
         "duration"
