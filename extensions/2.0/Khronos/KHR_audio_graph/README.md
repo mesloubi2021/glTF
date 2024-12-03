@@ -285,60 +285,6 @@ Up-mixing refers to the process of taking a stream with a smaller number of chan
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>input channels
-   </td>
-   <td>integer
-   </td>
-   <td>Number of channels in input audio.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>output channels
-   </td>
-   <td>integer
-   </td>
-   <td>Number of channels in output audio.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>channel interpretation
-   </td>
-   <td>string
-   </td>
-   <td>speakers, discrete
-<p>
-Speakers use up-mix / down-mix equations. In cases where the number of channels do not match any of the basic speaker layouts, use "discrete". "Discrete" up-mix by filling channels until they run out then zero out remaining channels; down-mix by filling as many channels as possible, then dropping remaining channels.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
-
 
 ### 6.7 Audio mixer node (N inputs / 1 output)
 
@@ -437,189 +383,25 @@ Use the Audio Mixer node to combine the output from multiple audio sources. A fi
 
 Reverberation is the persistence of sound in an enclosure after a sound source has been stopped. This is a result of the multiple reflections of sound waves throughout the room arriving at the ear so closely spaced that they are indistinguishable from one another and are heard as a gradual decay of sound.
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>mix
-   </td>
-   <td>number
-   </td>
-   <td>Blend between the source signal ('dry') and the reverb effect. A value of 0 will not add any reverb. A value of 50 will mix the signal 50% dry and 50% reverberation. A value of 100 will result in only reverberation, without any of the source signal.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>early reflections gain
-   </td>
-   <td>number
-   </td>
-   <td>Loudness control for the early reflections of the reverberation.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>diffusion gain
-   </td>
-   <td>number
-   </td>
-   <td>Loudness control for the reverb decay as it returns to silence.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>room size
-   </td>
-   <td>number
-   </td>
-   <td>Approximates the size of the room you want to simulate in meters from wall to wall.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reflectivity
-   </td>
-   <td>number
-   </td>
-   <td>Defines how much of the audio is reflected at each bounce on a wall. Value range: 0 to 100. Low values will simulate softer sounding materials like carpet or curtains. High values will simulate harder materials like wood, glass or metal. A value of 100 will result in self-oscillation and is not recommended.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reflectivity high
-   </td>
-   <td>number
-   </td>
-   <td>Separate value for the reflectivity of high frequencies.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reflectivity low
-   </td>
-   <td>number
-   </td>
-   <td>Separate value for the reflectivity of low frequencies.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>early reflections
-   </td>
-   <td>number
-   </td>
-   <td>The number of early reflections of reverberation. The value range is 0 to 32.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>min distance
-   </td>
-   <td>number
-   </td>
-   <td>The distance from the centerpoint that the reverb will have full effect at.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>max distance
-   </td>
-   <td>number
-   </td>
-   <td>The distance from the centerpoint that the reverb will not have any effect.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reflection delay
-   </td>
-   <td>number
-   </td>
-   <td>Initial reflection delay time in ms.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reverb delay
-   </td>
-   <td>number
-   </td>
-   <td>Late reverberation delay time relative to initial reflection.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>custom properties
-   </td>
-   <td>object
-   </td>
-   <td>Application-specific data.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>bypass
-   </td>
-   <td>boolean
-   </td>
-   <td>Disables this processor while still allowing unprocessed audio signals to pass.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**mix**|'number'|Blend between the source signal ('dry') and the reverb effect. A value of 0 will not add any reverb. A value of 50 will mix the signal 50% dry and 50% reverberation. A value of 100 will result in only reverberation, without any of the source signal.|Yes|
+|**earlyReflectionsGain**|'number'|Loudness control for the reverb decay as it returns to silence.|Yes|
+|**diffusionGain**|'number'|Loudness control for the reverb decay as it returns to silence.|Yes|
+|**roomSize**|'number'|Approximates the size of the room you want to simulate in meters from wall to wall.|Yes|
+|**reflectivity**|'number'|Defines how much of the audio is reflected at each bounce on a wall. Value range: 0 to 100. Low values will simulate softer sounding materials like carpet or curtains. High values will simulate harder materials like wood, glass or metal. A value of 100 will result in self-oscillation and is not recommended.|Yes|
+|**reflectivityHigh**|'number'|Separate value for the reflectivity of high frequencies.|Yes|
+|**reflectivityLow**|'number'|Separate value for the reflectivity of low frequencies.|Yes|
+|**earlyReflections**|'number'|The number of early reflections of reverberation. The value range is 0 to 32.|Yes|
+|**minDistance**|'number'|The distance from the centerpoint that the reverb will have full effect at.|Yes|
+|**maxDistance**|'number'|The distance from the centerpoint that the reverb will not have any effect.|Yes|
+|**reflectionDelay**|'number'|Initial reflection delay time in ms.|Yes|
+|**reverbDelay**|'number'|Late reverberation delay time relative to initial reflection.|Yes|
+|**diffusionGain**|'number'||Yes|
+|**bypass**|`boolean`|Disables this processor while still allowing unprocessed audio signals to pass.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 
@@ -634,3 +416,56 @@ Reverberation is the persistence of sound in an enclosure after a sound source h
 * A scene can have multiple emitters.
 * A node can have multiple spatial emitters.
 * A scene can have only one audio listener.
+
+## Appendix: Full Khronos Copyright Statement
+
+Copyright 2013-2017 The Khronos Group Inc.
+
+Some parts of this Specification are purely informative and do not define requirements
+necessary for compliance and so are outside the Scope of this Specification. These
+parts of the Specification are marked as being non-normative, or identified as
+**Implementation Notes**.
+
+Where this Specification includes normative references to external documents, only the
+specifically identified sections and functionality of those external documents are in
+Scope. Requirements defined by external documents not created by Khronos may contain
+contributions from non-members of Khronos not covered by the Khronos Intellectual
+Property Rights Policy.
+
+This specification is protected by copyright laws and contains material proprietary
+to Khronos. Except as described by these terms, it or any components
+may not be reproduced, republished, distributed, transmitted, displayed, broadcast
+or otherwise exploited in any manner without the express prior written permission
+of Khronos.
+
+This specification has been created under the Khronos Intellectual Property Rights
+Policy, which is Attachment A of the Khronos Group Membership Agreement available at
+www.khronos.org/files/member_agreement.pdf. Khronos grants a conditional
+copyright license to use and reproduce the unmodified specification for any purpose,
+without fee or royalty, EXCEPT no licenses to any patent, trademark or other
+intellectual property rights are granted under these terms. Parties desiring to
+implement the specification and make use of Khronos trademarks in relation to that
+implementation, and receive reciprocal patent license protection under the Khronos
+IP Policy must become Adopters and confirm the implementation as conformant under
+the process defined by Khronos for this specification;
+see https://www.khronos.org/adopters.
+
+Khronos makes no, and expressly disclaims any, representations or warranties,
+express or implied, regarding this specification, including, without limitation:
+merchantability, fitness for a particular purpose, non-infringement of any
+intellectual property, correctness, accuracy, completeness, timeliness, and
+reliability. Under no circumstances will Khronos, or any of its Promoters,
+Contributors or Members, or their respective partners, officers, directors,
+employees, agents or representatives be liable for any damages, whether direct,
+indirect, special or consequential damages for lost revenues, lost profits, or
+otherwise, arising from or in connection with these materials.
+
+Vulkan is a registered trademark and Khronos, OpenXR, SPIR, SPIR-V, SYCL, WebGL,
+WebCL, OpenVX, OpenVG, EGL, COLLADA, glTF, NNEF, OpenKODE, OpenKCAM, StreamInput,
+OpenWF, OpenSL ES, OpenMAX, OpenMAX AL, OpenMAX IL, OpenMAX DL, OpenML and DevU are
+trademarks of The Khronos Group Inc. ASTC is a trademark of ARM Holdings PLC,
+OpenCL is a trademark of Apple Inc. and OpenGL and OpenML are registered trademarks
+and the OpenGL ES and OpenGL SC logos are trademarks of Silicon Graphics
+International used under license by Khronos. All other product names, trademarks,
+and/or company names are used solely for identification and belong to their
+respective owners.
