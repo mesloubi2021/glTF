@@ -297,87 +297,121 @@ Use the Audio mixer node to combine the output from multiple audio sources. Numb
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
-### 6.8 Filter node (1 input / 1 output)
+### 6.8 Filter nodes (1 input / 1 output)
 
-Use the Audio Mixer node to combine the output from multiple audio sources. A filter node always has exactly one input and one output.
+Low-order filters are the building blocks of basic tone controls (bass, mid, treble), graphic equalizers, and more advanced filters. Multiple filters can be combined to form more complex filters. The filter parameters such as frequency can be changed over time for filter sweeps, etc. Each filter node always has exactly one input and one output.
 
+TODO:
+Add https://www.w3.org/TR/webaudio/#filters-characteristics explanations for the filter math
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>type
-   </td>
-   <td>string
-   </td>
-   <td>Defining the kind of filtering algorithm the node is implementing (lowpass, highpass, bandpass, lowshelf, highshelf, peaking, notch, allpass, custom)
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>frequency
-   </td>
-   <td>number
-   </td>
-   <td>Frequency in the current filtering algorithm measured in Hz.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>quality factor
-   </td>
-   <td>number
-   </td>
-   <td>The lower the Quality, the broader the bandwidth of frequencies cut or boosted. Value range: 0 to 100.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>gain
-   </td>
-   <td>number
-   </td>
-   <td>gain applied to the signal by the filter.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>bypass
-   </td>
-   <td>boolean
-   </td>
-   <td>Disables this processor while still allowing unprocessed audio signals to pass.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
+### 6.8.1 Lowpass filter node (1 input / 1 output)
+
+A lowpass filter allows frequencies below the cutoff frequency to pass through and attenuates frequencies above the cutoff. It implements a standard second-order resonant lowpass filter with 12dB/octave rolloff.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the lowpass filter node in the scene.|Yes|
+|**frequency**|'number'|The cutoff frequency in Hz.|Yes|
+|**qualityFactor**|`number`|Controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
+### 6.8.2 Highpass filter node (1 input / 1 output)
+
+A highpass filter allows frequencies above the cutoff frequency to pass through and attenuates frequencies below the cutoff. It implements a standard second-order resonant highpass filter with 12dB/octave rolloff.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the highpass filter node in the scene.|Yes|
+|**frequency**|'number'|The cutoff frequency in Hz.|Yes|
+|**qualityFactor**|`number`|Controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+
+### 6.8.3 Bandpass filter node (1 input / 1 output)
+
+A bandpass filter allows a range of frequencies to pass through and attenuates the frequencies below and above this frequency range. It implements a second-order bandpass filter.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the bandpass filter node in the scene.|Yes|
+|**frequency**|'number'|The cutoff frequency in Hz.|Yes|
+|**qualityFactor**|`number`|Controls the width of the band. The width becomes narrower as the Q value increases.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+
+### 6.8.4 Lowshelf filter node (1 input / 1 output)
+
+The lowshelf filter allows all frequencies through, but adds a boost (or attenuation) to the lower frequencies. It implements a second-order lowshelf filter.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the lowshelf filter node in the scene.|Yes|
+|**frequency**|'number'|The upper limit of the frequences where the boost (or attenuation) is applied in Hz.|Yes|
+|**gain**|`number`|"The boost, in dB, to be applied. If the value is negative, the frequencies are attenuated.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+### 6.8.5 Highshelf filter node (1 input / 1 output)
+
+The highshelf filter is the opposite of the lowshelf filter and allows all frequencies through, but adds a boost to the higher frequencies. It implements a second-order highshelf filter.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the highshelf filter node in the scene.|Yes|
+|**frequency**|'number'|The lower limit of the frequences where the boost (or attenuation) is applied in Hz.|Yes|
+|**gain**|`number`|"The boost, in dB, to be applied. If the value is negative, the frequencies are attenuated.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+
+### 6.8.6 Peaking filter node (1 input / 1 output)
+
+The peaking filter allows all frequencies through, but adds a boost (or attenuation) to a range of frequencies.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the peaking filter node in the scene.|Yes|
+|**frequency**|'number'|The center frequency of where the boost is applied.|Yes|
+|**qualityFactor**|`number`|Controls the width of the band of frequencies that are boosted. A large value implies a narrow width.|No|
+|**gain**|`number`|"The boost, in dB, to be applied. If the value is negative, the frequencies are attenuated.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+### 6.8.6 Notch filter node (1 input / 1 output)
+
+The notch filter (also known as a band-stop or band-rejection filter) is the opposite of a bandpass filter. It allows all frequencies through, except for a set of frequencies.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the notch filter node in the scene.|Yes|
+|**frequency**|'number'|The center frequency of where the boost is applied.|Yes|
+|**qualityFactor**|`number`|Controls the width of the band of frequencies that are boosted. A large value implies a narrow width.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+### 6.8.6 Allpass filter node (1 input / 1 output)
+
+An allpass filter allows all frequencies through, but changes the phase relationship between the various frequencies. It implements a second-order allpass filter.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the notch filter node in the scene.|Yes|
+|**frequency**|'number'|The frequency where the center of the phase transition occurs. Viewed another way, this is the frequency with maximal group delay.|Yes|
+|**qualityFactor**|`number`|Controls how sharp the phase transition is at the center frequency. A larger value implies a sharper transition and a larger group delay.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 ### 6.9 Reverb node (1 input / 1 output)
 
