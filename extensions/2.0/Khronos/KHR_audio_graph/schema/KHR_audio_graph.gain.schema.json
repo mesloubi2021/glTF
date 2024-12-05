@@ -24,6 +24,14 @@
             "type": "number",
             "description": "When changing gain, this parameter controls how long to spend interpolating in ms from the previously set gain value to the one that is specified."
         },
+        "channelInterpretation": {
+            "type": "string",
+            "description": "Channel ordering for speaker channel interpretation are captured here. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs. ",
+            "enum": [
+              "speakers",
+              "discrete"
+            ]
+          },
         "extensions": {},
         "extras": {}
     },

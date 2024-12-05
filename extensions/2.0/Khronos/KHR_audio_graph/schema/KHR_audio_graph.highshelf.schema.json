@@ -21,6 +21,14 @@
             "type": "boolean",
             "description": "Disables this filter while still allowing unprocessed audio signals to pass."
         },
+        "channelInterpretation": {
+            "type": "string",
+            "description": "Channel ordering for speaker channel interpretation are captured here. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs. ",
+            "enum": [
+              "speakers",
+              "discrete"
+            ]
+          },
         "extensions": {},
         "extras": {}
     },

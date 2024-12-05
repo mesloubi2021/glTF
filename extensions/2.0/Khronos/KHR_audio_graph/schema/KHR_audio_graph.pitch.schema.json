@@ -12,6 +12,14 @@
       "type": "number",
       "description": "Pitch shift in musical semitones. A value of -12 halves the pitch, while 12 doubles the pitch. A value of 0 will not change the pitch of the audio source."
     },
+    "channelInterpretation": {
+      "type": "string",
+      "description": "Channel ordering for speaker channel interpretation are captured here. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs. ",
+      "enum": [
+        "speakers",
+        "discrete"
+      ]
+    },
     "extensions": {},
     "extras": {}
   },

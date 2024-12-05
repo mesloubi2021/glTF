@@ -111,6 +111,7 @@ Audio sources reference audio data and define playback properties for it. An aud
 |**duration**|'number'|Length of the underlying audio data in ms.|No|
 |**offset**|'number'|If 0 is passed in for this value, then playback will start from the beginning of the buffer. Offset sould not be  negative. If offset is greater than loopEnd, playbackRate is positive or zero, and loop is true, playback will begin at loopEnd. If offset is greater than loopStart, playbackSpeed is negative, and loop is true, playback will begin at loopStart. offset is silently clamped to [0, duration], when startTime is reached, where duration is the value of the duration attribute of the AudioData or Oscillator set to the buffer attribute of this node.|No|
 |**when**|'number'|The when parameter describes at what time (in seconds) the sound should start playing.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -171,6 +172,7 @@ Using a spatial emitter, an audio stream can be spatialized or positioned in spa
 |**emitterType**|'string'|Emitter type (global, spatial).|Yes|
 |**gain**|'number'|Gain applied to the signal by the emitter. It's a linear value in the range [0, 1]. |No|
 |**spatialProperties**|'KHR_audio_graph.spatial.schema.json'|See 5.2 Spatial properties.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -217,6 +219,7 @@ Describes the position and other physical characteristics of a listener from whi
 |**gain**|'number'|The gain to apply. In's a linear value in the range [0..1]. Should be nultiplied to previous node (emitter, source) gain. Once set, the actual gain applied will transition from it’s current setting to the new one set over 'duration' milliseconds. |Yes|
 |**interpolation**|'string'|The curve to apply when changing gains (linear, custom).|No|
 |**duration**|'number'|When changing gain, this parameter controls how long to spend interpolating in ms from the previously set gain value to the one that is specified.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -230,6 +233,7 @@ The node that causes a delay between the arrival of an input data and its propag
 |---|---|---|---|
 |**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
 |**delayTime**|'number'|Representing the amount of delay to apply, specified in ms.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -243,6 +247,7 @@ Use the node to make the pitch of an audio deeper or higher.
 |---|---|---|---|
 |**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
 |**pitch**|'number'|Pitch shift in musical semitones. A value of -12 halves the pitch, while 12 doubles the pitch. A value of 0 will not change the pitch of the audio source.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -293,6 +298,7 @@ Use the Audio mixer node to combine the output from multiple audio sources. Numb
 |   |Type|Description|Required|
 |---|---|---|---|
 |**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -314,6 +320,7 @@ A lowpass filter allows frequencies below the cutoff frequency to pass through a
 |**frequency**|'number'|The cutoff frequency in Hz.|Yes|
 |**qualityFactor**|`number`|Controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.|No|
 |**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -328,6 +335,7 @@ A highpass filter allows frequencies above the cutoff frequency to pass through 
 |**frequency**|'number'|The cutoff frequency in Hz.|Yes|
 |**qualityFactor**|`number`|Controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.|No|
 |**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -342,6 +350,7 @@ A bandpass filter allows a range of frequencies to pass through and attenuates t
 |**frequency**|'number'|The cutoff frequency in Hz.|Yes|
 |**qualityFactor**|`number`|Controls the width of the band. The width becomes narrower as the Q value increases.|No|
 |**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -356,6 +365,7 @@ The lowshelf filter allows all frequencies through, but adds a boost (or attenua
 |**frequency**|'number'|The upper limit of the frequences where the boost (or attenuation) is applied in Hz.|Yes|
 |**gain**|`number`|"The boost, in dB, to be applied. If the value is negative, the frequencies are attenuated.|No|
 |**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -369,6 +379,7 @@ The highshelf filter is the opposite of the lowshelf filter and allows all frequ
 |**frequency**|'number'|The lower limit of the frequences where the boost (or attenuation) is applied in Hz.|Yes|
 |**gain**|`number`|"The boost, in dB, to be applied. If the value is negative, the frequencies are attenuated.|No|
 |**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -384,6 +395,7 @@ The peaking filter allows all frequencies through, but adds a boost (or attenuat
 |**qualityFactor**|`number`|Controls the width of the band of frequencies that are boosted. A large value implies a narrow width.|No|
 |**gain**|`number`|"The boost, in dB, to be applied. If the value is negative, the frequencies are attenuated.|No|
 |**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -397,6 +409,7 @@ The notch filter (also known as a band-stop or band-rejection filter) is the opp
 |**frequency**|'number'|The center frequency of where the boost is applied.|Yes|
 |**qualityFactor**|`number`|Controls the width of the band of frequencies that are boosted. A large value implies a narrow width.|No|
 |**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -410,6 +423,7 @@ An allpass filter allows all frequencies through, but changes the phase relation
 |**frequency**|'number'|The frequency where the center of the phase transition occurs. Viewed another way, this is the frequency with maximal group delay.|Yes|
 |**qualityFactor**|`number`|Controls how sharp the phase transition is at the center frequency. A larger value implies a sharper transition and a larger group delay.|No|
 |**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -434,6 +448,7 @@ Reverberation is the persistence of sound in an enclosure after a sound source h
 |**reverbDelay**|'number'|Late reverberation delay time relative to initial reflection.|Yes|
 |**diffusionGain**|'number'||Yes|
 |**bypass**|`boolean`|Disables this processor while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 

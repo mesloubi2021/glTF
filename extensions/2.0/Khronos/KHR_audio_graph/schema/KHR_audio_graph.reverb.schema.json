@@ -7,7 +7,7 @@
         "id": {
             "description": "A unique identifier of the reverb node in the scene.",
             "type": "integer"
-        },        
+        },
         "mix": {
             "type": "number",
             "description": "Blend between the source signal ('dry') and the reverb effect. A value of 0 will not add any reverb. A value of 50 will mix the signal 50% dry and 50% reverberation. A value of 100 will result in only reverberation, without any of the source signal.",
@@ -66,6 +66,14 @@
             "type": "boolean",
             "description": "Disables this processor while still allowing unprocessed audio signals to pass."
         },
+        "channelInterpretation": {
+            "type": "string",
+            "description": "Channel ordering for speaker channel interpretation are captured here. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs. ",
+            "enum": [
+              "speakers",
+              "discrete"
+            ]
+          },
         "extensions": {},
         "extras": {}
     },
