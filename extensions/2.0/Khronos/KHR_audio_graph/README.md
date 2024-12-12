@@ -125,6 +125,10 @@ TODO:
 
 We have to declare all node upfront, they will be referenced by the graph
 
+
+FIXME:: input/output type of the node is actually determined by the node (scheme) itself. Either we need to express input/output type od remove it
+
+
 Each Audio graph object is composed of:
 
   * An `audionodetype` category which must be one of the follwoing: audiodata, oscillator, source, mixer, TODO
@@ -164,6 +168,9 @@ Each Audio graph object is composed of:
 
 
 TODO
+
+Shoudl it be a part of nodes declaration of the actual graph?
+
 ```JSON
                     "extensions": {
                         "KHR_animation_pointer": {
@@ -177,7 +184,6 @@ TODO
 TODO:
 
 Listener node should be attached to the camera
-
 
 
 ### Procedurals Graphs
