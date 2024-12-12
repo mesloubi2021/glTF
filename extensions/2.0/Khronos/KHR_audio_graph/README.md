@@ -293,36 +293,36 @@ The following example shows the basic audio data, audio source and global emitte
 
 ```JSON
 {
+    "audio_nodes" [
+        {
+            "audionodetype": "audiodata",
+            "type": "stream",
+            "uri" : "urltotheasset"
+        },
+        {
+            "audionodetype": "source",
+            "type": "stream",
+            "value" : [
+                "id": 0,
+                "data" : 0,
+                "autoPLaye" : "true"
+            ]
+        },
+        {
+            "audionodetype": "emitter",
+            "type": "stream",
+            "value" : [
+                "id": 1,
+                "emitterType" : "global",
+            ]
+        },
+    ],
   "procedurals" [
     {
       "name": "nodegraph1",
       "nodetype": "nodegraph",
       "type": "stream",
       "inputs": [
-      ],
-      "audio_nodes" [
-        {
-        "audionodetype": "audiodata",
-        "type": "stream",
-        "uri" : "urltotheasset"
-        },
-        {
-        "audionodetype": "source",
-        "type": "stream",
-        "value" : [
-            "id": 0,
-            "data" : 0,
-            "autoPLaye" : "true"
-        ]
-        },
-        {
-        "audionodetype": "emitter",
-        "type": "stream",
-        "value" : [
-            "id": 1,
-            "emitterType" : "global",
-        ]
-        },
       ],
       "nodes" [
           {
