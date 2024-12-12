@@ -213,7 +213,7 @@ Note that input and output node types are `input` and `output` respectively.
 }
 ```
 
-### Audio Nodes
+### Graph Nodes
 
 * An atomic function is represented as a single node with the following properties:
 
@@ -385,10 +385,6 @@ The following example shows the basic audio data, audio source and global emitte
 ### BYPASS
 
 TODO
-
-
-
-
 
 
 ## 4. Audio source
