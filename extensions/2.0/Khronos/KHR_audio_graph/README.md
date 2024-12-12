@@ -40,29 +40,6 @@ The core idea involves an audio graph consisting of multiple interconnected audi
 One or more intermediate processing nodes such as filters can be placed between the source and destination nodes. Most processing nodes will have one input and one output. Each type of audio node differs in the details of how it processes or synthesizes audio. But, in general, an audio node will process its inputs (if it has any), and generate audio for its outputs (if it has any). An output may connect to one or more audio node inputs, thus fan-out is supported. An input (except source and sink) may be connected to one or more audio node outputs, thus fan-in is supported. Each input and output has one or more channels. The exact number of channels depends on the details of the specific audio node.
 
 
-## Extension Declaration
-
-Usage of the procedural structure is indicated by adding the `KHR_texture_procedurals` extension identifier to the `extensionsUsed` array.
-
-```json
-{
-    "extensionsUsed": [
-        "KHR_audio_graph"
-    ]
-}
-```
-
-Usage of a given extension is defined in the `extensions` object as follows:
-```json
-{
-    "extensions": {
-        "KHR_audio_graph": {
-            "audio_nodes": []
-        }
-    }
-}
-```
-
 
 ## Features
 
@@ -80,12 +57,338 @@ The core specification should support these primary features:
 * Audio mixing, reverb, and filtering with a set of low-order audio filters.
 * Animation control and dynamic update of node properties.
 
+### Definitions
+
+The following is a set of definitions to provide context for the ausio graph representation.
+
+* A **Audio Node** is a function that generates or operates upon audio data.
+
+* **Node Input and Output Ports** The interface for a node’s incoming data is declared through **input ports**, which may be audio data, oscillator data or audio channels data . The interface for a node’s outgoing data is declared through **output ports**.
+
+* There is a specific set of supported **Data Types**. Every port must have a data type.
+
+* An **Audio channel data** contains the actual sound bitstream for a single channel
+
+* An **Audio data** contains all channels for actual **Audio channel data**
+
+* A **Node Graph** is a directed acyclic graph (DAG) of nodes, which may be used to define arbitrarily complex generation or processing networks.  Node Graphs describe a network of nodes flowing from source to listener, or define a complex or layered node in terms of simpler nodes. The former is called a **compound nodegraph** and the latter a **functional nodegraph**.
+
+* Node Graph:
+  * **Inputs** are nodes that define the interface for a graph’s incoming data.
+  * **Outputs** are nodes that define the interface for a graph’s outgoing data.
 
 ## Graph based audio processing
 
 Audio nodes are the building blocks of an audio graph for rendering audio to the audio hardware. Graph based audio routing allows arbitrary connections between different audio node objects. An audio graph can be represented by audio sources, the audio destination/sink, and intermediate processing nodes. Each node can have inputs and/or outputs. A source node has no inputs and a single output. A destination or sink node has one input and no outputs. In the simplest case, a single source can be routed directly to the output.
 
 One or more intermediate processing nodes such as filters can be placed between the source and destination nodes. Most processing nodes will have one input and one output. Each type of audio node differs in the details of how it processes or synthesizes audio. But, in general, an audio node will process its inputs (if it has any), and generate audio for its outputs (if it has any). An output may connect to one or more audio node inputs, thus fan-out is supported. An input (except source and sink) may be connected to one or more audio node outputs, thus fan-in is supported. Each input and output has one or more channels. The exact number of channels depends on the details of the specific audio node.
+
+## Extension Declaration
+
+Usage of the procedural structure is indicated by adding the `KHR_texture_procedurals` extension identifier to the `extensionsUsed` array.
+
+```json
+{
+    "extensionsUsed": [
+        "KHR_audio_graph"
+    ]
+}
+```
+
+Usage of a given extension is defined in the `extensions` object as follows:
+```json
+{
+    "extensions": {
+        "KHR_audio_graph": {
+            "audio_nodes": [],
+            "procedurals" : []
+        }
+    }
+}
+```
+
+
+### Data Types
+
+The supported data types are:
+
+* single `float`
+* single `integer`
+* single `boolean`
+* single `channel`: Data stream for a single audio channel
+* single `stream`: Data stream for all channel
+
+
+### Audio Nodes
+
+TODO:
+
+We have to declare all node upfront, they will be referenced by the graph
+
+Each Audio graph object is composed of:
+
+  * An `audionodetype` category which must be one of the follwoing: audiodata, oscillator, source, mixer, TODO
+  * A `type` which is the output type of the audio node. This is a supported data type, or `multioutput` if there is more than one output node for the graph.
+  * A `value` actual JSON object that represents the data for this audio node - See (## 4. Audio source)
+
+```JSON
+{
+  "audio_nodes" [
+    {
+      "audionodetype": "audiodata",
+      "type": "stream",
+      "uri" : "urltotheasset"
+    },
+    {
+      "audionodetype": "source",
+      "type": "stream",
+      "value" : [
+        "id": 0,
+        "data" : 0,
+        "autoPLaye" : "true"
+      ]
+    },
+    {
+      "audionodetype": "emitter",
+      "type": "stream",
+      "value" : [
+        "id": 1,
+        "emitterType" : "global",
+      ]
+    },
+    ],
+}
+```
+
+### KHR_Animation_pointer integration
+
+
+TODO
+```JSON
+                    "extensions": {
+                        "KHR_animation_pointer": {
+                            "pointer": "/nodes/0/mixer1"
+                        }
+                    }
+```
+
+## Listener
+
+TODO:
+
+Listener node should be attached to the camera
+
+
+
+### Procedurals Graphs
+
+One ore more procedurals graphs can be defined in the `proceduras` array.
+
+A graph __cannot__ be nested (contain another graph). Any such configurations must be “flattened” to single level graphs.
+
+Each procedural graph object is composed of:
+
+  * An optional string `name` identifier
+  * A `nodetype` category which must be `nodegraph`
+  * A `type` which is the output type of the graph. This is a supported data type, or `multioutput` if there is more than one output node for the graph.
+  * Three array children:
+    * `inputs` : lists input "interface" nodes for passing data into the graph.
+    * `outputs` : lists output "interface" nodes for passing data out of the graph. See [Node Graph Connections](#node-graph-connections) for connection information.
+    * `nodes` : processing nodes.
+
+The structure of audio nodes is described in  [Audio Nodes](#procedural-nodes) section.
+
+Note that input and output node types are `input` and `output` respectively.
+
+#### Graph Structure
+
+```JSON
+{
+  "name": "<optional name>",
+  "nodetype": "nodegraph",
+  "type": "<data-type>",
+  "inputs": [],
+  "outputs": [],
+  "nodes": []
+}
+```
+
+### Audio Nodes
+
+* An atomic function is represented as a single node with the following properties:
+
+    * An optional string `name` identifier
+
+    * `nodetype` : a string identifier for the node type. This is an 'audionode' type or a custom node type.
+
+    * `type` : the output type of the node. This is a supported data type or `multioutput` if there is more than one output for the node.
+
+    * A list of input ports under an `inputs` array.
+    If an `input` is specified it's input value overrides that of the node definition default.
+
+    * A list of output ports under an `outputs` array. Every `output` defined by the node's definition __must__ be specified.
+
+    * Each input port:
+        * Must have a node type: `input`
+        * May have an optional string `name` identifier
+        * Must have a `type` which is a supported data type.
+        * Either:
+          * A `value` which is a constant value for the node. or
+          * A connection specifier. See [Node Graph Connections](#node-graph-connections) for allowed connections.
+
+    * All `output` ports specified by the node's definition must be specified for each node instance. Each output port:
+        * Must have a node type: `output`
+        * Must have a `type` which is a supported data type.
+
+#### Node Structure
+
+```JSON
+{
+  "name": "<node name>",
+  "type": "<data type>",
+  "audionode": <id of audionode>  or
+  "inputs": [],
+  "outputs": []
+}
+```
+
+where an each input port in the `inputs` array  has the following structure:
+
+```JSON
+{
+  "name": "<input name>",
+  "nodetype": "input",
+  "type": "<data type>",
+  "node": <processing node index> or
+  "input": <input node index> or
+  "output": <output node index>
+}
+```
+and each output port in the `outputs` array has the following structure:
+
+```JSON
+{
+  "name": "<input name>",
+  "nodetype": "output",
+  "type": "<data type>",
+}
+```
+
+### Node Graph Connections
+
+Connections inside a graph can be made:
+
+* To a `node input` from a an `nodegraph input` by specifying a `input` value which is an index into the graph's `inputs` array.
+* To a `node input` from a node `output` by specifying a `node` value which is an index into the graph's `nodes` array.
+* To a nodegraph `output` from a node `output` by specifying a `node` value which is an index into the graph's `nodes` array.
+
+If the upstream node has multiple outputs, then an `output` value which is an index into the the upstream nodes `outputs` array  __must__ additionally be specified.
+
+
+The following example shows the basic audio data, audio source and global emitter nodes
+
+
+<details>
+<summary>Example</summary>
+
+```JSON
+{
+  "procedurals" [
+    {
+      "name": "nodegraph1",
+      "nodetype": "nodegraph",
+      "type": "stream",
+      "inputs": [
+      ],
+      "audio_nodes" [
+        {
+        "audionodetype": "audiodata",
+        "type": "stream",
+        "uri" : "urltotheasset"
+        },
+        {
+        "audionodetype": "source",
+        "type": "stream",
+        "value" : [
+            "id": 0,
+            "data" : 0,
+            "autoPLaye" : "true"
+        ]
+        },
+        {
+        "audionodetype": "emitter",
+        "type": "stream",
+        "value" : [
+            "id": 1,
+            "emitterType" : "global",
+        ]
+        },
+      ],
+      "nodes" [
+          {
+            "name": "audiosource1",
+            "nodetype": "audionode",
+            "type": "stream",
+            "audionode" : 0,
+            "inputs": [
+              {
+                "name": "audiodata1",
+                "nodetype": "audiodata",
+                "type": "stream",
+                "audiodata": 0
+              }]              ,
+            "outputs": [
+              {
+                "name": "out",
+                "nodetype": "output",
+                "type": "stream"
+              }
+            ]
+          },
+          {
+            "name": "emitter1",
+            "nodetype": "audionode",
+            "audionode" : 1,
+            "type": "stream",
+            "inputs": [
+              {
+                "name": "in2",
+                "nodetype": "input",
+                "type": "stream",
+                "node": 0,
+                "output": 0
+              }
+            ],
+            "outputs": [
+              {
+                "name": "out",
+                "nodetype": "output",
+                "type": "stream"
+              }
+            ]
+          }
+        ],
+        "outputs" [
+          {
+            "name": "graph_out",
+            "nodetype": "output",
+            "type": "stream",
+            "node": 1,
+            "output": 0
+          },
+        ]
+    }
+}
+```
+
+
+### BYPASS
+
+TODO
+
+
+
+
 
 
 ## 4. Audio source
