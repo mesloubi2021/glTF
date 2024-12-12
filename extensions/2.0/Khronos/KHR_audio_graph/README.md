@@ -380,7 +380,7 @@ The following example shows the basic audio data, audio source and global emitte
     }
 }
 ```
-
+</details>
 
 ### BYPASS
 
