@@ -1,0 +1,39 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "KHR_audio_graph Notch Filter Node",
+    "type": "object",
+    "description": "The notch filter (also known as a band-stop or band-rejection filter) is the opposite of a bandpass filter. It allows all frequencies through, except for a set of frequencies.",
+    "properties": {
+        "id": {
+            "description": "A unique identifier of the notch filter node in the scene.",
+            "type": "integer"
+          },
+        "frequency": {
+            "type": "number",
+            "description": "The center frequency of where the boost is applied."
+        },
+        "qualityFactor": {
+            "type": "number",
+            "description": "Controls the width of the band of frequencies that are boosted. A large value implies a narrow width."
+        },
+        "bypass": {
+            "type": "boolean",
+            "description": "Disables this filter while still allowing unprocessed audio signals to pass."
+        },
+        "channelInterpretation": {
+            "type": "string",
+            "description": "Channel ordering for speaker channel interpretation are captured here. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs. ",
+            "enum": [
+              "speakers",
+              "discrete"
+            ]
+          },
+        "extensions": {},
+        "extras": {}
+    },
+    "required": [
+        "id",
+        "frequency",
+        "qualityFactor"
+    ]
+}

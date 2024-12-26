@@ -50,7 +50,7 @@
         },
         "coneOuterGain": {
             "type": "number",
-            "description": "A parameter for directional audio sources that is the gain outside of the cone outer angle."
+            "description": "A parameter for directional audio sources that is the gain outside of the cone outer angle. It's a linear value in the range [0, 1]"
         },
         "extensions": {},
         "extras": {}

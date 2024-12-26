@@ -1,0 +1,29 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "KHR_audio_graph Delay Node",
+    "type": "object",
+    "description": "The node that causes a delay between the arrival of an input data and its propagation to the output. A delay node always has exactly one input and one output, both with the same amount of channels",
+    "properties": {
+        "id": {
+            "description": "A unique identifier of the delay node in the scene.",
+            "type": "integer"
+        },
+        "delayTime": {
+            "type": "number",
+            "description": "Representing the amount of delay to apply, specified in ms."
+        },
+        "channelInterpretation": {
+            "type": "string",
+            "description": "Channel ordering for speaker channel interpretation are captured here. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs. ",
+            "enum": [
+              "speakers",
+              "discrete"
+            ]
+          },
+        "extensions": {},
+        "extras": {}
+    },
+    "required": [
+        "id"
+    ]
+}

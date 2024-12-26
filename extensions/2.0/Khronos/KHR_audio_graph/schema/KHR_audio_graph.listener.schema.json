@@ -9,7 +9,11 @@
             "description": "A unique identifier of the audio listener in the scene.",
             "type": "integer"
         },
+        
         "extensions": {},
         "extras": {}
-    }
+    },
+    "required": [
+        "id"
+    ]
 }

@@ -23,7 +23,7 @@
         },
         "gain": {
             "type": "number",
-            "description": "Gain applied to the signal by the emitter."
+            "description": "Gain applied to the signal by the emitter. It's a linear value in the range [0, 1]"
         },
         "spatialProperties": {
             "type": "object",
@@ -34,6 +34,7 @@
         "extras": {}
     },
     "required": [
+        "id",
         "emitterType",
         "gain"
     ],

@@ -41,6 +41,7 @@
         "extras": {}
     },
     "required": [
+        "id",
         "type",
         "frequency"
     ]

@@ -40,29 +40,6 @@ The core idea involves an audio graph consisting of multiple interconnected audi
 One or more intermediate processing nodes such as filters can be placed between the source and destination nodes. Most processing nodes will have one input and one output. Each type of audio node differs in the details of how it processes or synthesizes audio. But, in general, an audio node will process its inputs (if it has any), and generate audio for its outputs (if it has any). An output may connect to one or more audio node inputs, thus fan-out is supported. An input (except source and sink) may be connected to one or more audio node outputs, thus fan-in is supported. Each input and output has one or more channels. The exact number of channels depends on the details of the specific audio node.
 
 
-## Extension Declaration
-
-Usage of the procedural structure is indicated by adding the `KHR_texture_procedurals` extension identifier to the `extensionsUsed` array.
-
-```json
-{
-    "extensionsUsed": [
-        "KHR_audio_graph"
-    ]
-}
-```
-
-Usage of a given extension is defined in the `extensions` object as follows:
-```json
-{
-    "extensions": {
-        "KHR_audio_graph": {
-            "audio_nodes": []
-        }
-    }
-}
-```
-
 
 ## Features
 
@@ -80,12 +57,340 @@ The core specification should support these primary features:
 * Audio mixing, reverb, and filtering with a set of low-order audio filters.
 * Animation control and dynamic update of node properties.
 
+### Definitions
+
+The following is a set of definitions to provide context for the ausio graph representation.
+
+* A **Audio Node** is a function that generates or operates upon audio data.
+
+* **Node Input and Output Ports** The interface for a node’s incoming data is declared through **input ports**, which may be audio data, oscillator data or audio channels data . The interface for a node’s outgoing data is declared through **output ports**.
+
+* There is a specific set of supported **Data Types**. Every port must have a data type.
+
+* An **Audio channel data** contains the actual sound bitstream for a single channel
+
+* An **Audio data** contains all channels for actual **Audio channel data**
+
+* A **Node Graph** is a directed acyclic graph (DAG) of nodes, which may be used to define arbitrarily complex generation or processing networks.  Node Graphs describe a network of nodes flowing from source to listener, or define a complex or layered node in terms of simpler nodes. The former is called a **compound nodegraph** and the latter a **functional nodegraph**.
+
+* Node Graph:
+  * **Inputs** are nodes that define the interface for a graph’s incoming data.
+  * **Outputs** are nodes that define the interface for a graph’s outgoing data.
 
 ## Graph based audio processing
 
 Audio nodes are the building blocks of an audio graph for rendering audio to the audio hardware. Graph based audio routing allows arbitrary connections between different audio node objects. An audio graph can be represented by audio sources, the audio destination/sink, and intermediate processing nodes. Each node can have inputs and/or outputs. A source node has no inputs and a single output. A destination or sink node has one input and no outputs. In the simplest case, a single source can be routed directly to the output.
 
 One or more intermediate processing nodes such as filters can be placed between the source and destination nodes. Most processing nodes will have one input and one output. Each type of audio node differs in the details of how it processes or synthesizes audio. But, in general, an audio node will process its inputs (if it has any), and generate audio for its outputs (if it has any). An output may connect to one or more audio node inputs, thus fan-out is supported. An input (except source and sink) may be connected to one or more audio node outputs, thus fan-in is supported. Each input and output has one or more channels. The exact number of channels depends on the details of the specific audio node.
+
+## Extension Declaration
+
+Usage of the procedural structure is indicated by adding the `KHR_texture_procedurals` extension identifier to the `extensionsUsed` array.
+
+```json
+{
+    "extensionsUsed": [
+        "KHR_audio_graph"
+    ]
+}
+```
+
+Usage of a given extension is defined in the `extensions` object as follows:
+```json
+{
+    "extensions": {
+        "KHR_audio_graph": {
+            "audio_nodes": [],
+            "procedurals" : []
+        }
+    }
+}
+```
+
+
+### Data Types
+
+The supported data types are:
+
+* single `float`
+* single `integer`
+* single `boolean`
+* single `channel`: Data stream for a single audio channel
+* single `stream`: Data stream for all channel
+
+
+### Audio Nodes
+
+TODO:
+
+We have to declare all node upfront, they will be referenced by the graph
+
+
+FIXME:: input/output type of the node is actually determined by the node (scheme) itself. Either we need to express input/output type od remove it
+
+
+Each Audio graph object is composed of:
+
+  * An `audionodetype` category which must be one of the follwoing: audiodata, oscillator, source, mixer, TODO
+  * A `type` which is the output type of the audio node. This is a supported data type, or `multioutput` if there is more than one output node for the graph.
+  * A `value` actual JSON object that represents the data for this audio node - See (## 4. Audio source)
+
+```JSON
+{
+  "audio_nodes" [
+    {
+      "audionodetype": "audiodata",
+      "type": "stream",
+      "uri" : "urltotheasset"
+    },
+    {
+      "audionodetype": "source",
+      "type": "stream",
+      "value" : [
+        "id": 0,
+        "data" : 0,
+        "autoPLaye" : "true"
+      ]
+    },
+    {
+      "audionodetype": "emitter",
+      "type": "stream",
+      "value" : [
+        "id": 1,
+        "emitterType" : "global",
+      ]
+    },
+    ],
+}
+```
+
+### KHR_Animation_pointer integration
+
+
+TODO
+
+Shoudl it be a part of nodes declaration of the actual graph?
+
+```JSON
+                    "extensions": {
+                        "KHR_animation_pointer": {
+                            "pointer": "/nodes/0/mixer1"
+                        }
+                    }
+```
+
+## Listener
+
+TODO:
+
+Listener node should be attached to the camera
+
+
+### Procedurals Graphs
+
+One ore more procedurals graphs can be defined in the `proceduras` array.
+
+A graph __cannot__ be nested (contain another graph). Any such configurations must be “flattened” to single level graphs.
+
+Each procedural graph object is composed of:
+
+  * An optional string `name` identifier
+  * A `nodetype` category which must be `nodegraph`
+  * A `type` which is the output type of the graph. This is a supported data type, or `multioutput` if there is more than one output node for the graph.
+  * Three array children:
+    * `inputs` : lists input "interface" nodes for passing data into the graph.
+    * `outputs` : lists output "interface" nodes for passing data out of the graph. See [Node Graph Connections](#node-graph-connections) for connection information.
+    * `nodes` : processing nodes.
+
+The structure of audio nodes is described in  [Audio Nodes](#procedural-nodes) section.
+
+Note that input and output node types are `input` and `output` respectively.
+
+#### Graph Structure
+
+```JSON
+{
+  "name": "<optional name>",
+  "nodetype": "nodegraph",
+  "type": "<data-type>",
+  "inputs": [],
+  "outputs": [],
+  "nodes": []
+}
+```
+
+### Graph Nodes
+
+* An atomic function is represented as a single node with the following properties:
+
+    * An optional string `name` identifier
+
+    * `nodetype` : a string identifier for the node type. This is an 'audionode' type or a custom node type.
+
+    * `type` : the output type of the node. This is a supported data type or `multioutput` if there is more than one output for the node.
+
+    * A list of input ports under an `inputs` array.
+    If an `input` is specified it's input value overrides that of the node definition default.
+
+    * A list of output ports under an `outputs` array. Every `output` defined by the node's definition __must__ be specified.
+
+    * Each input port:
+        * Must have a node type: `input`
+        * May have an optional string `name` identifier
+        * Must have a `type` which is a supported data type.
+        * Either:
+          * A `value` which is a constant value for the node. or
+          * A connection specifier. See [Node Graph Connections](#node-graph-connections) for allowed connections.
+
+    * All `output` ports specified by the node's definition must be specified for each node instance. Each output port:
+        * Must have a node type: `output`
+        * Must have a `type` which is a supported data type.
+
+#### Node Structure
+
+```JSON
+{
+  "name": "<node name>",
+  "type": "<data type>",
+  "audionode": <id of audionode>  or
+  "inputs": [],
+  "outputs": []
+}
+```
+
+where an each input port in the `inputs` array  has the following structure:
+
+```JSON
+{
+  "name": "<input name>",
+  "nodetype": "input",
+  "type": "<data type>",
+  "node": <processing node index> or
+  "input": <input node index> or
+  "output": <output node index>
+}
+```
+and each output port in the `outputs` array has the following structure:
+
+```JSON
+{
+  "name": "<input name>",
+  "nodetype": "output",
+  "type": "<data type>",
+}
+```
+
+### Node Graph Connections
+
+Connections inside a graph can be made:
+
+* To a `node input` from a an `nodegraph input` by specifying a `input` value which is an index into the graph's `inputs` array.
+* To a `node input` from a node `output` by specifying a `node` value which is an index into the graph's `nodes` array.
+* To a nodegraph `output` from a node `output` by specifying a `node` value which is an index into the graph's `nodes` array.
+
+If the upstream node has multiple outputs, then an `output` value which is an index into the the upstream nodes `outputs` array  __must__ additionally be specified.
+
+
+The following example shows the basic audio data, audio source and global emitter nodes
+
+
+<details>
+<summary>Example</summary>
+
+```JSON
+{
+    "audio_nodes" [
+        {
+            "audionodetype": "audiodata",
+            "type": "stream",
+            "uri" : "urltotheasset"
+        },
+        {
+            "audionodetype": "source",
+            "type": "stream",
+            "value" : [
+                "id": 0,
+                "data" : 0,
+                "autoPLaye" : "true"
+            ]
+        },
+        {
+            "audionodetype": "emitter",
+            "type": "stream",
+            "value" : [
+                "id": 1,
+                "emitterType" : "global",
+            ]
+        },
+    ],
+  "procedurals" [
+    {
+      "name": "nodegraph1",
+      "nodetype": "nodegraph",
+      "type": "stream",
+      "inputs": [
+      ],
+      "nodes" [
+          {
+            "name": "audiosource1",
+            "nodetype": "audionode",
+            "type": "stream",
+            "audionode" : 0,
+            "inputs": [
+              {
+                "name": "audiodata1",
+                "nodetype": "audiodata",
+                "type": "stream",
+                "audiodata": 0
+              }]              ,
+            "outputs": [
+              {
+                "name": "out",
+                "nodetype": "output",
+                "type": "stream"
+              }
+            ]
+          },
+          {
+            "name": "emitter1",
+            "nodetype": "audionode",
+            "audionode" : 1,
+            "type": "stream",
+            "inputs": [
+              {
+                "name": "in2",
+                "nodetype": "input",
+                "type": "stream",
+                "node": 0,
+                "output": 0
+              }
+            ],
+            "outputs": [
+              {
+                "name": "out",
+                "nodetype": "output",
+                "type": "stream"
+              }
+            ]
+          }
+        ],
+        "outputs" [
+          {
+            "name": "graph_out",
+            "nodetype": "output",
+            "type": "stream",
+            "node": 1,
+            "output": 0
+          },
+        ]
+    }
+}
+```
+</details>
+
+### BYPASS
+
+TODO
 
 
 ## 4. Audio source
@@ -111,6 +416,7 @@ Audio sources reference audio data and define playback properties for it. An aud
 |**duration**|'number'|Length of the underlying audio data in ms.|No|
 |**offset**|'number'|If 0 is passed in for this value, then playback will start from the beginning of the buffer. Offset sould not be  negative. If offset is greater than loopEnd, playbackRate is positive or zero, and loop is true, playback will begin at loopEnd. If offset is greater than loopStart, playbackSpeed is negative, and loop is true, playback will begin at loopStart. offset is silently clamped to [0, duration], when startTime is reached, where duration is the value of the duration attribute of the AudioData or Oscillator set to the buffer attribute of this node.|No|
 |**when**|'number'|The when parameter describes at what time (in seconds) the sound should start playing.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -169,8 +475,9 @@ Using a spatial emitter, an audio stream can be spatialized or positioned in spa
 |---|---|---|---|
 |**id**|'integer'|A unique identifier of the audio source in the scene.|Yes|
 |**emitterType**|'string'|Emitter type (global, spatial).|Yes|
-|**gain**|'number'|Gain applied to the signal by the emitter.|No|
+|**gain**|'number'|Gain applied to the signal by the emitter. It's a linear value in the range [0, 1]. |No|
 |**spatialProperties**|'KHR_audio_graph.spatial.schema.json'|See 5.2 Spatial properties.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -196,7 +503,7 @@ Using a spatial emitter, an audio stream can be spatialized or positioned in spa
 |**shape**|`string`|Shape in which emitter emits audio (cone, omnidirectional, custom).|No|
 |**coneInnerAngle**|`object`|The angular diameter of a cone inside of which there will be no angular volume reduction.|No|
 |**coneOuterAngle**|`object`|A parameter for directional audio sources that is an angle, in degrees, outside of which the volume will be reduced to a constant value of coneOuterGain.|No|
-|**coneOuterGain**|`object`|A parameter for directional audio sources that is the gain outside of the cone outer angle.|No|
+|**coneOuterGain**|`object`|A parameter for directional audio sources that is the gain outside of the cone outer angle. It's a linear value in the range [0, 1].|No|
 |**extensions**|`object`|JSON object with extension-specific objects.|No|
 |**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
@@ -211,58 +518,15 @@ Describes the position and other physical characteristics of a listener from whi
 
 ### 6.1 Gain node (1 input / 1 output)
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>gain
-   </td>
-   <td>number
-   </td>
-   <td>The gain to apply. Once set, the actual gain applied will transition from it’s current setting to the new one set over “duration” milliseconds.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>interpolation
-   </td>
-   <td>string
-   </td>
-   <td>The curve to apply when changing gains (linear, custom).
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>duration
-   </td>
-   <td>number
-   </td>
-   <td>When changing gain, this parameter controls how long to spend interpolating from the previously set gain value to the one that is specified.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**gain**|'number'|The gain to apply. In's a linear value in the range [0..1]. Should be nultiplied to previous node (emitter, source) gain. Once set, the actual gain applied will transition from it’s current setting to the new one set over 'duration' milliseconds. |Yes|
+|**interpolation**|'string'|The curve to apply when changing gains (linear, custom).|No|
+|**duration**|'number'|When changing gain, this parameter controls how long to spend interpolating in ms from the previously set gain value to the one that is specified.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.2 Delay node (1 input / 1 output)
@@ -270,33 +534,13 @@ Describes the position and other physical characteristics of a listener from whi
 The node that causes a delay between the arrival of an input data and its propagation to the output. A delay node always has exactly one input and one output, both with the same amount of channels.
 
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>delay time
-   </td>
-   <td>number
-   </td>
-   <td>representing the amount of delay to apply, specified in ms.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**delayTime**|'number'|Representing the amount of delay to apply, specified in ms.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.3 Pitch shifter node (1 input / 1 output)
@@ -304,81 +548,25 @@ The node that causes a delay between the arrival of an input data and its propag
 Use the node to make the pitch of an audio deeper or higher.
 
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>semitone adjustment
-   </td>
-   <td>number
-   </td>
-   <td>Pitch shift in musical semitones. A value of -12 halves the pitch, while 12 doubles the pitch. A value of 0 will not change the pitch of the audio source.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**pitch**|'number'|Pitch shift in musical semitones. A value of -12 halves the pitch, while 12 doubles the pitch. A value of 0 will not change the pitch of the audio source.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.4 Channel splitter node (1 input / N outputs)
 
 Node for accessing the individual channels of an audio stream in the routing graph. It has a single input, and a number of outputs which equals the number of channels in the input audio stream. For example, if a stereo input is connected to this node then the number of active outputs will be two (one from the left channel and one from the right).
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>input channels
-   </td>
-   <td>integer
-   </td>
-   <td>Number of channels in input audio.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>channel interpretation
-   </td>
-   <td>string
-   </td>
-   <td>speakers, discrete
-<p>
-Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.5 Channel merger node (N inputs / 1 output)
@@ -386,47 +574,12 @@ Channel ordering for speaker channel interpretation are captured <a href="https:
 Node for combining channels from multiple audio streams into a single audio stream. It has a variable number of inputs, and a single output whose audio stream has a number of channels equal to the number of inputs. To merge multiple inputs into one stream, each input should be a single channel audio stream.
 
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>output channels
-   </td>
-   <td>integer
-   </td>
-   <td>Number of channels in output audio.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>channel interpretation
-   </td>
-   <td>string
-   </td>
-   <td>speakers, discrete
-<p>
-Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. When the number of channels do not match any of the basic speaker layouts, use discrete as it maps inputs to channels.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.6 Channel mixer node (1 input / 1 output)
@@ -434,337 +587,175 @@ Channel ordering for speaker channel interpretation are captured <a href="https:
 Up-mixing refers to the process of taking a stream with a smaller number of channels and converting it to a stream with a larger number of channels. Down-mixing refers to the process of taking a stream with a larger number of channels and converting it to a stream with a smaller number of channels. Channel mixer node should ideally use these [mixing rules](https://webaudio.github.io/web-audio-api/#mixing-rules).
 
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>input channels
-   </td>
-   <td>integer
-   </td>
-   <td>Number of channels in input audio.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>output channels
-   </td>
-   <td>integer
-   </td>
-   <td>Number of channels in output audio.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>channel interpretation
-   </td>
-   <td>string
-   </td>
-   <td>speakers, discrete
-<p>
-Speakers use up-mix / down-mix equations. In cases where the number of channels do not match any of the basic speaker layouts, use "discrete". "Discrete" up-mix by filling channels until they run out then zero out remaining channels; down-mix by filling as many channels as possible, then dropping remaining channels.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
-
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**outputChannels**|'number'|Number of channels in output audio.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs.|Yes|
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 ### 6.7 Audio mixer node (N inputs / 1 output)
 
 Use the Audio mixer node to combine the output from multiple audio sources. Number of channels should be the same across all inputs.
 
-[no properties for this node]
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
-### 6.8 Filter node (1 input / 1 output)
+### 6.8 Filter nodes (1 input / 1 output)
 
-Use the Audio Mixer node to combine the output from multiple audio sources. A filter node always has exactly one input and one output.
+Low-order filters are the building blocks of basic tone controls (bass, mid, treble), graphic equalizers, and more advanced filters. Multiple filters can be combined to form more complex filters. The filter parameters such as frequency can be changed over time for filter sweeps, etc. Each filter node always has exactly one input and one output.
 
+TODO:
+Add https://www.w3.org/TR/webaudio/#filters-characteristics explanations for the filter math
 
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>type
-   </td>
-   <td>string
-   </td>
-   <td>Defining the kind of filtering algorithm the node is implementing (lowpass, highpass, bandpass, lowshelf, highshelf, peaking, notch, allpass, custom)
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>frequency
-   </td>
-   <td>number
-   </td>
-   <td>Frequency in the current filtering algorithm measured in Hz.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>quality factor
-   </td>
-   <td>number
-   </td>
-   <td>The lower the Quality, the broader the bandwidth of frequencies cut or boosted. Value range: 0 to 100.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>gain
-   </td>
-   <td>number
-   </td>
-   <td>gain applied to the signal by the filter.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>bypass
-   </td>
-   <td>boolean
-   </td>
-   <td>Disables this processor while still allowing unprocessed audio signals to pass.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
+### 6.8.1 Lowpass filter node (1 input / 1 output)
+
+A lowpass filter allows frequencies below the cutoff frequency to pass through and attenuates frequencies above the cutoff. It implements a standard second-order resonant lowpass filter with 12dB/octave rolloff.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the lowpass filter node in the scene.|Yes|
+|**frequency**|'number'|The cutoff frequency in Hz.|Yes|
+|**qualityFactor**|`number`|Controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
+### 6.8.2 Highpass filter node (1 input / 1 output)
+
+A highpass filter allows frequencies above the cutoff frequency to pass through and attenuates frequencies below the cutoff. It implements a standard second-order resonant highpass filter with 12dB/octave rolloff.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the highpass filter node in the scene.|Yes|
+|**frequency**|'number'|The cutoff frequency in Hz.|Yes|
+|**qualityFactor**|`number`|Controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+
+### 6.8.3 Bandpass filter node (1 input / 1 output)
+
+A bandpass filter allows a range of frequencies to pass through and attenuates the frequencies below and above this frequency range. It implements a second-order bandpass filter.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the bandpass filter node in the scene.|Yes|
+|**frequency**|'number'|The cutoff frequency in Hz.|Yes|
+|**qualityFactor**|`number`|Controls the width of the band. The width becomes narrower as the Q value increases.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+
+### 6.8.4 Lowshelf filter node (1 input / 1 output)
+
+The lowshelf filter allows all frequencies through, but adds a boost (or attenuation) to the lower frequencies. It implements a second-order lowshelf filter.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the lowshelf filter node in the scene.|Yes|
+|**frequency**|'number'|The upper limit of the frequences where the boost (or attenuation) is applied in Hz.|Yes|
+|**gain**|`number`|"The boost, in dB, to be applied. If the value is negative, the frequencies are attenuated.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+### 6.8.5 Highshelf filter node (1 input / 1 output)
+
+The highshelf filter is the opposite of the lowshelf filter and allows all frequencies through, but adds a boost to the higher frequencies. It implements a second-order highshelf filter.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the highshelf filter node in the scene.|Yes|
+|**frequency**|'number'|The lower limit of the frequences where the boost (or attenuation) is applied in Hz.|Yes|
+|**gain**|`number`|"The boost, in dB, to be applied. If the value is negative, the frequencies are attenuated.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+
+### 6.8.6 Peaking filter node (1 input / 1 output)
+
+The peaking filter allows all frequencies through, but adds a boost (or attenuation) to a range of frequencies.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the peaking filter node in the scene.|Yes|
+|**frequency**|'number'|The center frequency of where the boost is applied.|Yes|
+|**qualityFactor**|`number`|Controls the width of the band of frequencies that are boosted. A large value implies a narrow width.|No|
+|**gain**|`number`|"The boost, in dB, to be applied. If the value is negative, the frequencies are attenuated.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+### 6.8.6 Notch filter node (1 input / 1 output)
+
+The notch filter (also known as a band-stop or band-rejection filter) is the opposite of a bandpass filter. It allows all frequencies through, except for a set of frequencies.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the notch filter node in the scene.|Yes|
+|**frequency**|'number'|The center frequency of where the boost is applied.|Yes|
+|**qualityFactor**|`number`|Controls the width of the band of frequencies that are boosted. A large value implies a narrow width.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
+
+### 6.8.6 Allpass filter node (1 input / 1 output)
+
+An allpass filter allows all frequencies through, but changes the phase relationship between the various frequencies. It implements a second-order allpass filter.
+
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the notch filter node in the scene.|Yes|
+|**frequency**|'number'|The frequency where the center of the phase transition occurs. Viewed another way, this is the frequency with maximal group delay.|Yes|
+|**qualityFactor**|`number`|Controls how sharp the phase transition is at the center frequency. A larger value implies a sharper transition and a larger group delay.|No|
+|**bypass**|`object`|Disables this filter while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 ### 6.9 Reverb node (1 input / 1 output)
 
 Reverberation is the persistence of sound in an enclosure after a sound source has been stopped. This is a result of the multiple reflections of sound waves throughout the room arriving at the ear so closely spaced that they are indistinguishable from one another and are heard as a gradual decay of sound.
 
-
-<table>
-  <tr>
-   <td>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-   <td><strong>Required</strong>
-   </td>
-   <td><strong>Notes</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>mix
-   </td>
-   <td>number
-   </td>
-   <td>Blend between the source signal ('dry') and the reverb effect. A value of 0 will not add any reverb. A value of 50 will mix the signal 50% dry and 50% reverberation. A value of 100 will result in only reverberation, without any of the source signal.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>early reflections gain
-   </td>
-   <td>number
-   </td>
-   <td>Loudness control for the early reflections of the reverberation.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>diffusion gain
-   </td>
-   <td>number
-   </td>
-   <td>Loudness control for the reverb decay as it returns to silence.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>room size
-   </td>
-   <td>number
-   </td>
-   <td>Approximates the size of the room you want to simulate in meters from wall to wall.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reflectivity
-   </td>
-   <td>number
-   </td>
-   <td>Defines how much of the audio is reflected at each bounce on a wall. Value range: 0 to 100. Low values will simulate softer sounding materials like carpet or curtains. High values will simulate harder materials like wood, glass or metal. A value of 100 will result in self-oscillation and is not recommended.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reflectivity high
-   </td>
-   <td>number
-   </td>
-   <td>Separate value for the reflectivity of high frequencies.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reflectivity low
-   </td>
-   <td>number
-   </td>
-   <td>Separate value for the reflectivity of low frequencies.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>early reflections
-   </td>
-   <td>number
-   </td>
-   <td>The number of early reflections of reverberation. The value range is 0 to 32.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>min distance
-   </td>
-   <td>number
-   </td>
-   <td>The distance from the centerpoint that the reverb will have full effect at.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>max distance
-   </td>
-   <td>number
-   </td>
-   <td>The distance from the centerpoint that the reverb will not have any effect.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reflection delay
-   </td>
-   <td>number
-   </td>
-   <td>Initial reflection delay time in ms.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>reverb delay
-   </td>
-   <td>number
-   </td>
-   <td>Late reverberation delay time relative to initial reflection.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>custom properties
-   </td>
-   <td>object
-   </td>
-   <td>Application-specific data.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-  <tr>
-   <td>bypass
-   </td>
-   <td>boolean
-   </td>
-   <td>Disables this processor while still allowing unprocessed audio signals to pass.
-   </td>
-   <td>
-   </td>
-   <td>
-   </td>
-  </tr>
-</table>
+|   |Type|Description|Required|
+|---|---|---|---|
+|**id**|'integer'|A unique identifier of the gain node in the scene.|Yes|
+|**mix**|'number'|Blend between the source signal ('dry') and the reverb effect. A value of 0 will not add any reverb. A value of 50 will mix the signal 50% dry and 50% reverberation. A value of 100 will result in only reverberation, without any of the source signal.|Yes|
+|**earlyReflectionsGain**|'number'|Loudness control for the reverb decay as it returns to silence.|Yes|
+|**diffusionGain**|'number'|Loudness control for the reverb decay as it returns to silence.|Yes|
+|**roomSize**|'number'|Approximates the size of the room you want to simulate in meters from wall to wall.|Yes|
+|**reflectivity**|'number'|Defines how much of the audio is reflected at each bounce on a wall. Value range: 0 to 100. Low values will simulate softer sounding materials like carpet or curtains. High values will simulate harder materials like wood, glass or metal. A value of 100 will result in self-oscillation and is not recommended.|Yes|
+|**reflectivityHigh**|'number'|Separate value for the reflectivity of high frequencies.|Yes|
+|**reflectivityLow**|'number'|Separate value for the reflectivity of low frequencies.|Yes|
+|**earlyReflections**|'number'|The number of early reflections of reverberation. The value range is 0 to 32.|Yes|
+|**minDistance**|'number'|The distance from the centerpoint that the reverb will have full effect at.|Yes|
+|**maxDistance**|'number'|The distance from the centerpoint that the reverb will not have any effect.|Yes|
+|**reflectionDelay**|'number'|Initial reflection delay time in ms.|Yes|
+|**reverbDelay**|'number'|Late reverberation delay time relative to initial reflection.|Yes|
+|**diffusionGain**|'number'||Yes|
+|**bypass**|`boolean`|Disables this processor while still allowing unprocessed audio signals to pass.|No|
+|**channelInterpretation**|'string'|Channel ordering for speaker channel interpretation are captured <a href="https://webaudio.github.io/web-audio-api/#ChannelOrdering">here</a>. Expected values are "speakers" or "discrete". When the number of channels do not match any of the basic speaker layouts, use
+|**extensions**|`object`|JSON object with extension-specific objects.|No|
+|**extras**|[`any`](#reference-any)|Application-specific data.|No|
 
 
 
@@ -779,3 +770,56 @@ Reverberation is the persistence of sound in an enclosure after a sound source h
 * A scene can have multiple emitters.
 * A node can have multiple spatial emitters.
 * A scene can have only one audio listener.
+
+## Appendix: Full Khronos Copyright Statement
+
+Copyright 2013-2017 The Khronos Group Inc.
+
+Some parts of this Specification are purely informative and do not define requirements
+necessary for compliance and so are outside the Scope of this Specification. These
+parts of the Specification are marked as being non-normative, or identified as
+**Implementation Notes**.
+
+Where this Specification includes normative references to external documents, only the
+specifically identified sections and functionality of those external documents are in
+Scope. Requirements defined by external documents not created by Khronos may contain
+contributions from non-members of Khronos not covered by the Khronos Intellectual
+Property Rights Policy.
+
+This specification is protected by copyright laws and contains material proprietary
+to Khronos. Except as described by these terms, it or any components
+may not be reproduced, republished, distributed, transmitted, displayed, broadcast
+or otherwise exploited in any manner without the express prior written permission
+of Khronos.
+
+This specification has been created under the Khronos Intellectual Property Rights
+Policy, which is Attachment A of the Khronos Group Membership Agreement available at
+www.khronos.org/files/member_agreement.pdf. Khronos grants a conditional
+copyright license to use and reproduce the unmodified specification for any purpose,
+without fee or royalty, EXCEPT no licenses to any patent, trademark or other
+intellectual property rights are granted under these terms. Parties desiring to
+implement the specification and make use of Khronos trademarks in relation to that
+implementation, and receive reciprocal patent license protection under the Khronos
+IP Policy must become Adopters and confirm the implementation as conformant under
+the process defined by Khronos for this specification;
+see https://www.khronos.org/adopters.
+
+Khronos makes no, and expressly disclaims any, representations or warranties,
+express or implied, regarding this specification, including, without limitation:
+merchantability, fitness for a particular purpose, non-infringement of any
+intellectual property, correctness, accuracy, completeness, timeliness, and
+reliability. Under no circumstances will Khronos, or any of its Promoters,
+Contributors or Members, or their respective partners, officers, directors,
+employees, agents or representatives be liable for any damages, whether direct,
+indirect, special or consequential damages for lost revenues, lost profits, or
+otherwise, arising from or in connection with these materials.
+
+Vulkan is a registered trademark and Khronos, OpenXR, SPIR, SPIR-V, SYCL, WebGL,
+WebCL, OpenVX, OpenVG, EGL, COLLADA, glTF, NNEF, OpenKODE, OpenKCAM, StreamInput,
+OpenWF, OpenSL ES, OpenMAX, OpenMAX AL, OpenMAX IL, OpenMAX DL, OpenML and DevU are
+trademarks of The Khronos Group Inc. ASTC is a trademark of ARM Holdings PLC,
+OpenCL is a trademark of Apple Inc. and OpenGL and OpenML are registered trademarks
+and the OpenGL ES and OpenGL SC logos are trademarks of Silicon Graphics
+International used under license by Khronos. All other product names, trademarks,
+and/or company names are used solely for identification and belong to their
+respective owners.

@@ -4,25 +4,9 @@
     "type": "object",
     "description": "Reverberation is the persistence of sound in an enclosure after a sound source has been stopped. This is a result of the multiple reflections of sound waves throughout the room arriving at the ear so closely spaced that they are indistinguishable from one another and are heard as a gradual decay of sound.",
     "properties": {
-        "name": {
-            "type": "string",
-            "description": "Name of the node"
-        },
-        "input": {
-            "allOf": [
-                {
-                    "$ref": "glTFid.schema.json"
-                }
-            ],
-            "description": "Input value for the node"
-        },
-        "output": {
-            "allOf": [
-                {
-                    "$ref": "glTFid.schema.json"
-                }
-            ],
-            "description": "Output value for the node"
+        "id": {
+            "description": "A unique identifier of the reverb node in the scene.",
+            "type": "integer"
         },
         "mix": {
             "type": "number",
@@ -78,16 +62,23 @@
             "type": "number",
             "description": "Late reverberation delay time relative to initial reflection."
         },
-        "customProperties": {
-            "type": "object",
-            "description": "Application-specific data."
-        },
         "bypass": {
             "type": "boolean",
             "description": "Disables this processor while still allowing unprocessed audio signals to pass."
-        }
+        },
+        "channelInterpretation": {
+            "type": "string",
+            "description": "Channel ordering for speaker channel interpretation are captured here. When the number of channels do not match any of the basic speaker layouts, use discrete to  maps channels to outputs. ",
+            "enum": [
+              "speakers",
+              "discrete"
+            ]
+          },
+        "extensions": {},
+        "extras": {}
     },
     "required": [
+        "id",
         "mix",
         "earlyReflectionsGain",
         "diffusionGain",
